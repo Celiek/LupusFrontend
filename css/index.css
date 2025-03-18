@@ -1,0 +1,96 @@
+body{
+    font-family: Nunito,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+
+.custom-sidebar {
+    background-color: #4e73df;
+    height: 100vh; /* Pełna wysokość ekranu */
+    color: white;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-header .accordion-button {
+    background-color: #4e73df; /* np. jasnoszary */
+    color: #000; /* czarny tekst */
+ }
+
+/* Kolor po kliknięciu (aktywny przycisk) */
+.custom-header .accordion-button:not(.collapsed) {
+    background-color: #007bff; /* niebieski */
+    color: #fff; /* biały tekst */
+ }
+ 
+ /* Kolor ciała akordeonu */
+ .custom-body {
+    background-color: #e9ecef; /* jasne tło */
+ }
+
+ .custom-navbar{
+    background-color: #4e73df;
+    color: white;
+ }
+
+ .nav-item.divider {
+    border-left: 1px solid #ccc; /* Dodaje pionowy separator */
+    height: 24px; /* Wyrównanie do wysokości elementów */
+    margin: auto 20px; /* Odsunięcie */
+  }
+
+.custom-card {
+    border: 1px solid #ddd; /* Ramka karty */
+    border-radius: 10px; /* Zaokrąglenie brzegów */
+    padding: 15px; /* Wewnętrzne odstępy */
+    margin: 10px 0; /* Zewnętrzne odstępy */
+    background-color: #fff; /* Tło karty */
+    position: relative; /* Pozycjonowanie dla pseudo-elementu */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Cień karty */
+}
+
+.custom-card::before {
+    content: ""; /* Pseudo-element dla lewego boku */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px; /* Szerokość żółtego boku */
+    height: 100%; /* Pełna wysokość karty */
+    background-color: yellow; /* Kolor żółty */
+    border-radius: 10px 0 0 10px; /* Dopasowanie zaokrąglenia */
+}
+
+.card-content {
+    display: flex; /* Ustawienie Flexbox */
+    justify-content: space-between; /* Treść i ikona po przeciwnych stronach */
+    align-items: center; /* Wyrównanie w pionie */
+}
+
+.card-text {
+    flex: 1; /* Treść zajmuje pozostałe miejsce */
+    margin-right: 15px; /* Odstęp między tekstem a ikoną */
+}
+
+.card-icon {
+    font-size: 2rem; /* Powiększenie ikony */
+    color: #555; /* Kolor ikony */
+}
+
+.custom-card-paragraph{
+    font-size: 1.0rem;
+}
+
+.card-violet::before {
+    background-color: #4e73df; /* Czerwony bok */
+}
+
+.card-green::before {
+    background-color: #1cc88a; /* Zielony bok */
+}
+
+.card-blue::before {
+    background-color: #36b9cc; /* Niebieski bok */
+}
+
+.card-yellow::before {
+    background-color: #f6c23e; /* Żółty bok */
+}
