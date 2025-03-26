@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pracownicy</title>
+</head>
+
+<body>
+    <h1>Lista Pracowników</h1>
+    <table id="pracownicyTable">
+        <thead>
+            <tr>
+                <th>Imię</th>
+                <th>Drugie Imię</th>
+                <th>Zdjecie</th>
+                <th>Nazwisko</th>
+                <th>Typ Pracownika</th>
+                <th>Data Dołączenia</th>
+                <th>Login</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Wiersze będą generowane dynamicznie -->
+        </tbody>
+    </table>
+
+    <script>
+        // Pobranie danych z endpointa
+        async function fetchPracownicy() {
+            const token = localStorage.getItem("token"); // Pobierz token z localStorage
+
+            try {
+                const response = await fetch("http://localhost:8080/api/pracownik/listall", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`, // Wysłanie tokena w nagłówku
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const pracownicy = await response.json();
+                populateTable(pracownicy);
+            } catch (error) {
+                console.error("Błąd podczas pobierania danych:", error);
+            }
+        }
+
+
+        // Funkcja do wypełnienia tabeli danymi
+        function populateTable(pracownicy) {
+            const tableBody = document.getElementById("pracownicyTable").querySelector("tbody");
+            tableBody.innerHTML = "";  // Czyszczenie tabeli przed dodaniem nowych danych
+
+            pracownicy.forEach(pracownik => {
+                const row = document.createElement("tr");
+
+                // Sprawdzenie, czy jest zdjęcie
+                let imgSrc = pracownik.zdjecie
+                    ? `data:image/jpeg;base64,${pracownik.zdjecie}`
+                    : "https://via.placeholder.com/100"; // Domyślny placeholder
+
+                row.innerHTML = `
+            <td>${pracownik.imie}</td>
+            <td>${pracownik.drugie_imie || "-"}</td>
+            <td>${pracownik.nazwisko}</td>
+            <td>${pracownik.typ_pracownika}</td>
+            <td>${pracownik.data_dolaczenia}</td>
+            <td>${pracownik.login}</td>
+            <td><img src="${imgSrc}" alt="Zdjęcie" width="100"></td>
+        `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+
+        // Wywołanie funkcji podczas ładowania strony
+        fetchPracownicy();
+    </script>
+
+</body>
+
+</html>

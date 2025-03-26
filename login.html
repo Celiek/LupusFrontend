@@ -50,11 +50,11 @@
                     console.log("Dekodowane role:", payload.roles);
 
                     if (payload.roles.includes("ROLE_ADMIN")) {
-                        window.location.href = "http://localhost:5500/admin-dashboard.html"; // Przekierowanie na stronę admina
-                    } else if (payload.roles.includes("ROLE_USER")) {
-                        window.location.href = "http://localhost:5500/user-dashboard.html"; // Przekierowanie na stronę użytkownika
+                        window.location.href = "http://127.0.0.1:5500/LupusFrontend/admin-dashboard.html"; // Przekierowanie na stronę admina
+                    } else if (payload.roles.includes("ROLE_FIZYCZNY")) {
+                        window.location.href = "http://localhost:5500/LupusFrontend/pracownik.html"; // Przekierowanie na stronę użytkownika
                     } else {
-                        window.location.href = "http://localhost:5500login.html"; // Przekierowanie na stronę domyślną
+                        window.location.href = "http://localhost:5500/login.html"; // Przekierowanie na stronę domyślną
                     }
                 } else {
                     const errorText = await response.text(); // Pobranie tekstu błędu
