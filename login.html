@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logowanie</title>
+</head>
+
+<body>
+    <h2>Logowanie</h2>
+    <form id="loginForm">
+        <label for="login">Login:</label>
+        <input type="text" id="login" name="login" required>
+        <br>
+        <label for="haslo">Hasło:</label>
+        <input type="password" id="haslo" name="haslo" required>
+        <br>
+        <button type="submit">Zaloguj</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async function (event) {
+            event.preventDefault(); // Zapobiega przeładowaniu strony
+
+            const login = document.getElementById("login").value;
+            const haslo = document.getElementById("haslo").value;
+
+            const message = document.getElementById("message");
+            message.textContent = "Logowanie...";
+
+            try {
+                const response = await fetch("http://localhost:8080/api/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ username: login, password: haslo })
+                });
+
+                if (response.ok) {
+                    const result = await response.json(); // Odczyt odpowiedzi jako JSON
+                    localStorage.setItem("token", result.token); // Zapis tokenu w localStorage
+                    message.textContent = "Zalogowano pomyślnie!";
+
+                    // Dekodowanie tokenu i przekierowanie na podstawie roli
+                    const payload = JSON.parse(atob(result.token.split('.')[1])); // Dekodowanie payloadu JWT
+                    console.log("Dekodowane role:", payload.roles);
+
+                    if (payload.roles.includes("ROLE_ADMIN")) {
+                        window.location.href = "http://localhost:5500/admin-dashboard.html"; // Przekierowanie na stronę admina
+                    } else if (payload.roles.includes("ROLE_USER")) {
+                        window.location.href = "http://localhost:5500/user-dashboard.html"; // Przekierowanie na stronę użytkownika
+                    } else {
+                        window.location.href = "http://localhost:5500login.html"; // Przekierowanie na stronę domyślną
+                    }
+                } else {
+                    const errorText = await response.text(); // Pobranie tekstu błędu
+                    message.textContent = "Błąd logowania: " + errorText;
+                }
+            } catch (error) {
+                message.textContent = "Nie udało się połączyć z serwerem. " + error;
+                console.error("Błąd:", error);
+            }
+        });
+    </script>
+</body>
+
+</html>
