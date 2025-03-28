@@ -5,6 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pracownicy</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        img {
+            border-radius: 5px;
+        }
+    </style>
 </head>
 
 <body>
@@ -14,7 +32,7 @@
             <tr>
                 <th>Imię</th>
                 <th>Drugie Imię</th>
-                <th>Zdjecie</th>
+                <th>Zdjęcie</th>
                 <th>Nazwisko</th>
                 <th>Typ Pracownika</th>
                 <th>Data Dołączenia</th>
@@ -30,7 +48,7 @@
         // Pobranie danych z endpointa
         async function fetchPracownicy() {
             const token = localStorage.getItem("token"); // Pobierz token z localStorage
-
+            console.log("Token:", localStorage.getItem("token"));
             try {
                 const response = await fetch("http://localhost:8080/api/pracownik/listall", {
                     method: "GET",
@@ -51,11 +69,10 @@
             }
         }
 
-
         // Funkcja do wypełnienia tabeli danymi
         function populateTable(pracownicy) {
             const tableBody = document.getElementById("pracownicyTable").querySelector("tbody");
-            tableBody.innerHTML = "";  // Czyszczenie tabeli przed dodaniem nowych danych
+            tableBody.innerHTML = ""; // Czyszczenie tabeli przed dodaniem nowych danych
 
             pracownicy.forEach(pracownik => {
                 const row = document.createElement("tr");
@@ -66,19 +83,18 @@
                     : "https://via.placeholder.com/100"; // Domyślny placeholder
 
                 row.innerHTML = `
-            <td>${pracownik.imie}</td>
-            <td>${pracownik.drugie_imie || "-"}</td>
-            <td>${pracownik.nazwisko}</td>
-            <td>${pracownik.typ_pracownika}</td>
-            <td>${pracownik.data_dolaczenia}</td>
-            <td>${pracownik.login}</td>
-            <td><img src="${imgSrc}" alt="Zdjęcie" width="100"></td>
-        `;
+                    <td>${pracownik.imie}</td>
+                    <td>${pracownik.drugie_imie || "-"}</td>
+                    <td><img src="${imgSrc}" alt="Zdjęcie" width="100"></td>
+                    <td>${pracownik.nazwisko}</td>
+                    <td>${pracownik.typ_pracownika}</td>
+                    <td>${pracownik.data_dolaczenia}</td>
+                    <td>${pracownik.login}</td>
+                `;
 
                 tableBody.appendChild(row);
             });
         }
-
 
         // Wywołanie funkcji podczas ładowania strony
         fetchPracownicy();

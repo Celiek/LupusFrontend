@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pobierz Czas Pracy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        button {
+            padding: 5px 15px;
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pobierz Czas Pracy</h1>
+    <form id="czasPracyForm">
+        <label for="data">Wybierz datę:</label>
+        <input type="date" id="data" name="data" required>
+        <button type="button" id="pobierzDane">Pobierz dane</button>
+    </form>
+
+    <div id="wyniki"></div>
+
+    <script>
+        // Obsługa kliknięcia przycisku
+        document.getElementById("pobierzDane").addEventListener("click", async function () {
+            const data = document.getElementById("data").value;
+            const token = localStorage.getItem("token"); // Pobranie tokena z localStorage
+            console.log("Token: " + token);
+
+            if (!data) {
+                alert("Proszę wybrać datę.");
+                return;
+            }
+
+            try {
+                // Wywołanie API
+                const response = await fetch(`http://localhost:8080/api/czasPracy/findCzasPracyByDate?dataPracy=${data}`, {
+                    method: 'GET',
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const dane = await response.json();
+                    renderTable(dane); // Renderowanie tabeli
+                } else {
+                    document.getElementById("wyniki").innerHTML = `<p>Błąd: ${response.status}</p>`;
+                }
+            } catch (error) {
+                document.getElementById("wyniki").innerHTML = `<p>Wystąpił błąd: ${error.message}</p>`;
+            }
+        });
+
+        // Funkcja generująca tabelę
+        function renderTable(data) {
+            const container = document.getElementById("wyniki");
+
+            // Reset zawartości kontenera
+            container.innerHTML = "";
+
+            // Tworzenie tabeli
+            const table = document.createElement("table");
+
+            // Nagłówki tabeli
+            const headers = ["Imię", "Nazwisko", "Drugie Imię", "Data Pracy", "Start Pracy", "Stop Pracy", "Czas Przerwy"];
+            const thead = document.createElement("thead");
+            const headerRow = document.createElement("tr");
+            headers.forEach(header => {
+                const th = document.createElement("th");
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Wiersze danych
+            const tbody = document.createElement("tbody");
+            data.forEach(row => {
+                const tr = document.createElement("tr");
+                row.forEach(cell => {
+                    const td = document.createElement("td");
+                    td.textContent = typeof cell === "object" && cell !== null ? cell.value : cell || "Brak";
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            // Dodanie tabeli do kontenera
+            container.appendChild(table);
+        }
+    </script>
+</body>
+</html>

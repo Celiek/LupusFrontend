@@ -50,7 +50,7 @@
                     console.log("Dekodowane role:", payload.roles);
 
                     if (payload.roles.includes("ROLE_ADMIN")) {
-                        window.location.href = "http://127.0.0.1:5500/LupusFrontend/admin-dashboard.html"; // Przekierowanie na stronę admina
+                        window.location.href = "http://localhost:5500/LupusFrontend/strony/adminDashboard/admin-dashboard.html"; // Przekierowanie na stronę admina
                     } else if (payload.roles.includes("ROLE_FIZYCZNY")) {
                         window.location.href = "http://localhost:5500/LupusFrontend/pracownik.html"; // Przekierowanie na stronę użytkownika
                     } else {

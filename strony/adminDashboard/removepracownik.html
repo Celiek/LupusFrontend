@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista Pracowników</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            border-radius: 5px;
+            max-width: 100px;
+            height: auto;
+        }
+
+        button {
+            padding: 5px 10px;
+            background-color: #FF0000;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #CC0000;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Lista Pracowników</h1>
+    <table id="pracownicyTable">
+        <thead>
+            <tr>
+                <th>Imię</th>
+                <th>Drugie Imię</th>
+                <th>Nazwisko</th>
+                <th>Typ Pracownika</th>
+                <th>Zdjęcie</th>
+                <th>Data Dołączenia</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Wiersze będą generowane dynamicznie -->
+        </tbody>
+    </table>
+
+    <script>
+        // Funkcja do pobrania danych pracowników z endpointu
+        async function fetchPracownicy() {
+            const token = localStorage.getItem("token");
+            console.log("token: " + token);
+            try {
+                const response = await fetch("http://localhost:8080/api/pracownik/listall", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const pracownicy = await response.json();
+                populateTable(pracownicy); // Wypełnienie tabeli
+            } catch (error) {
+                console.error("Błąd podczas pobierania danych:", error);
+            }
+        }
+
+        // Funkcja do wypełnienia tabeli danymi
+        function populateTable(pracownicy) {
+            const tableBody = document.getElementById("pracownicyTable").querySelector("tbody");
+            tableBody.innerHTML = ""; // Czyszczenie tabeli przed dodaniem nowych danych
+
+            pracownicy.forEach(pracownik => {
+                const row = document.createElement("tr");
+
+                // Obsługa zdjęcia (base64 lub domyślny placeholder)
+                let imgSrc = pracownik.zdjecie
+                    ? `data:image/jpeg;base64,${pracownik.zdjecie}`
+                    : "https://via.placeholder.com/100";
+
+                row.innerHTML = `
+                    <td>${pracownik.imie}</td>
+                    <td>${pracownik.drugie_imie || "-"}</td>
+                    <td>${pracownik.nazwisko}</td>
+                    <td>${pracownik.typ_pracownika}</td>
+                    <td><img src="${imgSrc}" alt="Zdjęcie"></td>
+                    <td>${pracownik.data_dolaczenia}</td>
+                    <td><button onclick="usunPracownika('${pracownik.imie}', '${pracownik.nazwisko}')">Usuń</button></td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Funkcja do usunięcia pracownika
+        async function usunPracownika(imie, nazwisko) {
+            const confirmDelete = confirm(`Na pewno chcesz usunąć pracownika: ${imie} ${nazwisko}?`);
+            const token = localStorage.getItem("token");
+            console.log("token do usuwania: " + token);
+
+            if (confirmDelete) {
+                try {
+                    const response = await fetch(`http://localhost:8080/api/pracownik/deleteByNameAndSurname?imie=${encodeURIComponent(imie)}&nazwisko=${encodeURIComponent(nazwisko)}`, {
+                        method: "DELETE",
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    alert(`Pracownik ${imie} ${nazwisko} został usunięty.`);
+                    fetchPracownicy(); // Odświeżenie tabeli po usunięciu
+                } catch (error) {
+                    console.error("Błąd podczas usuwania pracownika:", error);
+                }
+            }
+        }
+
+
+        // Pobranie danych podczas ładowania strony
+        document.addEventListener("DOMContentLoaded", fetchPracownicy);
+    </script>
+</body>
+
+</html>
