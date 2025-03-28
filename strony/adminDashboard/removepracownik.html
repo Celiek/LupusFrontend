@@ -119,14 +119,14 @@
         async function usunPracownika(imie, nazwisko) {
             const confirmDelete = confirm(`Na pewno chcesz usunąć pracownika: ${imie} ${nazwisko}?`);
             const token = localStorage.getItem("token");
-            console.log("token do usuwania: " + token);
 
             if (confirmDelete) {
                 try {
                     const response = await fetch(`http://localhost:8080/api/pracownik/deleteByNameAndSurname?imie=${encodeURIComponent(imie)}&nazwisko=${encodeURIComponent(nazwisko)}`, {
-                        method: "DELETE",
+                        method: "POST",
                         headers: {
-                            "Authorization": `Bearer ${token}`
+                            "Authorization": `Bearer ${token}`, // Token w nagłówku
+                            "Content-Type": "application/json"
                         }
                     });
 
@@ -141,7 +141,6 @@
                 }
             }
         }
-
 
         // Pobranie danych podczas ładowania strony
         document.addEventListener("DOMContentLoaded", fetchPracownicy);

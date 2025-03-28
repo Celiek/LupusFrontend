@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edycja Użytkowników</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="file"],
+        select {
+            padding: 5px;
+            width: 95%;
+        }
+
+        img {
+            border-radius: 5px;
+            max-width: 100px;
+            height: auto;
+        }
+
+        button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Edycja Użytkowników</h1>
+    <table id="usersTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Imię</th>
+                <th>Drugie Imię</th>
+                <th>Nazwisko</th>
+                <th>Typ Pracownika</th>
+                <th>Zdjęcie</th>
+                <th>Data Dołączenia</th>
+                <th>Login</th>
+                <th>Hasło</th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Wiersze będą generowane dynamicznie -->
+        </tbody>
+    </table>
+
+    <script>
+        // Funkcja do pobrania danych użytkowników
+        async function fetchUsers() {
+            const token = localStorage.getItem("token");
+            console.log("Token użyty do pobierania użytkowników: " + token);
+
+            try {
+                const response = await fetch("http://localhost:8080/api/pracownik/listall", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const users = await response.json();
+                populateTable(users);
+            } catch (error) {
+                console.error("Błąd podczas pobierania danych:", error);
+            }
+        }
+
+        // Wypełnienie tabeli użytkownikami
+        function populateTable(users) {
+            const tableBody = document.getElementById("usersTable").querySelector("tbody");
+            tableBody.innerHTML = ""; // Czyszczenie tabeli
+
+            users.forEach(user => {
+                const row = document.createElement("tr");
+
+                let imgSrc = user.zdjecie
+                    ? `data:image/jpeg;base64,${user.zdjecie}`
+                    : "https://via.placeholder.com/100"; // Domyślny placeholder
+
+                row.innerHTML = `
+                    <td><input type="text" value="${user.idPracownika}" id="id-${user.id}" disabled></td>
+                    <td><input type="text" value="${user.imie}" id="imie-${user.id}"></td>
+            <td><input type="text" value="${user.drugieImie || ''}" id="drugie-imie-${user.id}"></td> <!-- Obsługa pustej wartości -->                    <td><input type="text" value="${user.nazwisko}" id="nazwisko-${user.id}"></td>
+                    <td>
+                        <select id="typ-${user.id}">
+                            <option value="ADMIN" ${user.typPracownika === "ADMIN" ? "selected" : ""}>ADMIN</option>
+                            <option value="PRACOWNIK" ${user.typPracownika === "FIZYCZNY" ? "selected" : ""}>FIZYCZNY</option>
+                        </select>
+                    </td>
+                    <td>
+                        <img src="${imgSrc}" alt="Zdjęcie" id="img-preview-${user.id}">
+                        <input type="file" id="zdjecie-${user.id}" accept="image/*" onchange="updateImagePreview(event, '${user.id}')">
+                    </td>
+                    <td><input type="text" value="${user.data}" id="data-${user.id}" disabled></td>
+                    <td><input type="text" value="${user.login}" id="login-${user.id}"></td>
+                    <td><input type="password" value="${user.haslo}" id="haslo-${user.id}"></td>
+                    <td><button onclick="editUser('${user.id}')">Zatwierdź</button></td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Podgląd zdjęcia po zmianie
+        function updateImagePreview(event, userId) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                document.getElementById(`img-preview-${userId}`).src = e.target.result;
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Funkcja do przesłania zaktualizowanych danych
+        async function editUser(userId) {
+            const confirmEdit = confirm("Czy na pewno chcesz zatwierdzić zmiany?");
+            const token = localStorage.getItem("token");
+
+            if (confirmEdit) {
+                const id = document.getElementById(`id-${userId}`).value;
+                const imie = document.getElementById(`imie-${userId}`).value;
+                const drugieImie = document.getElementById(`drugie-imie-${userId}`).value;
+                const nazwisko = document.getElementById(`nazwisko-${userId}`).value;
+                const typ = document.getElementById(`typ-${userId}`).value;
+                const data = document.getElementById(`data-${userId}`).value;
+                const login = document.getElementById(`login-${userId}`).value;
+                const haslo = document.getElementById(`haslo-${userId}`).value;
+                const zdjecieInput = document.getElementById(`zdjecie-${userId}`);
+                let zdjecie = null;
+
+                if (zdjecieInput.files[0]) {
+                    const reader = new FileReader();
+                    zdjecie = await new Promise(resolve => {
+                        reader.onload = function (e) {
+                            resolve(e.target.result.split(",")[1]); // Pobierz base64
+                        };
+                        reader.readAsDataURL(zdjecieInput.files[0]);
+                    });
+                }
+
+                try {
+                    const response = await fetch(`http://localhost:8080/api/pracownik/updatePracownik?idPracownika=${id}&imie=${encodeURIComponent(imie)}&dimie=${encodeURIComponent(drugieImie || "")}&nazwisko=${encodeURIComponent(nazwisko)}&typPracownika=${encodeURIComponent(typ)}&zdjecie=${encodeURIComponent(zdjecie || "")}&data=${encodeURIComponent(data)}&login=${encodeURIComponent(login)}&haslo=${encodeURIComponent(haslo)}`, {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    alert("Zmiany zostały zatwierdzone.");
+                    fetchUsers(); // Odświeżenie tabeli
+                } catch (error) {
+                    console.error("Błąd podczas aktualizacji użytkownika:", error);
+                }
+            }
+        }
+
+        // Pobranie danych podczas ładowania strony
+        document.addEventListener("DOMContentLoaded", fetchUsers);
+    </script>
+</body>
+
+</html>
