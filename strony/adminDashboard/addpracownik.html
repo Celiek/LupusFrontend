@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj Pracownika</title>
+</head>
+
+<body>
+    <h1>Dodaj Pracownika</h1>
+    <form id="addUserForm">
+        <label for="imie">Imię:</label>
+        <input type="text" id="imie" name="imie" required>
+        <br>
+
+        <label for="drugieImie">Drugie Imię:</label>
+        <input type="text" id="drugieImie" name="drugieImie">
+        <br>
+
+        <label for="nazwisko">Nazwisko:</label>
+        <input type="text" id="nazwisko" name="nazwisko" required>
+        <br>
+
+        <label for="typ">Typ Pracownika:</label>
+        <select id="typ" name="typ" required>
+            <option value="ADMIN">ADMIN</option>
+            <option value="FIZYCZNY">FIZYCZNY</option>
+        </select>
+        <br>
+
+        <label for="zdjecie">Zdjęcie:</label>
+        <input type="file" id="zdjecie" name="zdjecie" accept="image/*">
+        <br>
+
+        <label for="dataDolaczenia">Data Dołączenia:</label>
+        <input type="date" id="dataDolaczenia" name="dataDolaczenia" required>
+        <br>
+
+        <label for="login">Login:</label>
+        <input type="text" id="login" name="login">
+        <br>
+
+        <label for="haslo">Hasło:</label>
+        <input type="password" id="haslo" name="haslo" required>
+        <br>
+
+        <button type="submit">Dodaj Pracownika</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+        // Automatyczne ustawienie domyślnej daty (dzisiejszy dzień)
+        document.addEventListener("DOMContentLoaded", function () {
+            const today = new Date().toISOString().split("T")[0];
+            document.getElementById("dataDolaczenia").value = today;
+        });
+
+        document.getElementById("addUserForm").addEventListener("submit", async function (event) {
+            event.preventDefault(); // Zapobiega przeładowaniu strony
+
+            const imie = document.getElementById("imie").value;
+            const nazwisko = document.getElementById("nazwisko").value;
+            const loginInput = document.getElementById("login").value;
+
+            // Automatyczne generowanie loginu, jeśli jest pusty
+            const login = loginInput.trim() === "" ? `${imie[0].toLowerCase()}.${nazwisko.toLowerCase()}` : loginInput;
+
+            const formData = new FormData();
+            formData.append("imie", imie);
+            formData.append("dimie", document.getElementById("drugieImie").value || ""); // Obsługa pustego drugiego imienia
+            formData.append("nazwisko", nazwisko);
+            formData.append("typ", document.getElementById("typ").value);
+            formData.append("zdjecie", document.getElementById("zdjecie").files[0]); // Przesłanie pliku jako MultipartFile
+            formData.append("data", document.getElementById("dataDolaczenia").value); // Dzisiejsza data
+            formData.append("login", login); // Wygenerowany lub podany login
+            formData.append("haslo", document.getElementById("haslo").value);
+
+            const message = document.getElementById("message");
+            message.textContent = "Dodawanie pracownika...";
+
+            try {
+                token = localStorage.getItem("token");  
+                const response = await fetch("http://localhost:8080/api/pracownik/addPracownik", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    message.textContent = "Pracownik został dodany pomyślnie!";
+                } else {
+                    const errorText = await response.text();
+                    message.textContent = "Błąd dodawania: " + errorText;
+                }
+            } catch (error) {
+                message.textContent = "Nie udało się połączyć z serwerem: " + error;
+                console.error("Błąd:", error);
+            }
+        });
+    </script>
+</body>
+
+</html>

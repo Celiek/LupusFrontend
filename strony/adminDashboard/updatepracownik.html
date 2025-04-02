@@ -12,8 +12,7 @@
             margin-top: 20px;
         }
 
-        th,
-        td {
+        th, td {
             border: 1px solid black;
             padding: 10px;
             text-align: center;
@@ -23,10 +22,7 @@
             background-color: #f2f2f2;
         }
 
-        input[type="text"],
-        input[type="password"],
-        input[type="file"],
-        select {
+        input[type="text"], input[type="password"], input[type="file"], select {
             padding: 5px;
             width: 95%;
         }
@@ -112,10 +108,14 @@
                     ? `data:image/jpeg;base64,${user.zdjecie}`
                     : "https://via.placeholder.com/100"; // Domyślny placeholder
 
+                // Formatowanie daty do bardziej czytelnego formatu
+                const formattedDate = user.dataDolaczenia ? new Date(user.dataDolaczenia).toLocaleDateString('pl-PL') : "";
+
                 row.innerHTML = `
                     <td><input type="text" value="${user.idPracownika}" id="id-${user.id}" disabled></td>
                     <td><input type="text" value="${user.imie}" id="imie-${user.id}"></td>
-            <td><input type="text" value="${user.drugieImie || ''}" id="drugie-imie-${user.id}"></td> <!-- Obsługa pustej wartości -->                    <td><input type="text" value="${user.nazwisko}" id="nazwisko-${user.id}"></td>
+                    <td><input type="text" value="${user.drugieImie || ''}" id="drugie-imie-${user.id}"></td> 
+                    <td><input type="text" value="${user.nazwisko}" id="nazwisko-${user.id}"></td>
                     <td>
                         <select id="typ-${user.id}">
                             <option value="ADMIN" ${user.typPracownika === "ADMIN" ? "selected" : ""}>ADMIN</option>
@@ -126,7 +126,7 @@
                         <img src="${imgSrc}" alt="Zdjęcie" id="img-preview-${user.id}">
                         <input type="file" id="zdjecie-${user.id}" accept="image/*" onchange="updateImagePreview(event, '${user.id}')">
                     </td>
-                    <td><input type="text" value="${user.data}" id="data-${user.id}" disabled></td>
+                    <td><input type="text" value="${formattedDate}" id="data-${user.id}" disabled></td>
                     <td><input type="text" value="${user.login}" id="login-${user.id}"></td>
                     <td><input type="password" value="${user.haslo}" id="haslo-${user.id}"></td>
                     <td><button onclick="editUser('${user.id}')">Zatwierdź</button></td>
@@ -141,7 +141,7 @@
             const file = event.target.files[0];
             const reader = new FileReader();
 
-            reader.onload = function (e) {
+            reader.onload = function(e) {
                 document.getElementById(`img-preview-${userId}`).src = e.target.result;
             };
 
@@ -170,7 +170,7 @@
                 if (zdjecieInput.files[0]) {
                     const reader = new FileReader();
                     zdjecie = await new Promise(resolve => {
-                        reader.onload = function (e) {
+                        reader.onload = function(e) {
                             resolve(e.target.result.split(",")[1]); // Pobierz base64
                         };
                         reader.readAsDataURL(zdjecieInput.files[0]);

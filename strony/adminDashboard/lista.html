@@ -11,14 +11,18 @@
             width: 100%;
             margin-top: 20px;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid black;
             padding: 10px;
             text-align: center;
         }
+
         th {
             background-color: #f2f2f2;
         }
+
         img {
             border-radius: 5px;
         }
@@ -77,24 +81,30 @@
             pracownicy.forEach(pracownik => {
                 const row = document.createElement("tr");
 
-                // Sprawdzenie, czy jest zdjęcie
+                // Obsługa zdjęcia
                 let imgSrc = pracownik.zdjecie
                     ? `data:image/jpeg;base64,${pracownik.zdjecie}`
-                    : "https://via.placeholder.com/100"; // Domyślny placeholder
+                    : "https://via.placeholder.com/100"; // Domyślny placeholder, jeśli brak zdjęcia
+
+                // Formatowanie daty (jeśli istnieje)
+                const formattedDate = pracownik.dataDolaczenia
+                    ? new Date(pracownik.dataDolaczenia).toLocaleDateString('pl-PL')
+                    : "Brak daty";
 
                 row.innerHTML = `
-                    <td>${pracownik.imie}</td>
-                    <td>${pracownik.drugie_imie || "-"}</td>
-                    <td><img src="${imgSrc}" alt="Zdjęcie" width="100"></td>
-                    <td>${pracownik.nazwisko}</td>
-                    <td>${pracownik.typ_pracownika}</td>
-                    <td>${pracownik.data_dolaczenia}</td>
-                    <td>${pracownik.login}</td>
-                `;
+            <td>${pracownik.imie || "-"}</td>
+            <td>${pracownik.drugieImie || "-"}</td> <!-- Poprawne odwołanie -->
+            <td><img src="${imgSrc}" alt="Zdjęcie" width="100"></td>
+            <td>${pracownik.nazwisko || "-"}</td>
+            <td>${pracownik.typPracownika || "-"}</td> <!-- Poprawne odwołanie -->
+            <td>${formattedDate}</td> <!-- Poprawne formatowanie daty -->
+            <td>${pracownik.login || "-"}</td>
+        `;
 
                 tableBody.appendChild(row);
             });
         }
+
 
         // Wywołanie funkcji podczas ładowania strony
         fetchPracownicy();
