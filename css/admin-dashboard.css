@@ -11,6 +11,9 @@ body {
     display: flex;
     flex-direction: column;
 }
+h1{
+    color: white;
+}
 
 .custom-header .accordion-button {
     background-color: #4e73df;
@@ -199,44 +202,6 @@ a:focus {
     font-weight: bold
 }
 
-.footer {
-    background-color: #4e73df; /* Kolor tła */
-    color: #ffffff; /* Kolor tekstu w całym footerze */
-    font-family: Nunito, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, 
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-}
-
-/* Linki w footerze */
-.footer a {
-    color: #ffcc00; /* Zmiana koloru tekstu linków */
-    text-decoration: none; /* Usunięcie podkreślenia */
-    font-weight: bold; /* Pogrubienie */
-}
-
-.footer a:hover {
-    color: #ff6347; /* Kolor tekstu przy najechaniu */
-    text-decoration: underline; /* Podkreślenie przy najechaniu */
-}
-
-/* Stylizacja list (ul/li) */
-.footer ul {
-    list-style: none; /* Usunięcie punktów listy */
-    padding: 0;
-    margin: 0;
-}
-
-.footer p{
-    color: #ffffff; /* Zmiana koloru na czerwony */
-    font-size: 16px; /* Zmiana rozmiaru tekstu */
-    font-weight: bold; /* Pogrubienie tekstu */
-    text-transform: uppercase; /* Wszystkie litery wielkie */
-}
-
-.footer ul li a {
-    color: #ffffff; /* Biały kolor tekstu w elementach listy */
-}
-
-.footer ul li a:hover {
-    color: #1e90ff; /* Zmiana koloru linku w liście przy najechaniu */
-    font-weight: bold
+.h1-napis{
+    color: #1e90ff;
 }

@@ -33,16 +33,16 @@
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
                             data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
-                                <a href = "czas_pracy.html">Czas pracy pracowników</a>
+                                <a href="czas_pracy.html">Czas pracy pracowników</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="lista.html">Lista pracowników</a> 
+                                <a href="lista.html">Lista pracowników</a>
                             </div>
                             <div class="accordion-body">
                                 <a href="addpracownik.html">Dodaj pracownika</a>
                             </div>
                             <div class="accordion-body">
-                               <a href="removepracownik.html">Usuń pracownika</a> 
+                                <a href="removepracownik.html">Usuń pracownika</a>
                             </div>
                             <div class="accordion-body">
                                 <a href="updatepracownik.html">Zaktualizuj dane pracownika</a>
@@ -60,6 +60,7 @@
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
                             data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
+<<<<<<< HEAD
                                 <a href="add-tygodniowa.html">Dodaj tygodniową wypłatę pracownikom</a>
                             </div>
                             <div class="accordion-body">
@@ -82,6 +83,30 @@
                             </div>
                             <div class="accordion-body">
                                 <a href="wyplaty-miesieczne-pracownika.html">Wyplaty miesieczne Pracownika</a>
+=======
+                                <a href="../czasPracy/add-tygodniowa.html">Dodaj tygodniową wypłatę pracownikom</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../czasPracy/add-tygodniowe.html">Dodaj tygodniową wypłatę pracownikowi</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../czasPracy/popraw-wyplaty.html">Popraw wypłatę pracownikom</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../czasPracy/popraw-wyplate">Popraw wypłatę pracownikowi</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czasPracy/lista-wyplat.html">Wypłaty tygodniowe pracownikow</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czasPracy/lista-wyplat-pracownika.html">Wyplaty tygodniowe pracownika</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czasPracy/wyplaty-miesieczne.html">Wyplaty miesieczne Pracownikow</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czasPracy/wyplaty-miesieczne-pracownika.html">Wyplaty miesieczne Pracownika</a>
+>>>>>>> 29cc4cc (Css strony admina)
                             </div>
                         </div>
                     </div>
@@ -126,7 +151,7 @@
                                 <li class="nav-item divider"></li>
                                 <!-- imie nazwisko i zdjecie uzytkownika -->
                                 <li class="nav-item">
-                                    <a class="nav-link d-flex" href="#">Uzytkownik XYZ</a>
+                                    <a class="nav-link d-flex" href="#" id="user-name"></a>
                                 </li>
                             </ul>
                         </div>
@@ -140,7 +165,8 @@
                                 <div class="custom-card card-violet">
                                     <div class="card-content">
                                         <div class="card-text">
-                                            <p class="custom-card-paragraph" style="color:  #4e73df;">Przepracowane godziny</p>
+                                            <p class="custom-card-paragraph" style="color:  #4e73df;">Przepracowane
+                                                godziny</p>
                                             <p>To jest treść karty z zaokrąglonymi brzegami i żółtym lewym bokiem.</p>
                                         </div>
                                         <div class="card-icon">
@@ -155,7 +181,8 @@
                                 <div class="custom-card card-green">
                                     <div class="card-content">
                                         <div class="card-text">
-                                            <p class="custom-card-paragraph" style="color: #1cc88a">Czas Pracy dzisiaj</p>
+                                            <p class="custom-card-paragraph" style="color: #1cc88a">Czas Pracy dzisiaj
+                                            </p>
                                             <p>To jest treść karty z zaokrąglonymi brzegami i żółtym lewym bokiem.</p>
                                         </div>
                                         <div class="card-icon">
@@ -170,7 +197,8 @@
                                 <div class="custom-card card-blue">
                                     <div class="card-content">
                                         <div class="card-text">
-                                            <p class="custom-card-paragraph" style="color: #36b9cc">Start Pracy dzisiaj</p>
+                                            <p class="custom-card-paragraph" style="color: #36b9cc">Start Pracy dzisiaj
+                                            </p>
                                             <p>To jest treść karty z zaokrąglonymi brzegami i żółtym lewym bokiem.</p>
                                         </div>
                                         <div class="card-icon">
@@ -185,12 +213,13 @@
                                 <div class="custom-card card-yellow">
                                     <div class="card-content">
                                         <div class="card-text">
-                                            <p class="custom-card-paragraph" style="color: #f6c23e">Czas przerw dzisiaj</p>
+                                            <p class="custom-card-paragraph" style="color: #f6c23e">Czas przerw dzisiaj
+                                            </p>
                                             <p>To jest treść karty z zaokrąglonymi brzegami i żółtym lewym bokiem.</p>
                                         </div>
-                                            <div class="card-icon">
-                                                <i class="fa-solid fa-mug-saucer"></i>
-                                            </div>
+                                        <div class="card-icon">
+                                            <i class="fa-solid fa-mug-saucer"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -202,8 +231,39 @@
     </div>
     <script>
         console.log("Token:", localStorage.getItem("token"));
-    </script>
+        // Rozdzielenie tokena na części (header, payload, signature)
+        const token = localStorage.getItem("token");
+        const tokenParts = token.split("."); 
+        const payload = atob(tokenParts[1]); // Dekodowanie części payload z Base64
 
+        // Parsowanie payload do obiektu JSON
+        const decodedPayload = JSON.parse(payload);
+
+        // Wyciąganie imienia użytkownika
+        const fullname = decodedPayload.sub;
+        const firstName = fullname.split(".")[0];
+
+        // Wstawianie imienia w DOM
+        document.getElementById("user-name").textContent = `Użytkownik: ${firstName}`
+    </script>
+    <footer class="footer d-flex flex-wrap justify-content-between align-items-center">
+        <p class="col-md-4 mb-0 text-muted">&copy; 2025 Lupus</p>
+
+        <a href="/"
+            class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto  text-decoration-none">
+            <svg class="bi me-2" width="40" height="32">
+                <use xlink:href="#bootstrap" />
+            </svg>
+        </a>
+
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Twórca Gabriel Stachnik</a></li>
+            <li class="nav-item"><a href="https://www.github.com/Celiek" class="nav-link px-2 text-muted">Github</a>
+            </li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Adres email Tworcy: g.stachnik@onet.pl</a>
+            </li>
+        </ul>
+    </footer>
 </body>
 
 </html>

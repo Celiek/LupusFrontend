@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edycja Użytkowników</title>
+<<<<<<< HEAD
     <style>
         table {
             border-collapse: collapse;
@@ -46,29 +47,163 @@
             background-color: #45a049;
         }
     </style>
+=======
+    <link rel="stylesheet" href="../../css/admin-dashboard.css">
+    <link rel="stylesheet" href="../../css/index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+>>>>>>> 29cc4cc (Css strony admina)
 </head>
 
 <body>
-    <h1>Edycja Użytkowników</h1>
-    <table id="usersTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Imię</th>
-                <th>Drugie Imię</th>
-                <th>Nazwisko</th>
-                <th>Typ Pracownika</th>
-                <th>Zdjęcie</th>
-                <th>Data Dołączenia</th>
-                <th>Login</th>
-                <th>Hasło</th>
-                <th>Akcje</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Wiersze będą generowane dynamicznie -->
-        </tbody>
-    </table>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 custom-sidebar">
+                <h1>Lupus HRM</h1>
+                <div class="accordion" id="sidebarAccordion">
+                    <!-- Akordeon 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Pracownicy
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="czas_pracy.html">Czas pracy pracowników</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="lista.html">Lista pracowników</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="addpracownik.html">Dodaj pracownika</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="removepracownik.html">Usuń pracownika</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="updatepracownik.html">Zaktualizuj dane pracownika</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Akordeon 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Czas pracy
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="../czasPracy/add-tygodniowa.html">Dodaj tygodniową wypłatę pracownikom</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../czasPracy/add-tygodniowe.html">Dodaj tygodniową wypłatę pracownikowi</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../czasPracy/popraw-wyplaty.html">Popraw wypłatę pracownikom</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../czasPracy/popraw-wyplate">Popraw wypłatę pracownikowi</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czasPracy/lista-wyplat.html">Wypłaty tygodniowe pracownikow</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czasPracy/lista-wyplat-pracownika.html">Wyplaty tygodniowe pracownika</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czasPracy/wyplaty-miesieczne.html">Wyplaty miesieczne Pracownikow</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czasPracy/wyplaty-miesieczne-pracownika.html">Wyplaty miesieczne Pracownika</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Akordeon 3 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Strona Adama
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="#">Strona Kierowcy</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Główna treść -->
+            <div class="col-md-9 col-lg-10 p-4">
+                <!-- navbar tutaj bedzie  -->
+                <nav class="navbar navbar-expand-lg custom-navbar">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="#">Navbar</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Link</a>
+                                </li>
+                                <!-- divider -->
+                                <li class="nav-item divider"></li>
+                                <!-- imie nazwisko i zdjecie uzytkownika -->
+                                <li class="nav-item">
+                                    <a class="nav-link d-flex" href="#" id="user-name"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <div class=" justify-content-center align-items-center">
+                    <h1 class="h1-napis">Edycja Użytkowników</h1>
+                    <div class="table-responsive">
+                        <table id="usersTable" class="table table-striped table-bordered table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Imię</th>
+                                    <th>Drugie Imię</th>
+                                    <th>Nazwisko</th>
+                                    <th>Typ Pracownika</th>
+                                    <th>Zdjęcie</th>
+                                    <th>Data Dołączenia</th>
+                                    <th>Login</th>
+                                    <th>Hasło</th>
+                                    <th>Akcje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Wiersze będą generowane dynamicznie -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Funkcja do pobrania danych użytkowników
@@ -104,10 +239,12 @@
             users.forEach(user => {
                 const row = document.createElement("tr");
 
+                // Obsługa zdjęcia (base64 lub domyślny placeholder)
                 let imgSrc = user.zdjecie
                     ? `data:image/jpeg;base64,${user.zdjecie}`
                     : "https://via.placeholder.com/100"; // Domyślny placeholder
 
+<<<<<<< HEAD
                 // Formatowanie daty do bardziej czytelnego formatu
                 const formattedDate = user.dataDolaczenia ? new Date(user.dataDolaczenia).toLocaleDateString('pl-PL') : "";
 
@@ -131,10 +268,38 @@
                     <td><input type="password" value="${user.haslo}" id="haslo-${user.id}"></td>
                     <td><button onclick="editUser('${user.id}')">Zatwierdź</button></td>
                 `;
+=======
+                // Formatowanie daty
+                const formattedDate = user.dataDolaczenia ? new Date(user.dataDolaczenia).toLocaleDateString('pl-PL') : "-";
+
+                row.innerHTML = `
+            <td>${user.idPracownika || "-"}</td>
+            <td>${user.imie || "-"}</td>
+            <td>${user.drugieImie || "-"}</td>
+            <td>${user.nazwisko || "-"}</td>
+            <td>
+                <select class="form-select form-select-sm" id="typ-${user.id}">
+                    <option value="ADMIN" ${user.typPracownika === "ADMIN" ? "selected" : ""}>ADMIN</option>
+                    <option value="FIZYCZNY" ${user.typPracownika === "FIZYCZNY" ? "selected" : ""}>FIZYCZNY</option>
+                </select>
+            </td>
+            <td>
+                <img src="${imgSrc}" alt="Zdjęcie" class="img-thumbnail" width="100">
+                <input type="file" id="zdjecie-${user.id}" class="form-control form-control-sm" accept="image/*" onchange="updateImagePreview(event, '${user.id}')">
+            </td>
+            <td>${formattedDate}</td>
+            <td>${user.login || "-"}</td>
+            <td><input type="password" value="${user.haslo || ''}" id="haslo-${user.id}" class="form-control form-control-sm"></td>
+            <td>
+                <button class="btn btn-success btn-sm" onclick="editUser('${user.id}')">Zatwierdź</button>
+            </td>
+        `;
+>>>>>>> 29cc4cc (Css strony admina)
 
                 tableBody.appendChild(row);
             });
         }
+
 
         // Podgląd zdjęcia po zmianie
         function updateImagePreview(event, userId) {
