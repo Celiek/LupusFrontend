@@ -244,33 +244,32 @@
                     ? `data:image/jpeg;base64,${user.zdjecie}`
                     : "https://via.placeholder.com/100"; // Domyślny placeholder
 
-<<<<<<< HEAD
-                // Formatowanie daty do bardziej czytelnego formatu
-                const formattedDate = user.dataDolaczenia ? new Date(user.dataDolaczenia).toLocaleDateString('pl-PL') : "";
+// <<<<<<< HEAD
+//                 // Formatowanie daty do bardziej czytelnego formatu
+//                 const formattedDate = user.dataDolaczenia ? new Date(user.dataDolaczenia).toLocaleDateString('pl-PL') : "";
 
-                row.innerHTML = `
-                    <td><input type="text" value="${user.idPracownika}" id="id-${user.id}" disabled></td>
-                    <td><input type="text" value="${user.imie}" id="imie-${user.id}"></td>
-                    <td><input type="text" value="${user.drugieImie || ''}" id="drugie-imie-${user.id}"></td> 
-                    <td><input type="text" value="${user.nazwisko}" id="nazwisko-${user.id}"></td>
-                    <td>
-                        <select id="typ-${user.id}">
-                            <option value="ADMIN" ${user.typPracownika === "ADMIN" ? "selected" : ""}>ADMIN</option>
-                            <option value="PRACOWNIK" ${user.typPracownika === "FIZYCZNY" ? "selected" : ""}>FIZYCZNY</option>
-                        </select>
-                    </td>
-                    <td>
-                        <img src="${imgSrc}" alt="Zdjęcie" id="img-preview-${user.id}">
-                        <input type="file" id="zdjecie-${user.id}" accept="image/*" onchange="updateImagePreview(event, '${user.id}')">
-                    </td>
-                    <td><input type="text" value="${formattedDate}" id="data-${user.id}" disabled></td>
-                    <td><input type="text" value="${user.login}" id="login-${user.id}"></td>
-                    <td><input type="password" value="${user.haslo}" id="haslo-${user.id}"></td>
-                    <td><button onclick="editUser('${user.id}')">Zatwierdź</button></td>
-                `;
-=======
-                // Formatowanie daty
-                const formattedDate = user.dataDolaczenia ? new Date(user.dataDolaczenia).toLocaleDateString('pl-PL') : "-";
+//                 row.innerHTML = `
+//                     <td><input type="text" value="${user.idPracownika}" id="id-${user.id}" disabled></td>
+//                     <td><input type="text" value="${user.imie}" id="imie-${user.id}"></td>
+//                     <td><input type="text" value="${user.drugieImie || ''}" id="drugie-imie-${user.id}"></td> 
+//                     <td><input type="text" value="${user.nazwisko}" id="nazwisko-${user.id}"></td>
+//                     <td>
+//                         <select id="typ-${user.id}">
+//                             <option value="ADMIN" ${user.typPracownika === "ADMIN" ? "selected" : ""}>ADMIN</option>
+//                             <option value="PRACOWNIK" ${user.typPracownika === "FIZYCZNY" ? "selected" : ""}>FIZYCZNY</option>
+//                         </select>
+//                     </td>
+//                     <td>
+//                         <img src="${imgSrc}" alt="Zdjęcie" id="img-preview-${user.id}">
+//                         <input type="file" id="zdjecie-${user.id}" accept="image/*" onchange="updateImagePreview(event, '${user.id}')">
+//                     </td>
+//                     <td><input type="text" value="${formattedDate}" id="data-${user.id}" disabled></td>
+//                     <td><input type="text" value="${user.login}" id="login-${user.id}"></td>
+//                     <td><input type="password" value="${user.haslo}" id="haslo-${user.id}"></td>
+//                     <td><button onclick="editUser('${user.id}')">Zatwierdź</button></td>
+//                 `;
+//                 // Formatowanie daty
+//                 const formattedDate = user.dataDolaczenia ? new Date(user.dataDolaczenia).toLocaleDateString('pl-PL') : "-";
 
                 row.innerHTML = `
             <td>${user.idPracownika || "-"}</td>
@@ -294,7 +293,7 @@
                 <button class="btn btn-success btn-sm" onclick="editUser('${user.id}')">Zatwierdź</button>
             </td>
         `;
->>>>>>> 29cc4cc (Css strony admina)
+
 
                 tableBody.appendChild(row);
             });
