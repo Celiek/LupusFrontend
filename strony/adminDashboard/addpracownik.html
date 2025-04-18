@@ -5,51 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dodaj Pracownika</title>
-<<<<<<< HEAD
-</head>
-
-<body>
-    <h1>Dodaj Pracownika</h1>
-    <form id="addUserForm">
-        <label for="imie">Imię:</label>
-        <input type="text" id="imie" name="imie" required>
-        <br>
-
-        <label for="drugieImie">Drugie Imię:</label>
-        <input type="text" id="drugieImie" name="drugieImie">
-        <br>
-
-        <label for="nazwisko">Nazwisko:</label>
-        <input type="text" id="nazwisko" name="nazwisko" required>
-        <br>
-
-        <label for="typ">Typ Pracownika:</label>
-        <select id="typ" name="typ" required>
-            <option value="ADMIN">ADMIN</option>
-            <option value="FIZYCZNY">FIZYCZNY</option>
-        </select>
-        <br>
-
-        <label for="zdjecie">Zdjęcie:</label>
-        <input type="file" id="zdjecie" name="zdjecie" accept="image/*">
-        <br>
-
-        <label for="dataDolaczenia">Data Dołączenia:</label>
-        <input type="date" id="dataDolaczenia" name="dataDolaczenia" required>
-        <br>
-
-        <label for="login">Login:</label>
-        <input type="text" id="login" name="login">
-        <br>
-
-        <label for="haslo">Hasło:</label>
-        <input type="password" id="haslo" name="haslo" required>
-        <br>
-
-        <button type="submit">Dodaj Pracownika</button>
-    </form>
-
-=======
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../../css/admin-dashboard.css">
@@ -235,7 +190,6 @@
             </div>
         </div>
     </div>
->>>>>>> 29cc4cc (Css strony admina)
     <p id="message"></p>
 
     <script>
@@ -253,11 +207,7 @@
             const loginInput = document.getElementById("login").value;
 
             // Automatyczne generowanie loginu, jeśli jest pusty
-<<<<<<< HEAD
-            const login = loginInput.trim() === "" ? `${imie[0].toLowerCase()}.${nazwisko.toLowerCase()}` : loginInput;
-=======
             const login = loginInput.trim() === "" ? `${imie.toLowerCase()}.${nazwisko.toLowerCase()}` : loginInput;
->>>>>>> 29cc4cc (Css strony admina)
 
             const formData = new FormData();
             formData.append("imie", imie);
@@ -273,11 +223,7 @@
             message.textContent = "Dodawanie pracownika...";
 
             try {
-<<<<<<< HEAD
-                token = localStorage.getItem("token");  
-=======
                 token = localStorage.getItem("token");
->>>>>>> 29cc4cc (Css strony admina)
                 const response = await fetch("http://localhost:8080/api/pracownik/addPracownik", {
                     method: "POST",
                     body: formData,
@@ -300,8 +246,4 @@
     </script>
 </body>
 
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> 29cc4cc (Css strony admina)

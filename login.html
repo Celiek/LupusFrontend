@@ -57,9 +57,9 @@
                 console.log("Dekodowane role:", payload.roles);
 
                 if (payload.roles.includes("ROLE_ADMIN")) {
-                    window.location.href = "/LupusFrontend/strony/adminDashboard/admin-dashboard.html";
+                    window.location.href = "/strony/adminDashboard/admin-dashboard.html";
                 } else if (payload.roles.includes("ROLE_FIZYCZNY")) {
-                    window.location.href = "/LupusFrontend/pracownik.html";
+                    window.location.href = "/pracownik.html";
                 } else {
                     window.location.href = "/login.html";
                 }
