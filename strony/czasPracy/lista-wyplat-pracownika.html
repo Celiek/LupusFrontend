@@ -11,38 +11,52 @@
 </head>
 
 <body class="bg-light">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const logoutButton = document.getElementById("logout-btn");
+            if (logoutButton) {
+                logoutButton.addEventListener("click", () => {
+                    localStorage.removeItem("token");
+                    window.location.href = "../../login.html"; // dopasuj ścieżkę do katalogu
+                });
+            } else {
+                console.error("Nie znaleziono przycisku logout-btn");
+            }
+        });
+    </script>
 
 
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-3 col-lg-2 custom-sidebar">
-            <h1>Lupus HRM</h1>
-            <div class="accordion" id="sidebarAccordion">
-                <!-- Akordeon 1 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Pracownicy
-                        </button>
-                    </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                        data-bs-parent="#sidebarAccordion">
-                        <div class="accordion-body">
-                            <a href="czas_pracy.html">Czas pracy pracowników</a>
-                        </div>
-                        <div class="accordion-body">
-                            <a href="lista.html">Lista pracowników</a>
-                        </div>
-                        <div class="accordion-body">
-                            <a href="addpracownik.html">Dodaj pracownika</a>
-                        </div>
-                        <div class="accordion-body">
-                            <a href="removepracownik.html">Usuń pracownika</a>
-                        </div>
-                        <div class="accordion-body">
-                            <a href="updatepracownik.html">Zaktualizuj dane pracownika</a>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 custom-sidebar">
+                <h1><a href="/strony/adminDashboard/admin-dashboard.html">Lupus HRM</a></h1>
+                <div class="accordion" id="sidebarAccordion">
+                    <!-- Akordeon 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Pracownicy
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="../adminDashboard/czas_pracy.html">Czas pracy pracowników</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../adminDashboard/lista.html">Lista pracowników</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../adminDashboard/addpracownik.html">Dodaj pracownika</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../adminDashboard/removepracownik.html">Usuń pracownika</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../adminDashboard/updatepracownik.html">Zaktualizuj dane pracownika</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -125,6 +139,9 @@
                             <li class="nav-item">
                                 <a class="nav-link d-flex" href="#" id="user-name"></a>
                             </li>
+                            <li class="nav-item">
+                                <button class="btn btn-danger ms-2" id="logout-btn">Wyloguj się</button>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -133,7 +150,7 @@
                 <!-- dane :-->
                 <div class="container mt-5">
                     <h2 class="mb-4 text-center">Sprawdź wypłatę pracownika</h2>
-                
+
                     <form id="searchForm" class="row g-3 mb-4">
                         <div class="col-md-4">
                             <input type="text" id="imie" class="form-control" placeholder="Imię" required>
@@ -148,10 +165,10 @@
                             <button type="submit" class="btn btn-primary">Pobierz wypłatę</button>
                         </div>
                     </form>
-                
+
                     <div id="error" class="alert alert-danger d-none"></div>
                     <div id="loader" class="text-muted mb-3"></div>
-                
+
                     <table id="tabelaWyplaty" class="table table-bordered d-none">
                         <thead class="table-primary">
                             <tr>
@@ -169,7 +186,25 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
+    <footer class="footer d-flex flex-wrap justify-content-between align-items-center">
+        <p class="col-md-4 mb-0 text-muted">&copy; 2025 Lupus</p>
+
+        <a href="/"
+            class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto  text-decoration-none">
+            <svg class="bi me-2" width="40" height="32">
+                <use xlink:href="#bootstrap" />
+            </svg>
+        </a>
+
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Twórca Gabriel Stachnik</a></li>
+            <li class="nav-item"><a href="https://www.github.com/Celiek" class="nav-link px-2 text-muted">Github</a>
+            </li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Adres email Tworcy: g.stachnik@onet.pl</a>
+            </li>
+        </ul>
+    </footer>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

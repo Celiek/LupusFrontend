@@ -20,7 +20,7 @@
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3 col-lg-2 custom-sidebar">
-                <h1>Lupus HRM</h1>
+                <h1><a href="/strony/adminDashboard/admin-dashboard.html">Lupus HRM</a></h1>
                 <div class="accordion" id="sidebarAccordion">
                     <!-- Akordeon 1 -->
                     <div class="accordion-item">
@@ -128,6 +128,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link d-flex" href="#" id="user-name"></a>
                                 </li>
+                                <li class="nav-item">
+                                    <button class="btn btn-danger ms-2" id="logout-btn">Wyloguj się</button>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -146,6 +149,24 @@
             </div>
         </div>
     </div>
+        <footer class="footer d-flex flex-wrap justify-content-between align-items-center">
+            <p class="col-md-4 mb-0 text-muted">&copy; 2025 Lupus</p>
+        
+            <a href="/"
+                class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto  text-decoration-none">
+                <svg class="bi me-2" width="40" height="32">
+                    <use xlink:href="#bootstrap" />
+                </svg>
+            </a>
+        
+            <ul class="nav col-md-4 justify-content-end">
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Twórca Gabriel Stachnik</a></li>
+                <li class="nav-item"><a href="https://www.github.com/Celiek" class="nav-link px-2 text-muted">Github</a>
+                </li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Adres email Tworcy: g.stachnik@onet.pl</a>
+                </li>
+            </ul>
+        </footer>
 
     <script>
         // Obsługa kliknięcia przycisku
@@ -228,6 +249,20 @@
         }
 
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const logoutButton = document.getElementById("logout-btn");
+            if (logoutButton) {
+                logoutButton.addEventListener("click", () => {
+                    localStorage.removeItem("token");
+                    window.location.href = "../../login.html"; // dopasuj ścieżkę do katalogu
+                });
+            } else {
+                console.error("Nie znaleziono przycisku logout-btn");
+            }
+        });
+    </script>
+
 </body>
 
 </html>

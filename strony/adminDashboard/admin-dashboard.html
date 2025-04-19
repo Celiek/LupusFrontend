@@ -22,11 +22,6 @@
             const headers = {
                 "Authorization": `Bearer ${token}`
             };
-            
-            console.log("Fetching /czasPracyDzisiaj...");
-            const responseWorkTime = await fetch("http://localhost:8080/api/pracownik/czasPracyDzisiaj", { headers });
-            console.log("Status:", responseWorkTime.status);
-
 
             try {
                 // 1. Liczba pracowników dzisiaj
@@ -42,8 +37,15 @@
                 const breakTime = await responseBreak.text();
 
                 // 4. Przepracowane godziny
-                const responseWorkTime = await fetch("http://localhost:8080/api/pracownik/czasPracyDzisiaj", { headers });
+                const responseWorkTime = await fetch("http://localhost:8080/api/pracownik/czasPracyToday", { headers });
                 const workTime = await responseWorkTime.text();
+
+                // Debug:
+                // console.log("Dane do kart:");
+                // console.log("Godziny pracy:", workTime);
+                // console.log("Ilość osób:", todayCount);
+                // console.log("Start pracy:", startTime);
+                // console.log("Czas przerwy:", breakTime);
 
                 // Wstawienie danych do kart
                 const cardTexts = document.querySelectorAll('.card-text p:nth-child(2)');
@@ -59,20 +61,28 @@
 
         fetchDataAndUpdateCards();
     </script>
-    <script>
 
-        document.getElementById("logout-btn").addEventListener("click", () => {
-            localStorage.removeItem("token");
-            window.location.href = "login.html"; 
-        });
-    </script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const logoutButton = document.getElementById("logout-btn");
+        if (logoutButton) {
+            logoutButton.addEventListener("click", () => {
+                localStorage.removeItem("token");
+                window.location.href = "../../login.html"; // dopasuj ścieżkę do katalogu
+            });
+        } else {
+            console.error("Nie znaleziono przycisku logout-btn");
+        }
+    });
+</script>
+
 
 
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3 col-lg-2 custom-sidebar">
-                <h1>Lupus HRM</h1>
+                <h1><a href="/strony/adminDashboard/admin-dashboard.html">Lupus HRM</a></h1>
                 <div class="accordion" id="sidebarAccordion">
                     <!-- Akordeon 1 -->
                     <div class="accordion-item">
@@ -124,16 +134,16 @@
                                 <a href="../czasPracy/popraw-wyplate">Popraw wypłatę pracownikowi</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="czasPracy/lista-wyplat.html">Wypłaty tygodniowe pracownikow</a>
+                                <a href="../czasPracy/lista-wyplat.html">Wypłaty tygodniowe pracownikow</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="czasPracy/lista-wyplat-pracownika.html">Wyplaty tygodniowe pracownika</a>
+                                <a href="../czasPracy/lista-wyplat-pracownika.html">Wyplaty tygodniowe pracownika</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="czasPracy/wyplaty-miesieczne.html">Wyplaty miesieczne Pracownikow</a>
+                                <a href="../czasPracy/wyplaty-miesieczne.html">Wyplaty miesieczne Pracownikow</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="czasPracy/wyplaty-miesieczne-pracownika.html">Wyplaty miesieczne Pracownika</a>
+                                <a href="../czasPracy/wyplaty-miesieczne-pracownika.html">Wyplaty miesieczne Pracownika</a>
                             </div>
                         </div>
                     </div>
@@ -260,6 +270,7 @@
             </div>
         </div>
     </div>
+    
     <script>
         console.log("Token:", localStorage.getItem("token"));
         // Rozdzielenie tokena na części (header, payload, signature)
