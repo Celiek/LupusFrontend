@@ -16,6 +16,58 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+    <script>
+        async function fetchDataAndUpdateCards() {
+            const token = localStorage.getItem("token");
+            const headers = {
+                "Authorization": `Bearer ${token}`
+            };
+            
+            console.log("Fetching /czasPracyDzisiaj...");
+            const responseWorkTime = await fetch("http://localhost:8080/api/pracownik/czasPracyDzisiaj", { headers });
+            console.log("Status:", responseWorkTime.status);
+
+
+            try {
+                // 1. Liczba pracowników dzisiaj
+                const responseCount = await fetch("http://localhost:8080/api/pracownik/nowiDzis", { headers });
+                const todayCount = await responseCount.text();
+
+                // 2. Godzina rozpoczęcia pracy
+                const responseStartTime = await fetch("http://localhost:8080/api/pracownik/pierwszyStartDzisiaj", { headers });
+                const startTime = await responseStartTime.text();
+
+                // 3. Czas przerw
+                const responseBreak = await fetch("http://localhost:8080/api/pracownik/sumaPrzerwDzisiaj", { headers });
+                const breakTime = await responseBreak.text();
+
+                // 4. Przepracowane godziny
+                const responseWorkTime = await fetch("http://localhost:8080/api/pracownik/czasPracyDzisiaj", { headers });
+                const workTime = await responseWorkTime.text();
+
+                // Wstawienie danych do kart
+                const cardTexts = document.querySelectorAll('.card-text p:nth-child(2)');
+                cardTexts[0].textContent = `${workTime} godz.`;     // Przepracowane godziny
+                cardTexts[1].textContent = `${todayCount} osób`;     // Ilość osób pracujących
+                cardTexts[2].textContent = `${startTime}`;           // Start pracy
+                cardTexts[3].textContent = `${breakTime} min`;       // Czas przerw
+
+            } catch (e) {
+                console.error("Błąd przy pobieraniu danych do kart:", e);
+            }
+        }
+
+        fetchDataAndUpdateCards();
+    </script>
+    <script>
+
+        document.getElementById("logout-btn").addEventListener("click", () => {
+            localStorage.removeItem("token");
+            window.location.href = "login.html"; 
+        });
+    </script>
+
+
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
@@ -128,6 +180,10 @@
                                 <li class="nav-item">
                                     <a class="nav-link d-flex" href="#" id="user-name"></a>
                                 </li>
+                                <li class="nav-item">
+                                    <button class="btn btn-danger ms-2" id="logout-btn">Wyloguj się</button>
+                                </li>
+
                             </ul>
                         </div>
                     </div>
