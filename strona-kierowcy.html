@@ -64,6 +64,12 @@
             align-items: center;
             gap: 0.5rem;
         }
+
+        .separator {
+            height: 2px;
+            background-color: #ccc;
+            margin: 2rem 0;
+        }
     </style>
 </head>
 
@@ -81,27 +87,37 @@
                                 <i class="fas fa-user"></i> Kierowca: <strong>Adam</strong>
                             </span>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item me-4">
                             <div class="status-wrapper">
                                 <i class="fas fa-circle status-icon" id="status-icon"></i>
                                 <span class="status-text" id="status-text">Sprawdzanie połączenia...</span>
                             </div>
                         </li>
+                        <li class="nav-item">
+                            <span class="nav-link text-white">
+                                <i class="fas fa-users"></i> Ilość pracujących: <strong id="workerCount">0</strong>
+                            </span>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
+
         <h2 class="mb-4">Panel Kierowcy</h2>
 
         <div class="row text-center mb-4">
             <div class="col-md-4 mb-2">
                 <button id="startWork" class="btn btn-success w-100">Start pracy</button>
+                <div class="separator"></div>
             </div>
             <div class="col-md-4 mb-2">
                 <button id="startBreak" class="btn btn-warning w-100">Początek przerwy</button>
+                <div class="separator"></div>
+
             </div>
             <div class="col-md-4 mb-2">
                 <button id="stopWork" class="btn btn-danger w-100">Stop pracy</button>
+                <div class="separator"></div>
             </div>
         </div>
 
@@ -110,7 +126,7 @@
         <div class="alert alert-danger mt-3" id="breakAlert">Przerwa trwa za długo!</div>
 
         <div class="mt-4">
-            <h5>Ilość pracujących: <span id="workerCount">0</span></h5>
+            
             <button class="btn btn-outline-secondary btn-sm mt-2" type="button" data-bs-toggle="collapse"
                 data-bs-target="#workerList">Pokaż listę</button>
             <div class="collapse mt-2" id="workerList">
@@ -120,36 +136,38 @@
             </div>
         </div>
     </div>
-<div class="text-center mt-5 position-relative">
-    <div class="dropup">
-        <button class="btn btn-secondary btn-lg" type="button" data-bs-toggle="collapse"
-            data-bs-target="#userTableCollapse" aria-expanded="false" aria-controls="userTableCollapse">
-            Pokaż listę pracowników
-        </button>
+    <div class="text-center mt-5 position-relative">
+        <div class="dropup">
+            <button class="btn btn-secondary btn-lg" type="button" data-bs-toggle="collapse"
+                data-bs-target="#userTableCollapse" aria-expanded="false" aria-controls="userTableCollapse">
+                Pokaż listę pracowników
+            </button>
 
-        <div class="collapse mt-3 dropup-menu" id="userTableCollapse" style="z-index: 1;">
-            <div class="card card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover" id="userTable">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Imię</th>
-                                <th>Drugie imię</th>
-                                <th>Nazwisko</th>
-                                <th>Typ</th>
-                                <th>Data Dołączenia</th>
-                                <th>Zdjęcie</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Wiersze zostaną uzupełnione dynamicznie -->
-                        </tbody>
-                    </table>
+            <div class="collapse mt-3 dropup-menu" id="userTableCollapse" style="z-index: 1;">
+                <div class="card card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="userTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Imię</th>
+                                    <th>Drugie imię</th>
+                                    <th>Nazwisko</th>
+                                    <th>Typ</th>
+                                    <th>Data Dołączenia</th>
+                                    <th>Zdjęcie</th>
+                                    <th>Obecny?</th>
+                                    <th>Akcja</th> <!-- Dodano -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Wiersze zostaną uzupełnione dynamicznie -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 
     <script src="skrypty/kierowca.js"></script>
