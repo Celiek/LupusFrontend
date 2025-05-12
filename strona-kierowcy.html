@@ -72,7 +72,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg navbar-custom shadow">
@@ -97,6 +96,11 @@
                             <span class="nav-link text-white">
                                 <i class="fas fa-users"></i> Ilość pracujących: <strong id="workerCount">0</strong>
                             </span>
+                        </li>
+                        <li class="nav-item me-4">
+                            <a class="nav-link text-white" href="/strony/adminDashboard/admin-dashboard.html">
+                                <i class="fas fa-user-shield me-1"></i> Strona Admina
+                            </a>
                         </li>
                         <li class="nav-item me-4">
                             <span class="nav-link">
@@ -129,17 +133,6 @@
         <div class="time-display" id="workTime">Czas pracy: 00:00</div>
 
         <div class="alert alert-danger mt-3" id="breakAlert">Przerwa trwa za długo!</div>
-
-        <div class="mt-4">
-            
-            <button class="btn btn-outline-secondary btn-sm mt-2" type="button" data-bs-toggle="collapse"
-                data-bs-target="#workerList">Pokaż listę</button>
-            <div class="collapse mt-2" id="workerList">
-                <ul class="list-group" id="workersUl">
-                    <!-- Lista dynamicznie -->
-                </ul>
-            </div>
-        </div>
     </div>
     <div class="text-center mt-5 position-relative">
         <div class="dropup">
@@ -190,6 +183,12 @@
                     <button type="button" class="btn btn-danger" id="confirmStopBtn">Zatwierdź</button>
                 </div>
             </div>
+        </div>
+    </div>
+    <div id="startAlertContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <div id="startAlert" class="alert alert-success alert-dismissible fade" role="alert">
+            <strong>Praca rozpoczęta!</strong> Czas pracy został zarejestrowany.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Zamknij"></button>
         </div>
     </div>
 

@@ -138,57 +138,74 @@
                 <div class=" justify-content-center align-items-center">
                     <!-- dane :-->
                     <h1 class="h1-napis">Dodaj Pracownika</h1>
-                    <form id="addUserForm" class="needs-validation row g-3" novalidate>
-                        <div class="col-md-6">
-                            <label for="imie" class="form-label">Imię:</label>
-                            <input type="text" id="imie" name="imie" class="form-control" required>
-                            <div class="invalid-feedback">Proszę wpisać imię.</div>
+                    <form id="addUserForm" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                    
+                            <div class="col-md-6">
+                                <label for="imie" class="form-label">Imię</label>
+                                <input type="text" class="form-control" id="imie" name="imie" required>
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <label for="drugieImie" class="form-label">Drugie Imię</label>
+                                <input type="text" class="form-control" id="drugieImie" name="drugieImie">
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <label for="nazwisko" class="form-label">Nazwisko</label>
+                                <input type="text" class="form-control" id="nazwisko" name="nazwisko" required>
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <label for="typ" class="form-label">Typ Pracownika</label>
+                                <select class="form-select" id="typ" name="typ" required>
+                                    <option value="ADMIN">ADMIN</option>
+                                    <option value="FIZYCZNY">FIZYCZNY</option>
+                                </select>
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <label for="zdjecie" class="form-label">Zdjęcie</label>
+                                <input type="file" class="form-control" id="zdjecie" name="zdjecie" accept="image/*">
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <label for="dataDolaczenia" class="form-label">Data Dołączenia</label>
+                                <input type="date" class="form-control" id="dataDolaczenia" name="dataDolaczenia" required>
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <label for="login" class="form-label">Login</label>
+                                <input type="text" class="form-control" id="login" name="login">
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <label for="haslo" class="form-label">Hasło</label>
+                                <input type="password" class="form-control" id="haslo" name="haslo" required>
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <label for="krajPochodzenia" class="form-label">Kraj Pochodzenia</label>
+                                <input list="kraje" id="krajPochodzenia" name="krajPochodzenia" class="form-control" required>
+                                <datalist id="kraje">
+                                    <option value="Polska">
+                                    <option value="Ukraina">
+                                    <option value="Kolumbia">
+                                </datalist>
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <label for="nrWhatsapp" class="form-label">Numer WhatsApp</label>
+                                <input type="tel" class="form-control" id="nrWhatsapp" name="nrWhatsapp" required>
+                            </div>
+                    
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary w-100">Dodaj Pracownika</button>
+                            </div>
+                    
                         </div>
-
-                        <div class="mb-3">
-                            <label for="drugieImie" class="form-label">Drugie Imię:</label>
-                            <input type="text" id="drugieImie" name="drugieImie" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="nazwisko" class="form-label">Nazwisko:</label>
-                            <input type="text" id="nazwisko" name="nazwisko" class="form-control" required>
-                            <div class="invalid-feedback">Proszę wpisać nazwisko.</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="typ" class="form-label">Typ Pracownika:</label>
-                            <select id="typ" name="typ" class="form-select" required>
-                                <option value="ADMIN">ADMIN</option>
-                                <option value="FIZYCZNY">FIZYCZNY</option>
-                            </select>
-                            <div class="invalid-feedback">Proszę wybrać typ pracownika.</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="zdjecie" class="form-label">Zdjęcie:</label>
-                            <input type="file" id="zdjecie" name="zdjecie" class="form-control" accept="image/*">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="dataDolaczenia" class="form-label">Data Dołączenia:</label>
-                            <input type="date" id="dataDolaczenia" name="dataDolaczenia" class="form-control" required>
-                            <div class="invalid-feedback">Proszę wybrać datę.</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="login" class="form-label">Login:</label>
-                            <input type="text" id="login" name="login" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="haslo" class="form-label">Hasło:</label>
-                            <input type="password" id="haslo" name="haslo" class="form-control" required>
-                            <div class="invalid-feedback">Proszę wpisać hasło.</div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">Dodaj Pracownika</button>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -213,71 +230,125 @@
             </ul>
         </footer>
 
-    <script>
-        // Automatyczne ustawienie domyślnej daty (dzisiejszy dzień)
-        document.addEventListener("DOMContentLoaded", function () {
-            const today = new Date().toISOString().split("T")[0];
-            document.getElementById("dataDolaczenia").value = today;
-        });
-
-        document.getElementById("addUserForm").addEventListener("submit", async function (event) {
+<script>
+    document.getElementById("addUserForm").addEventListener("submit", async function (event) {
             event.preventDefault(); // Zapobiega przeładowaniu strony
 
-            const imie = document.getElementById("imie").value;
-            const nazwisko = document.getElementById("nazwisko").value;
-            const loginInput = document.getElementById("login").value;
+            const imie = document.getElementById("imie").value.trim();
+            const nazwisko = document.getElementById("nazwisko").value.trim();
+            const loginInput = document.getElementById("login").value.trim();
 
-            // Automatyczne generowanie loginu, jeśli jest pusty
-            const login = loginInput.trim() === "" ? `${imie.toLowerCase()}.${nazwisko.toLowerCase()}` : loginInput;
+            const login = loginInput === "" ? `${imie.toLowerCase()}.${nazwisko.toLowerCase()}` : loginInput;
 
-            const formData = new FormData();
-            formData.append("imie", imie);
-            formData.append("dimie", document.getElementById("drugieImie").value || ""); // Obsługa pustego drugiego imienia
-            formData.append("nazwisko", nazwisko);
-            formData.append("typ", document.getElementById("typ").value);
-            formData.append("zdjecie", document.getElementById("zdjecie").files[0]); // Przesłanie pliku jako MultipartFile
-            formData.append("data", document.getElementById("dataDolaczenia").value); // Dzisiejsza data
-            formData.append("login", login); // Wygenerowany lub podany login
-            formData.append("haslo", document.getElementById("haslo").value);
+            const zdjecieInput = document.getElementById("zdjecie");
+            const plik = zdjecieInput.files[0];
 
-            const message = document.getElementById("message");
+            const wyslijFormularz = async (blob) => {
+                const formData = new FormData();
+                formData.append("imie", imie);
+                formData.append("dimie", document.getElementById("drugieImie").value);
+                formData.append("nazwisko", nazwisko);
+                formData.append("typ", document.getElementById("typ").value);
+                formData.append("zdjecie", blob);
+                formData.append("data", document.getElementById("dataDolaczenia").value);
+                formData.append("login", login);
+                formData.append("haslo", document.getElementById("haslo").value);
+                formData.append("kraj_pochodzenia", document.getElementById("krajPochodzenia").value);
+                formData.append("nr_whatsapp", document.getElementById("nrWhatsapp").value);
+
+                const message = document.getElementById("message");
+                message.textContent = "Dodawanie pracownika...";
+
+                try {
+                    const token = localStorage.getItem("token");
+                    const response = await fetch("http://localhost:8080/api/pracownik/addPracownik", {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        message.textContent = "✅ Pracownik został dodany pomyślnie!";
+                    } else {
+                        const errorText = await response.text();
+                        message.textContent = "❌ Błąd dodawania: " + errorText;
+                    }
+                } catch (error) {
+                    message.textContent = "❌ Nie udało się połączyć z serwerem: " + error;
+                    console.error("Błąd:", error);
+                }
+            };
+
+            if (plik) {
+                const img = new Image();
+                const reader = new FileReader();
+
+                reader.onload = function (event) {
+                    img.src = event.target.result;
+                };
+
+                img.onload = function () {
+                    const MAX_WIDTH = 1024;
+                    const MAX_HEIGHT = 768;
+
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height = Math.round((height *= MAX_WIDTH / width));
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width = Math.round((width *= MAX_HEIGHT / height));
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    const canvas = document.createElement("canvas");
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const ctx = canvas.getContext("2d");
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    canvas.toBlob((blob) => {
+                        wyslijFormularz(blob);
+                    }, "image/jpeg", 0.8);
+                };
+
+                reader.readAsDataURL(plik);
+            } else {
+                wyslijFormularz(null);
+            }
+        });
+
+
+        async function wyslijFormularz(formData) {
             message.textContent = "Dodawanie pracownika...";
-
             try {
-                token = localStorage.getItem("token");
+                const token = localStorage.getItem("token");
                 const response = await fetch("http://localhost:8080/api/pracownik/addPracownik", {
                     method: "POST",
                     body: formData,
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
+                    headers: { "Authorization": `Bearer ${token}` }
                 });
 
                 if (response.ok) {
-                    message.textContent = "Pracownik został dodany pomyślnie!";
+                    message.textContent = "✅ Pracownik został dodany pomyślnie!";
+                    document.getElementById("addUserForm").reset();
                 } else {
                     const errorText = await response.text();
-                    message.textContent = "Błąd dodawania: " + errorText;
+                    message.textContent = "❌ Błąd: " + errorText;
                 }
-            } catch (error) {
-                message.textContent = "Nie udało się połączyć z serwerem: " + error;
-                console.error("Błąd:", error);
+            } catch (err) {
+                message.textContent = "❌ Błąd połączenia: " + err;
             }
-        });
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const logoutButton = document.getElementById("logout-btn");
-            if (logoutButton) {
-                logoutButton.addEventListener("click", () => {
-                    localStorage.removeItem("token");
-                    window.location.href = "../../login.html"; // dopasuj ścieżkę do katalogu
-                });
-            } else {
-                console.error("Nie znaleziono przycisku logout-btn");
-            }
-        });
-    </script>
+        }
+</script>
 </body>
 
 </html>
