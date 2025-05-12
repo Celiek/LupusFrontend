@@ -202,29 +202,6 @@ function updateTimeDisplay() {
   }
 }
 
-document.getElementById("startWork").addEventListener("click", async () => {
-  try {
-    const token = localStorage.getItem("token");
-
-    const response = await fetch(
-      "http://localhost:8080/api/czasPracy/startPracy",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (!response.ok) throw new Error("Błąd rozpoczęcia pracy!");
-
-    const now = new Date();
-    localStorage.setItem("startPracy", now.toISOString());
-    updateTimeDisplay();
-  } catch (err) {
-    console.error(err);
-  }
-});
 
 setInterval(updateTimeDisplay, 60000); // aktualizacja co minutę
 updateTimeDisplay(); // startowa aktualizacja przy ładowaniu
@@ -314,5 +291,101 @@ document.getElementById("startBreak").addEventListener("click", () => {
       totalBreakTimeMs
     )}`;
     alertDiv.style.display = "block";
+  }
+});
+
+
+let selectedWorkerId = null;
+
+// Funkcja wywoływana po kliknięciu "Stop pracy"
+function stopPraca(idPracownika) {
+  selectedWorkerId = idPracownika;
+  const modal = new bootstrap.Modal(document.getElementById("confirmStopModal"));
+  modal.show();
+}
+
+// Obsługa kliknięcia "Zatwierdź" w modalu
+document.addEventListener("DOMContentLoaded", () => {
+  const confirmBtn = document.getElementById("confirmStopBtn");
+
+  confirmBtn.addEventListener("click", async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/czasPracy/stopPracy?id=${selectedWorkerId}`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Błąd zatrzymania pracy: ${response.status}`);
+      }
+
+      alert(`Zatrzymano pracę pracownika ID: ${selectedWorkerId}`);
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById("confirmStopModal"));
+      modal.hide();
+
+    } catch (error) {
+      console.error("Błąd:", error);
+      alert("Nie udało się zatrzymać pracy.");
+    }
+  });
+});
+
+
+async function stopPracaDlaWielu() {
+  const token = localStorage.getItem("token");
+
+  // Pobierz zaznaczone checkboxy
+  const checkboxes = document.querySelectorAll(".obecny-checkbox:checked");
+  const ids = Array.from(checkboxes).map((cb) => parseInt(cb.dataset.id));
+
+  if (ids.length === 0) {
+    alert("Zaznacz przynajmniej jednego pracownika.");
+    return;
+  }
+
+  const potwierdzenie = confirm(
+    `Czy na pewno chcesz zakończyć pracę dla ${ids.length} pracownika(ów)?`
+  );
+  if (!potwierdzenie) return;
+
+  try {
+    const response = await fetch(
+      "http://localhost:8080/api/czasPracy/stopPracaWielu",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(ids),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Błąd HTTP: ${response.status}`);
+    }
+
+    const result = await response.text();
+    alert("Zakończono pracę dla zaznaczonych pracowników.");
+  } catch (err) {
+    console.error("Błąd:", err);
+    alert("Nie udało się zakończyć pracy dla wielu pracowników.");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const logoutButton = document.getElementById("logout-btn");
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      localStorage.removeItem("token");
+      window.location.href = "../../login.html"; // dopasuj ścieżkę do katalogu
+    });
+  } else {
+    console.error("Nie znaleziono przycisku logout-btn");
   }
 });

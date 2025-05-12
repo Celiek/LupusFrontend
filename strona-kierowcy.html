@@ -98,6 +98,11 @@
                                 <i class="fas fa-users"></i> Ilość pracujących: <strong id="workerCount">0</strong>
                             </span>
                         </li>
+                        <li class="nav-item me-4">
+                            <span class="nav-link">
+                                <button class="btn btn-danger ms-2" id="logout-btn">Wyloguj</button>
+                            </span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -116,7 +121,7 @@
 
             </div>
             <div class="col-md-4 mb-2">
-                <button id="stopWork" class="btn btn-danger w-100">Stop pracy</button>
+                <button id="stopWork" class="btn btn-danger w-100" onclick="stopPracaDlaWielu()">Stop pracy</button>
                 <div class="separator"></div>
             </div>
         </div>
@@ -164,6 +169,25 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal potwierdzający zatrzymanie pracy -->
+    <div class="modal fade" id="confirmStopModal" tabindex="-1" aria-labelledby="confirmStopModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Potwierdzenie</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"></button>
+                </div>
+                <div class="modal-body">
+                    Czy na pewno chcesz zatrzymać czas pracy tego pracownika?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuluj</button>
+                    <button type="button" class="btn btn-danger" id="confirmStopBtn">Zatwierdź</button>
                 </div>
             </div>
         </div>
