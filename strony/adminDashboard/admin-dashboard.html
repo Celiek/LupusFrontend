@@ -158,10 +158,33 @@
                         <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
                             data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
-                                <a href="#">Urlopy</a><br>
+                                <a href="#">Generuj wypłaty dla pracowników</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                Urlopy
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="#">Lista Urlopów</a><br>
                             </div>
                             <div class="accordion-body">
-                                <a href="#">Generuj dokumenty wypłaty</a>
+                                <a href="#">Dodaj Urlop</a><br>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="#">Usun urlop</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="#">Edytuj urlop</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="#">Dodaj urlopy</a>
                             </div>
                         </div>
                     </div>
@@ -197,7 +220,6 @@
                                 <li class="nav-item">
                                     <button class="btn btn-danger ms-2" id="logout-btn">Wyloguj się</button>
                                 </li>
-
                             </ul>
                         </div>
                     </div>
@@ -269,16 +291,68 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="urlopy">
+                            <h2>Lista urlopowiczów</h2>
+                            <table class="table table-rounded mt-3" id="urlopy-table">
+                                <thead>
+                                    <tr>
+                                        <th>Imię i nazwisko</th>
+                                        <th>Data od</th>
+                                        <th>Data do</th>
+                                        <th>Typ urlopu</th>
+                                        <th>Powod urlopu</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            
+                            <div id="blad" class="alert alert-danger d-none" role="alert">
+                                Nie udało się pobrać danych.                  </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        const token = localStorage.getItem("token");
+       fetch("http://localhost:8080/api/urlopy/wszystkie", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Błąd serwera");
+                }
+                return response.json();
+            })
+            .then(data => {
+                const tbody = document.querySelector("#urlopy-table tbody");
+                data.forEach((row, index) => {
+                    const tr = document.createElement("tr");
+                    row.forEach(cell => {
+                        const td = document.createElement("td");
+                        td.textContent = cell;
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+            })
+            .catch(error => {
+                console.error(error);
+                document.getElementById("blad").classList.remove("d-none");
+            });
+    </script>
     
     <script>
         console.log("Token:", localStorage.getItem("token"));
         // Rozdzielenie tokena na części (header, payload, signature)
-        const token = localStorage.getItem("token");
+        //onst token = localStorage.getItem("token");
         const tokenParts = token.split("."); 
         const payload = atob(tokenParts[1]); // Dekodowanie części payload z Base64
 
