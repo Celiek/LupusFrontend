@@ -21,24 +21,22 @@
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3 col-lg-2 custom-sidebar">
-                <h1><a href="/strony/adminDashboard/admin-dashboard.html">Lupus HRM</a></h1>
+                <a href="/strony/adminDashboard/admin-dashboard.html" class="custom-anchor">
+                    <img src="logo.svg" alt="Logo" style="width: 200px; height: auto;">
+                    <h1 class="mt-3 custom-anchor" style="font-size: 1.8rem;">GR Jesionówka</h1>
+                </a>
                 <div class="accordion" id="sidebarAccordion">
+                    <!-- Akordeon 1 -->
                     <!-- Akordeon 1 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                aria-expanded="true" aria-controls="collapseOne">
                                 Pracownicy
                             </button>
                         </h2>
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
                             data-bs-parent="#sidebarAccordion">
-                            <div class="accordion-body">
-                                <a href="czas_pracy.html">Czas pracy pracowników</a>
-                            </div>
-                            <div class="accordion-body">
-                                <a href="lista.html">Lista pracowników</a>
-                            </div>
                             <div class="accordion-body">
                                 <a href="addpracownik.html">Dodaj pracownika</a>
                             </div>
@@ -48,41 +46,32 @@
                             <div class="accordion-body">
                                 <a href="updatepracownik.html">Zaktualizuj dane pracownika</a>
                             </div>
+                            <div class="accordion-body">
+                                <a href="lista.html">Lista pracowników</a>
+                            </div>
                         </div>
                     </div>
                     <!-- Akordeon 2 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                aria-expanded="false" aria-controls="collapseTwo">
                                 Czas pracy
                             </button>
                         </h2>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
                             data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
-                                <a href="../czasPracy/add-tygodniowa.html">Dodaj tygodniową wypłatę pracownikom</a>
+                                <a href="czas_pracy_today.html">Czas pracy dzisiaj</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="../czasPracy/add-tygodniowe.html">Dodaj tygodniową wypłatę pracownikowi</a>
+                                <a href="czas_pracy_yesterday.html">Czas pracy wczoraj</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="../czasPracy/popraw-wyplaty.html">Popraw wypłatę pracownikom</a>
+                                <a href="czas_pracy_month.html">Czas pracy w tym miesiącu</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="../czasPracy/popraw-wyplate">Popraw wypłatę pracownikowi</a>
-                            </div>
-                            <div class="accordion-body">
-                                <a href="czasPracy/lista-wyplat.html">Wypłaty tygodniowe pracownikow</a>
-                            </div>
-                            <div class="accordion-body">
-                                <a href="czasPracy/lista-wyplat-pracownika.html">Wyplaty tygodniowe pracownika</a>
-                            </div>
-                            <div class="accordion-body">
-                                <a href="czasPracy/wyplaty-miesieczne.html">Wyplaty miesieczne Pracownikow</a>
-                            </div>
-                            <div class="accordion-body">
-                                <a href="czasPracy/wyplaty-miesieczne-pracownika.html">Wyplaty miesieczne Pracownika</a>
+                                <a href="czas_pracy_season.html">Czas pracy w tym sezonie</a>
                             </div>
                         </div>
                     </div>
@@ -97,11 +86,53 @@
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
                             data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
-                                <a href="#">Strona Kierowcy</a>
+                                <a href="../../strona-kierowcy.html">Strona Kierowcy</a>
                             </div>
                         </div>
                     </div>
-                </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Dokumenty
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="../Inne/generate_documents.html">Generuj wypłaty dla pracowników</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                Urlopy
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="../urlopy/urlopy.html">Lista Urlopów</a><br>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../urlopy/dodaj_urlop.html">Dodaj Urlop</a><br>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../urlopy/usun_urlop.html">Usun urlop</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../urlopy/edytuj_urlop.html">Edytuj urlop</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../urlopy/dodaj_urlopy.html">Dodaj urlopy</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    </div>
             </div>
 
             <!-- Główna treść -->
@@ -167,7 +198,7 @@
         </div>
     </div>
     <footer class="footer d-flex flex-wrap justify-content-between align-items-center">
-        <p class="col-md-4 mb-0 text-muted">&copy; 2025 Lupus</p>
+        <p class="col-md-4 mb-0 text-muted">&copy; 2025 Gr Jesionówka</p>
 
         <a href="/"
             class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto  text-decoration-none">

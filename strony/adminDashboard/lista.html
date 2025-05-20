@@ -18,165 +18,197 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 
-        <div class="container-fluid">
-            <div class="row">
-                <!-- Sidebar -->
-                <div class="col-md-3 col-lg-2 custom-sidebar">
-                    <h1><a href="/strony/adminDashboard/admin-dashboard.html">Lupus HRM</a></h1>
-                    <div class="accordion" id="sidebarAccordion">
-                        <!-- Akordeon 1 -->
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    Pracownicy
-                                </button>
-                            </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                                data-bs-parent="#sidebarAccordion">
-                                <div class="accordion-body">
-                                    <a href="czas_pracy.html">Czas pracy pracowników</a>
-                                </div>
-                                <div class="accordion-body">
-                                    <a href="lista.html">Lista pracowników</a>
-                                </div>
-                                <div class="accordion-body">
-                                    <a href="addpracownik.html">Dodaj pracownika</a>
-                                </div>
-                                <div class="accordion-body">
-                                    <a href="removepracownik.html">Usuń pracownika</a>
-                                </div>
-                                <div class="accordion-body">
-                                    <a href="updatepracownik.html">Zaktualizuj dane pracownika</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Akordeon 2 -->
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingTwo">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    Czas pracy
-                                </button>
-                            </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                                data-bs-parent="#sidebarAccordion">
-                                <div class="accordion-body">
-                                    <a href="../czasPracy/add-tygodniowa.html">Dodaj tygodniową wypłatę pracownikom</a>
-                                </div>
-                                <div class="accordion-body">
-                                    <a href="../czasPracy/add-tygodniowe.html">Dodaj tygodniową wypłatę pracownikowi</a>
-                                </div>
-                                <div class="accordion-body">
-                                    <a href="../czasPracy/popraw-wyplaty.html">Popraw wypłatę pracownikom</a>
-                                </div>
-                                <div class="accordion-body">
-                                    <a href="../czasPracy/popraw-wyplate">Popraw wypłatę pracownikowi</a>
-                                </div>
-                                <div class="accordion-body">
-                                    <a href="czasPracy/lista-wyplat.html">Wypłaty tygodniowe pracownikow</a>
-                                </div>
-                                <div class="accordion-body">
-                                    <a href="czasPracy/lista-wyplat-pracownika.html">Wyplaty tygodniowe pracownika</a>
-                                </div>
-                                <div class="accordion-body">
-                                    <a href="czasPracy/wyplaty-miesieczne.html">Wyplaty miesieczne Pracownikow</a>
-                                </div>
-                                <div class="accordion-body">
-                                    <a href="czasPracy/wyplaty-miesieczne-pracownika.html">Wyplaty miesieczne Pracownika</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Akordeon 3 -->
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingThree">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    Strona Adama
-                                </button>
-                            </h2>
-                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                                data-bs-parent="#sidebarAccordion">
-                                <div class="accordion-body">
-                                    <a href="#">Strona Kierowcy</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 custom-sidebar">
+                <div class="text-center my-3">
+                    <a href="/strony/adminDashboard/admin-dashboard.html">
+                        <img src="logo.svg" alt="Logo" style="width: 200px; height: auto;">
+                        <h1 class="mt-2" style="font-size: 1.8rem;">GR Jesionówka</h1>
+                    </a>
                 </div>
-    
-                <!-- Główna treść -->
-                <div class="col-md-9 col-lg-10 p-4">
-                    <!-- navbar tutaj bedzie  -->
-                    <nav class="navbar navbar-expand-lg custom-navbar">
-                        <div class="container-fluid">
-                            <a class="navbar-brand" href="#">Navbar</a>
-                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
+                <div class="accordion" id="sidebarAccordion">
+                    <!-- Akordeon 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                aria-expanded="true" aria-controls="collapseOne">
+                                Pracownicy
                             </button>
-                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#">Link</a>
-                                    </li>
-                                    <!-- divider -->
-                                    <li class="nav-item divider"></li>
-                                    <!-- imie nazwisko i zdjecie uzytkownika -->
-                                    <li class="nav-item">
-                                        <a class="nav-link d-flex" href="#" id="user-name"></a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <button class="btn btn-danger ms-2" id="logout-btn">Wyloguj się</button>
-                                    </li>
-                                </ul>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="addpracownik.html">Dodaj pracownika</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="removepracownik.html">Usuń pracownika</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="updatepracownik.html">Zaktualizuj dane pracownika</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="lista.html">Lista pracowników</a>
                             </div>
                         </div>
-                    </nav>
-                    <div class=" justify-content-center align-items-center">
-                        <h1 class="h1-napis">Lista Pracowników</h1>
-                        <table id="wyniki">
-                            <thead>
-                                <tr>
-                                    <th>Imię</th>
-                                    <th>Drugie Imię</th>
-                                    <th>Zdjęcie</th>
-                                    <th>Nazwisko</th>
-                                    <th>Typ Pracownika</th>
-                                    <th>Data Dołączenia</th>
-                                    <th>Login</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <!-- Wiersze będą generowane dynamicznie -->
-                            </tbody>
-                        </table>
                     </div>
+                    <!-- Akordeon 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Czas pracy
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="czas_pracy_today.html">Czas pracy dzisiaj</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czas_pracy_yesterday.html">Czas pracy wczoraj</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czas_pracy_month.html">Czas pracy w tym miesiącu</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czas_pracy_season.html">Czas pracy w tym sezonie</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Akordeon 3 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Strona Adama
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="../../strona-kierowcy.html">Strona Kierowcy</a>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Dokumenty
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="../Inne/generate_documents.html">Generuj wypłaty dla pracowników</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                Urlopy
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="../urlopy/urlopy.html">Lista Urlopów</a><br>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../urlopy/dodaj_urlop.html">Dodaj Urlop</a><br>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../urlopy/usun_urlop.html">Usun urlop</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../urlopy/edytuj_urlop.html">Edytuj urlop</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../urlopy/dodaj_urlopy.html">Dodaj urlopy</a>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+
+            <!-- Główna treść -->
+            <div class="col-md-9 col-lg-10 p-4">
+                <!-- navbar tutaj bedzie  -->
+                <nav class="navbar navbar-expand-lg custom-navbar">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="#">Navbar</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Link</a>
+                                </li>
+                                <!-- divider -->
+                                <li class="nav-item divider"></li>
+                                <!-- imie nazwisko i zdjecie uzytkownika -->
+                                <li class="nav-item">
+                                    <a class="nav-link d-flex" href="#" id="user-name"></a>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="btn btn-danger ms-2" id="logout-btn">Wyloguj się</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <div class=" justify-content-center align-items-center">
+                    <h1 class="h1-napis">Lista Pracowników</h1>
+                    <table id="wyniki">
+                        <thead>
+                            <tr>
+                                <th>Imię</th>
+                                <th>Drugie Imię</th>
+                                <th>Zdjęcie</th>
+                                <th>Nazwisko</th>
+                                <th>Typ Pracownika</th>
+                                <th>Data Dołączenia</th>
+                                <th>Login</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Wiersze będą generowane dynamicznie -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-            <footer class="footer d-flex flex-wrap justify-content-between align-items-center">
-                <p class="col-md-4 mb-0 text-muted">&copy; 2025 Lupus</p>
-            
-                <a href="/"
-                    class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto  text-decoration-none">
-                    <svg class="bi me-2" width="40" height="32">
-                        <use xlink:href="#bootstrap" />
-                    </svg>
-                </a>
-            
-                <ul class="nav col-md-4 justify-content-end">
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Twórca Gabriel Stachnik</a></li>
-                    <li class="nav-item"><a href="https://www.github.com/Celiek" class="nav-link px-2 text-muted">Github</a>
-                    </li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Adres email Tworcy: g.stachnik@onet.pl</a>
-                    </li>
-                </ul>
-            </footer>
+    </div>
+    <footer class="footer d-flex flex-wrap justify-content-between align-items-center">
+        <p class="col-md-4 mb-0 text-muted">&copy; 2025 GR Jesionówka/p>
+
+        <a href="/"
+            class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto  text-decoration-none">
+            <svg class="bi me-2" width="40" height="32">
+                <use xlink:href="#bootstrap" />
+            </svg>
+        </a>
+
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Twórca Gabriel Stachnik</a></li>
+            <li class="nav-item"><a href="https://www.github.com/Celiek" class="nav-link px-2 text-muted">Github</a>
+            </li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Adres email Tworcy: g.stachnik@onet.pl</a>
+            </li>
+        </ul>
+    </footer>
     <script>
         // Pobranie danych z endpointa
         async function fetchPracownicy() {
@@ -204,46 +236,46 @@
 
         // Funkcja do wypełnienia tabeli danymi w stylu Bootstrap
         function populateTable(pracownicy) {
-                console.table(pracownicy);
-                const container = document.getElementById("wyniki");
-                container.innerHTML = ""; // Czyścimy kontener
+            console.table(pracownicy);
+            const container = document.getElementById("wyniki");
+            container.innerHTML = ""; // Czyścimy kontener
 
-                const tableResponsiveDiv = document.createElement("div");
-                tableResponsiveDiv.className = "table-responsive";
+            const tableResponsiveDiv = document.createElement("div");
+            tableResponsiveDiv.className = "table-responsive";
 
-                const table = document.createElement("table");
-                table.className = "table table-striped table-bordered table-hover";
+            const table = document.createElement("table");
+            table.className = "table table-striped table-bordered table-hover";
 
-                // ✅ DODANE nowe kolumny
-                const headers = [
-                    "Imię", "Drugie Imię", "Zdjęcie", "Nazwisko",
-                    "Typ Pracownika", "Data Dołączenia", "Login",
-                    "Kraj Pochodzenia", "Numer WhatsApp"
-                ];
+            // ✅ DODANE nowe kolumny
+            const headers = [
+                "Imię", "Drugie Imię", "Zdjęcie", "Nazwisko",
+                "Typ Pracownika", "Data Dołączenia", "Login",
+                "Kraj Pochodzenia", "Numer WhatsApp"
+            ];
 
-                const thead = document.createElement("thead");
-                const headerRow = document.createElement("tr");
-                headers.forEach(header => {
-                    const th = document.createElement("th");
-                    th.textContent = header;
-                    headerRow.appendChild(th);
-                });
-                thead.appendChild(headerRow);
-                table.appendChild(thead);
+            const thead = document.createElement("thead");
+            const headerRow = document.createElement("tr");
+            headers.forEach(header => {
+                const th = document.createElement("th");
+                th.textContent = header;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
 
-                const tbody = document.createElement("tbody");
-                pracownicy.forEach(pracownik => {
-                    const row = document.createElement("tr");
+            const tbody = document.createElement("tbody");
+            pracownicy.forEach(pracownik => {
+                const row = document.createElement("tr");
 
-                    const imgSrc = pracownik.zdjecie
-                        ? `data:image/jpeg;base64,${pracownik.zdjecie}`
-                        : "https://via.placeholder.com/100";
+                const imgSrc = pracownik.zdjecie
+                    ? `data:image/jpeg;base64,${pracownik.zdjecie}`
+                    : "https://via.placeholder.com/100";
 
-                    const formattedDate = pracownik.dataDolaczenia
-                        ? new Date(pracownik.dataDolaczenia).toLocaleDateString('pl-PL')
-                        : "Brak daty";
+                const formattedDate = pracownik.dataDolaczenia
+                    ? new Date(pracownik.dataDolaczenia).toLocaleDateString('pl-PL')
+                    : "Brak daty";
 
-                    row.innerHTML = `
+                row.innerHTML = `
             <td>${pracownik.imie || "-"}</td>
             <td>${pracownik.drugieImie || "-"}</td>
             <td><img src="${imgSrc}" alt="Zdjęcie" width="100" class="img-thumbnail"></td>
@@ -254,13 +286,13 @@
             <td>${pracownik.krajPochodzenia || "-"}</td>
             <td>${pracownik.nrWhatsapp || "-"}</td>
         `;
-                    tbody.appendChild(row);
-                });
+                tbody.appendChild(row);
+            });
 
-                table.appendChild(tbody);
-                tableResponsiveDiv.appendChild(table);
-                container.appendChild(tableResponsiveDiv);
-            }
+            table.appendChild(tbody);
+            tableResponsiveDiv.appendChild(table);
+            container.appendChild(tableResponsiveDiv);
+        }
 
 
         // Wywołanie funkcji podczas ładowania strony
