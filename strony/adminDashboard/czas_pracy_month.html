@@ -178,8 +178,8 @@
                     <div class="col-md-6">
                         <div class="p-4 bg-white shadow rounded">
                             <i class="fa-solid fa-users fa-2x text-success mb-2"></i>
-                            <h5 class="text-muted">W pracy wczoraj</h5>
-                            <h3 id="liczba-pracownikow">...</h3>
+                            <h5 class="text-muted">Średnia liczba godzin / pracownik</h5>
+                            <h3 id="srednia-godzin">...</h3>
                         </div>
                     </div>
                 </div>
@@ -196,7 +196,7 @@
                                         <th>Data</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tabela-godzin">
+                                <tbody id="tabelaGodzin">
                                     <!-- wiersze będą wstawiane dynamicznie -->
                                 </tbody>
                             </table>
@@ -226,81 +226,148 @@
         </ul>
     </footer>
     <script>
-        async function aktualizujStatystyki() {
+        async function pobierzSumeISredniaGodzin() {
             const token = localStorage.getItem("token");
 
             const headers = {
                 "Authorization": `Bearer ${token}`
             };
 
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+            const startDate = firstDay.toISOString().split("T")[0];
+            const endDate = lastDay.toISOString().split("T")[0];
+
             try {
-                // Ilość pracowników dzisiaj
-                const resPracownicy = await fetch("http://localhost:8080/api/pracownik/nowiDzis", { headers });
-                const liczbaPracownikow = await resPracownicy.text();
-                document.getElementById("liczba-pracownikow").textContent = liczbaPracownikow + " osób";
+                const response = await fetch(`http://localhost:8080/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, {
+                    headers
+                });
 
-                // Czas pracy dzisiaj
-                // Czas pracy dzisiaj
-                const resGodziny = await fetch("http://localhost:8080/api/pracownik/czasPracyToday", { headers });
-                const godziny = parseFloat(await resGodziny.text());
+                if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
 
-                const godzinyCale = Math.floor(godziny); // część całkowita - godziny
-                const minuty = Math.round((godziny - godzinyCale) * 60); // pozostałe minuty
+                const data = await response.json();
 
-                // Sformatowany wynik HH:MM
-                const czasSformatowany = `${godzinyCale}:${minuty.toString().padStart(2, "0")}`;
+                // suma godzin
+                const sumaGodzin = data.reduce((acc, row) => acc + (parseFloat(row[4]) || 0), 0);
+                const godzinyCale = Math.floor(sumaGodzin);
+                const minuty = Math.round((sumaGodzin - godzinyCale) * 60);
+                const sformatowanaSuma = `${godzinyCale}:${minuty.toString().padStart(2, "0")}`;
+                document.getElementById("godziny-miesiac").textContent = sformatowanaSuma;
 
-                document.getElementById("godziny-miesiac").textContent = czasSformatowany;
+                // średnia godzin
+                const liczbaPracownikow = data.length;
+                const srednia = liczbaPracownikow > 0 ? sumaGodzin / liczbaPracownikow : 0;
+                const sredniaCale = Math.floor(srednia);
+                const sredniaMinuty = Math.round((srednia - sredniaCale) * 60);
+                const sformatowanaSrednia = `${sredniaCale}:${sredniaMinuty.toString().padStart(2, "0")}`;
+                document.getElementById("srednia-godzin").textContent = sformatowanaSrednia;
 
-            } catch (error) {
-                console.error("Błąd pobierania danych:", error);
+            } catch (err) {
+                console.error("Błąd pobierania danych:", err);
                 document.getElementById("godziny-miesiac").textContent = "Błąd";
-                document.getElementById("liczba-pracownikow").textContent = "Błąd";
+                document.getElementById("srednia-godzin").textContent = "Błąd";
             }
         }
 
-        document.addEventListener("DOMContentLoaded", aktualizujStatystyki);
+        // Wywołanie po załadowaniu strony
+        document.addEventListener("DOMContentLoaded", () => {
+            pobierzSumeISredniaGodzin();
+        });
     </script>
     <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-                const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
+        const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth(); // 0-based: styczeń = 0
 
-                async function pobierzGodzinyMiesiaca() {
-                    const headers = {
-                        "Authorization": `Bearer ${token}`
-                    };
+            const startDate = new Date(year, month, 1).toISOString().split("T")[0];
+            const endDate = new Date(year, month + 1, 0).toISOString().split("T")[0];
 
-                    const today = new Date();
-                    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-                    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-                    const startDate = firstDay.toISOString().split("T")[0];
-                    const endDate = lastDay.toISOString().split("T")[0];
-
-                    try {
-                        const response = await fetch(`http://localhost:8080/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, {
-                            headers
-                        });
-
-                        if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
-
-                        const data = await response.json();
-
-                        const godziny = parseFloat(data[0][1] || 0);
-                        const godzinyCale = Math.floor(godziny);
-                        const minuty = Math.round((godziny - godzinyCale) * 60);
-                        const sformatowany = `${godzinyCale}:${minuty.toString().padStart(2, "0")}`;
-
-                        document.getElementById("godziny-miesiac").textContent = sformatowany;
-                    } catch (err) {
-                        console.error("Błąd pobierania godzin z miesiąca:", err);
-                        document.getElementById("godziny-miesiac").textContent = "Błąd";
-                    }
+        try {
+            const response = await fetch(`http://localhost:8080/api/czasPracy/sumGodzinyPracyByDate?startDate=${startDate}&endDate=${endDate}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
                 }
-
-                pobierzGodzinyMiesiaca(); // <-- zamiast drugiego DOMContentLoaded
-
             });
+
+            if (!response.ok) {
+                throw new Error("Błąd pobierania danych");
+            }
+
+            const data = await response.json();
+            const tbody = document.getElementById("tabela-godzin");
+            tbody.innerHTML = "";
+
+            data.forEach(row => {
+                const tr = document.createElement("tr");
+
+                const tdImieNazwisko = document.createElement("td");
+                tdImieNazwisko.textContent = `${row[1]} ${row[2]}`;
+
+                const tdGodziny = document.createElement("td");
+                tdGodziny.textContent = parseFloat(row[4]).toFixed(2);
+
+                const tdData = document.createElement("td");
+                tdData.textContent = `${startDate} - ${endDate}`;
+
+                tr.appendChild(tdImieNazwisko);
+                tr.appendChild(tdGodziny);
+                tr.appendChild(tdData);
+                tbody.appendChild(tr);
+            });
+
+        } catch (error) {
+            console.error("Błąd pobierania danych:", error);
+            alert("Nie udało się pobrać danych z serwera.");
+        }
+    </script>
+    <script>
+        async function pobierzSumeISredniaGodzin() {
+            const token = localStorage.getItem("token");
+
+            const headers = {
+                "Authorization": `Bearer ${token}`
+            };
+
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+            const startDate = firstDay.toISOString().split("T")[0];
+            const endDate = lastDay.toISOString().split("T")[0];
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, {
+                    headers
+                });
+
+                if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
+
+                const data = await response.json();
+
+                // Suma godzin
+                const sumaGodzin = data.reduce((acc, row) => acc + (parseFloat(row[4]) || 0), 0);
+                const godzinyCale = Math.floor(sumaGodzin);
+                const minuty = Math.round((sumaGodzin - godzinyCale) * 60);
+                const sformatowanaSuma = `${godzinyCale}:${minuty.toString().padStart(2, "0")}`;
+                document.getElementById("godziny-miesiac").textContent = sformatowanaSuma;
+
+                // Średnia godzin
+                const liczbaPracownikow = data.length;
+                const srednia = liczbaPracownikow > 0 ? sumaGodzin / liczbaPracownikow : 0;
+                const sredniaCale = Math.floor(srednia);
+                const sredniaMinuty = Math.round((srednia - sredniaCale) * 60);
+                const sformatowanaSrednia = `${sredniaCale}:${sredniaMinuty.toString().padStart(2, "0")}`;
+                document.getElementById("srednia-godzin").textContent = sformatowanaSrednia;
+
+            } catch (err) {
+                console.error("Błąd pobierania danych:", err);
+                document.getElementById("godziny-miesiac").textContent = "Błąd";
+                document.getElementById("srednia-godzin").textContent = "Błąd";
+            }
+        }
     </script>
 
 
@@ -315,8 +382,65 @@
             } else {
                 console.error("Nie znaleziono przycisku logout-btn");
             }
+            //pobierzGodzinyMiesiaca();
+            pobierzSumeISredniaGodzin();
         });
     </script>
+    <script>
+        async function wypelnijTabeleGodzinami() {
+            const token = localStorage.getItem("token");
+
+            const headers = {
+                "Authorization": `Bearer ${token}`
+            };
+
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+            const startDate = firstDay.toISOString().split("T")[0];
+            const endDate = lastDay.toISOString().split("T")[0];
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, {
+                    headers
+                });
+
+                if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
+
+                const data = await response.json();
+                const tbody = document.getElementById("tabelaGodzin");
+                tbody.innerHTML = ""; // wyczyść stare dane
+
+                data.forEach(row => {
+                    const tr = document.createElement("tr");
+
+                    const tdImieNazwisko = document.createElement("td");
+                    tdImieNazwisko.textContent = `${row[1]} ${row[2]}`;
+
+                    const tdGodziny = document.createElement("td");
+                    tdGodziny.textContent = parseFloat(row[4]).toFixed(2);
+
+                    const tdData = document.createElement("td");
+                    tdData.textContent = `${startDate} – ${endDate}`;
+
+                    tr.appendChild(tdImieNazwisko);
+                    tr.appendChild(tdGodziny);
+                    tr.appendChild(tdData);
+
+                    tbody.appendChild(tr);
+                });
+
+            } catch (err) {
+                console.error("Błąd wypełniania tabeli:", err);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            wypelnijTabeleGodzinami();
+        });
+    </script>
+    
 </body>
 
 </html>
