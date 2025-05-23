@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista Urlopow</title>
+    <title>Dodaj Urlopy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../../css/admin-dashboard.css">
@@ -170,25 +170,22 @@
                     </div>
                 </nav>
                 <div class=" justify-content-center align-items-center">
-                    <div class="container mt-4">
-                        <h2 class="mb-3">Lista Urlopów</h2>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped align-middle text-center">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Imię i nazwisko</th>
-                                        <th>Od</th>
-                                        <th>Do</th>
-                                        <th>Typ urlopu</th>
-                                        <th>Powód</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tabela-urlopow">
-                                    <!-- Wiersze będą dodawane dynamicznie -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>                    
+                    <h2>Lista Uwagi</h2>
+                    
+                    <table class="table table-bordered text-center" id="tabela-uwag">
+                        <thead>
+                            <tr>
+                                <th>ID Uwagi</th>
+                                <th>ID Pracownika</th>
+                                <th>Data</th>
+                                <th>Treść</th>
+                                <th>Autor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-body-uwag">
+                            <!-- dane uwag -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -212,150 +209,49 @@
         </ul>
     </footer>
     <script>
-        // Pobranie danych z endpointa
-        async function fetchPracownicy() {
-            const token = localStorage.getItem("token"); // Pobierz token z localStorage
-            console.log("Token:", localStorage.getItem("token"));
-            try {
-                const response = await fetch("http://localhost:8080/api/urlopy/wszystkie", {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${token}`, // Wysłanie tokena w nagłówku
-                        "Content-Type": "application/json"
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const pracownicy = await response.json();
-                populateTable(pracownicy);
-            } catch (error) {
-                console.error("Błąd podczas pobierania danych:", error);
-            }
-        }
-
-        // Funkcja do wypełnienia tabeli danymi w stylu Bootstrap
-        function populateTable(pracownicy) {
-            console.table(pracownicy);
-            const container = document.getElementById("wyniki");
-            container.innerHTML = ""; // Czyścimy kontener
-
-            const tableResponsiveDiv = document.createElement("div");
-            tableResponsiveDiv.className = "table-responsive";
-
-            const table = document.createElement("table");
-            table.className = "table table-striped table-bordered table-hover";
-
-            // ✅ DODANE nowe kolumny
-            const headers = [
-                "Imię", "Drugie Imię", "Zdjęcie", "Nazwisko",
-                "Typ Pracownika", "Data Dołączenia", "Login",
-                "Kraj Pochodzenia", "Numer WhatsApp"
-            ];
-
-            const thead = document.createElement("thead");
-            const headerRow = document.createElement("tr");
-            headers.forEach(header => {
-                const th = document.createElement("th");
-                th.textContent = header;
-                headerRow.appendChild(th);
-            });
-            thead.appendChild(headerRow);
-            table.appendChild(thead);
-
-            const tbody = document.createElement("tbody");
-            pracownicy.forEach(pracownik => {
-                const row = document.createElement("tr");
-
-                const imgSrc = pracownik.zdjecie
-                    ? `data:image/jpeg;base64,${pracownik.zdjecie}`
-                    : "https://via.placeholder.com/100";
-
-                const formattedDate = pracownik.dataDolaczenia
-                    ? new Date(pracownik.dataDolaczenia).toLocaleDateString('pl-PL')
-                    : "Brak daty";
-
-                row.innerHTML = `
-            <td>${pracownik.imie || "-"}</td>
-            <td>${pracownik.drugieImie || "-"}</td>
-            <td><img src="${imgSrc}" alt="Zdjęcie" width="100" class="img-thumbnail"></td>
-            <td>${pracownik.nazwisko || "-"}</td>
-            <td>${pracownik.typPracownika || "-"}</td>
-            <td>${formattedDate}</td>
-            <td>${pracownik.login || "-"}</td>
-            <td>${pracownik.krajPochodzenia || "-"}</td>
-            <td>${pracownik.nrWhatsapp || "-"}</td>
-        `;
-                tbody.appendChild(row);
-            });
-
-            table.appendChild(tbody);
-            tableResponsiveDiv.appendChild(table);
-            container.appendChild(tableResponsiveDiv);
-        }
-
-
-        // Wywołanie funkcji podczas ładowania strony
-        fetchPracownicy();
-    </script>
-    <script>
-        async function wypelnijTabeleUrlopow() {
+        document.addEventListener("DOMContentLoaded", () => {
             const token = localStorage.getItem("token");
 
-            try {
-                const response = await fetch("http://localhost:8080/api/urlopy/wszystkie", {
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
+            async function pobierzUwagi() {
+                try {
+                    const res = await fetch("http://localhost:8080/api/uwagi/listAll", {
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        }
+                    });
 
-                if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
+                    if (!res.ok) throw new Error("Błąd sieci");
 
-                const data = await response.json(); // Każdy element to [imie i nazwisko, data_od, data_do, typ, powod]
+                    const uwagi = await res.json();
+                    wypelnijTabeleUwagi(uwagi);
+                } catch (err) {
+                    console.error("Błąd ładowania uwag:", err);
+                }
+            }
 
-                const tbody = document.getElementById("tabela-urlopow");
-                tbody.innerHTML = ""; // Czyścimy starą zawartość
+            function wypelnijTabeleUwagi(data) {
+                const tbody = document.getElementById("tabela-body-uwag");
+                tbody.innerHTML = "";
 
-                data.forEach(row => {
+                data.forEach(u => {
                     const tr = document.createElement("tr");
-
-                    const tdNazwisko = document.createElement("td");
-                    tdNazwisko.textContent = row[0];
-
-                    const tdOd = document.createElement("td");
-                    tdOd.textContent = row[1];
-
-                    const tdDo = document.createElement("td");
-                    tdDo.textContent = row[2];
-
-                    const tdTyp = document.createElement("td");
-                    tdTyp.textContent = row[3];
-
-                    const tdPowod = document.createElement("td");
-                    tdPowod.textContent = row[4];
-
-                    tr.appendChild(tdNazwisko);
-                    tr.appendChild(tdOd);
-                    tr.appendChild(tdDo);
-                    tr.appendChild(tdTyp);
-                    tr.appendChild(tdPowod);
-
+                    tr.innerHTML = `
+                            <td>${u.idUwagi}</td>
+                            <td>${u.idPracownika}</td>
+                            <td>${u.dataDodania}</td>
+                            <td>${u.trescUwagi}</td>
+                            <td>${u.autorUwagi}</td>
+                        `;
                     tbody.appendChild(tr);
                 });
-
-            } catch (err) {
-                console.error("Błąd podczas pobierania urlopów:", err);
-                alert("Nie udało się pobrać danych urlopów.");
             }
-        }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            wypelnijTabeleUrlopow();
+            pobierzUwagi();
         });
     </script>
     
+
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const logoutButton = document.getElementById("logout-btn");

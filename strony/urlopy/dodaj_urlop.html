@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj Urlop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../css/admin-dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- boostrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 custom-sidebar">
+                <div class="text-center my-3">
+                    <a href="/strony/adminDashboard/admin-dashboard.html">
+                        <img src="logo.svg" alt="Logo" style="width: 200px; height: auto;">
+                        <h1 class="mt-2" style="font-size: 1.8rem;">GR Jesionówka</h1>
+                    </a>
+                </div>
+                <div class="accordion" id="sidebarAccordion">
+                    <!-- Akordeon 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Pracownicy
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="addpracownik.html">Dodaj pracownika</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="removepracownik.html">Usuń pracownika</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="updatepracownik.html">Zaktualizuj dane pracownika</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="lista.html">Lista pracowników</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Akordeon 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Czas pracy
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="czas_pracy_today.html">Czas pracy dzisiaj</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czas_pracy_yesterday.html">Czas pracy wczoraj</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czas_pracy_month.html">Czas pracy w tym miesiącu</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="czas_pracy_season.html">Czas pracy w tym sezonie</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Akordeon 3 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Strona Adama
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="../../strona-kierowcy.html">Strona Kierowcy</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                Dokumenty
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="../Inne/generate_documents.html">Generuj wypłaty dla pracowników</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                Urlopy
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
+                            data-bs-parent="#sidebarAccordion">
+                            <div class="accordion-body">
+                                <a href="../urlopy/urlopy.html">Lista Urlopów</a><br>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../urlopy/dodaj_urlop.html">Dodaj Urlop</a><br>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../urlopy/usun_urlop.html">Usun urlop</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../urlopy/edytuj_urlop.html">Edytuj urlop</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../urlopy/dodaj_urlopy.html">Dodaj urlopy</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Główna treść -->
+            <div class="col-md-9 col-lg-10 p-4">
+                <!-- navbar tutaj bedzie  -->
+                <nav class="navbar navbar-expand-lg custom-navbar">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="#">Navbar</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Link</a>
+                                </li>
+                                <!-- divider -->
+                                <li class="nav-item divider"></li>
+                                <!-- imie nazwisko i zdjecie uzytkownika -->
+                                <li class="nav-item">
+                                    <a class="nav-link d-flex" href="#" id="user-name"></a>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="btn btn-danger ms-2" id="logout-btn">Wyloguj się</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <div class=" justify-content-center align-items-center">
+                    <div class="container mt-5">
+                        <h2>Dodaj urlopy</h2>
+
+                        <!-- Formularz zbiorczego dodawania -->
+                        <form id="form-dla-wszystkich" class="mb-4">
+                            <div class="row g-2">
+                                <div class="col-md-2"><input type="date" class="form-control" id="dataOdAll" required>
+                                </div>
+                                <div class="col-md-2"><input type="date" class="form-control" id="dataDoAll" required>
+                                </div>
+                                <div class="col-md-3"><input type="text" class="form-control" placeholder="Typ urlopu"
+                                        id="typUrlopuAll" required></div>
+                                <div class="col-md-3"><input type="text" class="form-control" placeholder="Powód"
+                                        id="powodAll" required>
+                                </div>
+                                <div class="col-md-2"><button type="submit" class="btn btn-success w-100">Dodaj
+                                        wszystkim</button></div>
+                            </div>
+                        </form>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-center" id="tabela-urlopow">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Imię i nazwisko</th>
+                                        <th>Data od</th>
+                                        <th>Data do</th>
+                                        <th>Typ urlopu</th>
+                                        <th>Powód</th>
+                                        <th>Akcja</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabela-body-urlopow">
+                                    <!-- dane pracowników -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer d-flex flex-wrap justify-content-between align-items-center">
+        <p class="col-md-4 mb-0 text-muted">&copy; 2025 GR Jesionówka/p>
+
+            <a href="/"
+                class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto  text-decoration-none">
+                <svg class="bi me-2" width="40" height="32">
+                    <use xlink:href="#bootstrap" />
+                </svg>
+            </a>
+
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Twórca Gabriel Stachnik</a></li>
+            <li class="nav-item"><a href="https://www.github.com/Celiek" class="nav-link px-2 text-muted">Github</a>
+            </li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Adres email Tworcy: g.stachnik@onet.pl</a>
+            </li>
+        </ul>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const token = localStorage.getItem("token");
+
+            async function pobierzPracownikow() {
+                try {
+                    const res = await fetch("http://localhost:8080/api/pracownik/listall", {
+                        headers: { "Authorization": "Bearer " + token }
+                    });
+                    const pracownicy = await res.json();
+                    wypelnijTabele(pracownicy);
+                } catch (err) {
+                    console.error("Błąd ładowania pracowników:", err);
+                }
+            }
+
+            function wypelnijTabele(data) {
+                const tbody = document.getElementById("tabela-body-urlopow");
+                tbody.innerHTML = "";
+
+                data.forEach(p => {
+                    const tr = document.createElement("tr");
+
+                    tr.innerHTML = `
+                            <td>${p.id}</td>
+                            <td>${p.imie} ${p.nazwisko}</td>
+                            <td><input type="date" class="form-control" id="od-${p.id}"></td>
+                            <td><input type="date" class="form-control" id="do-${p.id}"></td>
+                            <td><input type="text" class="form-control" id="typ-${p.id}" placeholder="Typ"></td>
+                            <td><input type="text" class="form-control" id="powod-${p.id}" placeholder="Powód"></td>
+                            <td><button class="btn btn-primary" onclick="dodajUrlop(${p.id})">Dodaj</button></td>
+                        `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // Dodanie urlopu pojedynczemu pracownikowi
+            window.dodajUrlop = async function (id) {
+                const data_Od = document.getElementById(`od-${id}`).value;
+                const data_Do = document.getElementById(`do-${id}`).value;
+                const typ = document.getElementById(`typ-${id}`).value;
+                const powod = document.getElementById(`powod-${id}`).value;
+
+                if (!data_Od || !data_Do || !typ || !powod) {
+                    alert("Uzupełnij wszystkie pola dla pracownika ID " + id);
+                    return;
+                }
+
+                try {
+                    const res = await fetch(`http://localhost:8080/api/urlopy/dodaj?id_Pracownika=${id}&data_Od=${data_Od}&data_Do=${data_Do}&typ_Urlopu=${typ}&powod=${powod}`, {
+                        method: "POST",
+                        headers: { "Authorization": "Bearer " + token }
+                    });
+
+                    if (res.ok) alert(`Urlop dodany dla pracownika ID ${id}`);
+                    else alert("Błąd dodawania urlopu");
+                } catch (err) {
+                    console.error("Błąd dodawania urlopu:", err);
+                }
+            };
+
+            // Masowe dodawanie urlopów
+            document.getElementById("form-dla-wszystkich").addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const dataOd = document.getElementById("dataOdAll").value;
+                const dataDo = document.getElementById("dataDoAll").value;
+                const typ = document.getElementById("typUrlopuAll").value;
+                const powod = document.getElementById("powodAll").value;
+
+                try {
+                    const res = await fetch(`http://localhost:8080/api/urlopy/dodajWszystkim?dataOd=${dataOd}&dataDo=${dataDo}&typ=${typ}&powod=${powod}`, {
+                        method: "POST",
+                        headers: { "Authorization": "Bearer " + token }
+                    });
+
+                    const text = await res.text();
+                    alert(text);
+                } catch (err) {
+                    console.error("Błąd masowego dodawania urlopów:", err);
+                }
+            });
+
+            pobierzPracownikow();
+        });
+    </script>
+    
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const logoutButton = document.getElementById("logout-btn");
+            if (logoutButton) {
+                logoutButton.addEventListener("click", () => {
+                    localStorage.removeItem("token");
+                    window.location.href = "../../login.html"; // dopasuj ścieżkę do katalogu
+                });
+            } else {
+                console.error("Nie znaleziono przycisku logout-btn");
+            }
+        });
+    </script>
+</body>
+
+</html>
