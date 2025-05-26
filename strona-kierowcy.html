@@ -72,6 +72,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg navbar-custom shadow">
@@ -147,14 +148,13 @@
                         <table class="table table-bordered table-hover" id="userTable">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Imię</th>
+                                    <th>Imię i nazwisko</th>
                                     <th>Drugie imię</th>
-                                    <th>Nazwisko</th>
-                                    <th>Typ</th>
-                                    <th>Data Dołączenia</th>
+                                    <th>Data dołączenia</th>
                                     <th>Zdjęcie</th>
-                                    <th>Obecny?</th>
-                                    <th>Akcja</th> <!-- Dodano -->
+                                    <th>Obecny</th>
+                                    <th>Stop pracy</th>
+                                    <th>Start pracy</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -168,7 +168,8 @@
     </div>
 
     <!-- Modal potwierdzający zatrzymanie pracy -->
-    <div class="modal fade" id="confirmStopModal" tabindex="-1" aria-labelledby="confirmStopModalLabel" aria-hidden="true">
+    <div class="modal fade" id="confirmStopModal" tabindex="-1" aria-labelledby="confirmStopModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">

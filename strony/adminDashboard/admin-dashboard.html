@@ -337,9 +337,9 @@
             })
             .then(data => {
                 const tbody = document.querySelector("#urlopy-table tbody");
-                data.forEach((row, index) => {
+                data.forEach(row => {
                     const tr = document.createElement("tr");
-                    row.forEach(cell => {
+                    row.slice(0, 5).forEach(cell => {
                         const td = document.createElement("td");
                         td.textContent = cell;
                         tr.appendChild(td);

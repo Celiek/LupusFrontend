@@ -1,30 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pl">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dodaj Urlopy</title>
+    <meta charset="UTF-8" />
+    <title>Lista wypłat</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../../css/admin-dashboard.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        .pdf-pracownik {
+            padding: 20px;
+            margin-bottom: 40px;
+            border: 1px solid #ccc;
+            page-break-after: always;
+        }
+
+        .table-bordered td,
+        .table-bordered th {
+            border: 2px solid #000 !important;
+        }
+
+        table {
+            width: 100% !important;
+            table-layout: fixed;
+            word-wrap: break-word;
+        }
+
+        canvas,
+        img.signature {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid black;
+        }
+    </style>
+
 </head>
 
 <body>
-    <!-- boostrap js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const logoutButton = document.getElementById("logout-btn");
+            if (logoutButton) {
+                logoutButton.addEventListener("click", () => {
+                    localStorage.removeItem("token");
+                    window.location.href = "../../login.html"; // dopasuj ścieżkę do katalogu
+                });
+            } else {
+                console.error("Nie znaleziono przycisku logout-btn");
+            }
+        });
+    </script>
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3 col-lg-2 custom-sidebar">
                 <div class="text-center my-3">
                     <a href="/strony/adminDashboard/admin-dashboard.html">
-                        <img src="logo.svg" alt="Logo" style="width: 200px; height: auto;">
+                        <img src="../adminDashboard/logo.svg" alt="Logo" style="width: 200px; height: auto;">
                         <h1 class="mt-2" style="font-size: 1.8rem;">GR Jesionówka</h1>
                     </a>
                 </div>
@@ -169,59 +213,46 @@
                         </div>
                     </div>
                 </nav>
-                <div class=" justify-content-center align-items-center">
-                    <div class="container mt-5">
-                        <h2>Dodaj urlopy</h2>
+                <div class="container mt-5">
+                    <h2 class="mb-3">Godziny pracy pracowników</h2>
 
-                        <!-- Formularz zbiorczego dodawania -->
-                        <form id="form-dla-wszystkich" class="mb-4">
-                            <div class="row g-2">
-                                <div class="col-md-2"><input type="date" class="form-control" id="dataOdAll" required>
-                                </div>
-                                <div class="col-md-2"><input type="date" class="form-control" id="dataDoAll" required>
-                                </div>
-                                <div class="col-md-3"><input type="text" class="form-control" placeholder="Typ urlopu"
-                                        id="typUrlopuAll" required></div>
-                                <div class="col-md-3"><input type="text" class="form-control" placeholder="Powód"
-                                        id="powodAll" required>
-                                </div>
-                                <div class="col-md-2"><button type="submit" class="btn btn-success w-100">Dodaj
-                                        wszystkim</button></div>
-                            </div>
-                        </form>
-
-                        <div class="table-responsive">
-                            <table class="table table-bordered text-center" id="tabela-urlopow">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Imię i nazwisko</th>
-                                        <th>Data od</th>
-                                        <th>Data do</th>
-                                        <th>Typ urlopu</th>
-                                        <th>Powód</th>
-                                        <th>Akcja</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tabela-body-urlopow">
-                                    <!-- dane pracowników -->
-                                </tbody>
-                            </table>
+                    <!-- Wybór przedziału dat -->
+                    <form id="formularz-daty" class="row g-3 mb-4">
+                        <div class="col-auto">
+                            <label for="startDate" class="form-label">Data od:</label>
+                            <input type="date" class="form-control" id="startDate" required>
                         </div>
+                        <div class="col-auto">
+                            <label for="endDate" class="form-label">Data do:</label>
+                            <input type="date" class="form-control" id="endDate" required>
+                        </div>
+                        <div class="col-auto align-self-end">
+                            <button type="submit" class="btn btn-primary">Pobierz dane</button>
+                        </div>
+                        <div class="col-auto">
+                            <label for="stawka" class="form-label">Stawka godzinowa (zł):</label>
+                            <input type="number" class="form-control" id="stawka" step="0.01" value="23.50" required>
+                        </div>
+                    </form>
+
+                    <!-- Tabela wyników -->
+                    <div id="tabela-body"></div>
+                    <div class="text-end mb-3">
+                        <button id="zapisz-pdf" class="btn btn-success">Zapisz jako PDF</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <footer class="footer d-flex flex-wrap justify-content-between align-items-center">
-        <p class="col-md-4 mb-0 text-muted">&copy; 2025 GR Jesionówka/p>
+        <p class="col-md-4 mb-0 text-muted">&copy; 2025 Lupus</p>
 
-            <a href="/"
-                class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto  text-decoration-none">
-                <svg class="bi me-2" width="40" height="32">
-                    <use xlink:href="#bootstrap" />
-                </svg>
-            </a>
+        <a href="/"
+            class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto  text-decoration-none">
+            <svg class="bi me-2" width="40" height="32">
+                <use xlink:href="#bootstrap" />
+            </svg>
+        </a>
 
         <ul class="nav col-md-4 justify-content-end">
             <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Twórca Gabriel Stachnik</a></li>
@@ -231,107 +262,202 @@
             </li>
         </ul>
     </footer>
+
+
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
+        let listaPracownikow = [];
 
-            async function pobierzPracownikow() {
-                try {
-                    const res = await fetch("http://localhost:8080/api/pracownik/listall", {
-                        headers: { "Authorization": "Bearer " + token }
-                    });
-                    const pracownicy = await res.json();
-                    wypelnijTabele(pracownicy);
-                } catch (err) {
-                    console.error("Błąd ładowania pracowników:", err);
-                }
-            }
+        async function pobierzListePracownikow() {
+            const res = await fetch("http://localhost:8080/api/pracownik/listall", {
+                headers: { Authorization: "Bearer " + token }
+            });
+            listaPracownikow = await res.json();
+        }
 
-            function wypelnijTabele(data) {
-                const tbody = document.getElementById("tabela-body-urlopow");
-                tbody.innerHTML = "";
+        async function pobierzGodzinyDlaPracownikow(startDate, endDate) {
+                const container = document.getElementById("tabela-body");
+                container.innerHTML = "";
 
-                data.forEach(p => {
-                    const tr = document.createElement("tr");
-
-                    tr.innerHTML = `
-                            <td>${p.id}</td>
-                            <td>${p.imie} ${p.nazwisko}</td>
-                            <td><input type="date" class="form-control" id="od-${p.id}"></td>
-                            <td><input type="date" class="form-control" id="do-${p.id}"></td>
-                            <td><input type="text" class="form-control" id="typ-${p.id}" placeholder="Typ"></td>
-                            <td><input type="text" class="form-control" id="powod-${p.id}" placeholder="Powód"></td>
-                            <td><button class="btn btn-primary" onclick="dodajUrlop(${p.id})">Dodaj</button></td>
-                        `;
-                    tbody.appendChild(tr);
-                });
-            }
-
-            // Dodanie urlopu pojedynczemu pracownikowi
-            window.dodajUrlop = async function (id) {
-                const data_Od = document.getElementById(`od-${id}`).value;
-                const data_Do = document.getElementById(`do-${id}`).value;
-                const typ = document.getElementById(`typ-${id}`).value;
-                const powod = document.getElementById(`powod-${id}`).value;
-
-                if (!data_Od || !data_Do || !typ || !powod) {
-                    alert("Uzupełnij wszystkie pola dla pracownika ID " + id);
+                const stawka = parseFloat(document.getElementById("stawka").value);
+                if (isNaN(stawka) || stawka <= 0) {
+                    alert("Podaj poprawną stawkę godzinową.");
                     return;
                 }
 
-                try {
-                    const res = await fetch(`http://localhost:8080/api/urlopy/dodaj?id_Pracownika=${id}&data_Od=${data_Od}&data_Do=${data_Do}&typ_Urlopu=${typ}&powod=${powod}`, {
-                        method: "POST",
-                        headers: { "Authorization": "Bearer " + token }
+                for (const p of listaPracownikow) {
+                    const id = p.idPracownika;
+                    const imie = p.imie;
+                    const nazwisko = p.nazwisko;
+
+                    const res = await fetch(`http://localhost:8080/api/czasPracy/dniPracyZakres?idPracownika=${id}&dataOd=${startDate}&dataDo=${endDate}`, {
+                        headers: { Authorization: "Bearer " + token }
                     });
 
-                    if (res.ok) alert(`Urlop dodany dla pracownika ID ${id}`);
-                    else alert("Błąd dodawania urlopu");
-                } catch (err) {
-                    console.error("Błąd dodawania urlopu:", err);
+                    if (res.ok) {
+                        const dane = await res.json();
+                        if (dane.length === 0) continue;
+
+                        // Sekcja dla jednego pracownika
+                        const sekcja = document.createElement("div");
+                        sekcja.classList.add("pdf-pracownik");
+                        container.appendChild(sekcja);
+
+                        // Nagłówek
+                        const naglowek = document.createElement("h4");
+                        naglowek.textContent = `${imie} ${nazwisko} | Godziny pracy od ${startDate} do ${endDate}`;
+                        sekcja.appendChild(naglowek);
+
+                        // Tabela
+                        const table = document.createElement("table");
+                        table.classList.add("table", "table-bordered", "mb-2");
+
+                        const thead = document.createElement("thead");
+                        thead.innerHTML = `<tr><th>Data pracy</th><th>Ilość godzin</th><th>Urlop?</th></tr>`;
+                        table.appendChild(thead);
+
+                        const tbody = document.createElement("tbody");
+                        let sumaGodzin = 0;
+
+                        const resUrlop = await fetch(`http://localhost:8080/api/urlopy/urlopyPracownika?idPracownika=${id}`, {
+                            headers: { Authorization: "Bearer " + token }
+                        });
+                        const dniUrlopu = resUrlop.ok ? await resUrlop.json() : [];
+
+                        let current = new Date(startDate);
+                        const koniec = new Date(endDate);
+
+                        while (current <= koniec) {
+                            const dataStr = current.toISOString().split("T")[0];
+
+                            const entry = dane.find(e => e[3].startsWith(dataStr));
+                            const godziny = entry ? parseFloat(entry[4]) || 0 : 0;
+                            if (entry) sumaGodzin += godziny;
+
+                            const isUrlop = dniUrlopu.includes(dataStr);
+
+                            const godzinyText = entry ? godziny.toFixed(2) + " h" : "";
+                            const statusText = entry ? "" : "Wolne";
+
+                            const tr = document.createElement("tr");
+                            tr.innerHTML = `
+                    <td>${dataStr}</td>
+                    <td>${godzinyText}</td>
+                    <td>${isUrlop ? "Urlop" : statusText}</td>
+                `;
+                            tbody.appendChild(tr);
+
+                            current.setDate(current.getDate() + 1);
+                        }
+
+                        table.appendChild(tbody);
+                        sekcja.appendChild(table);
+
+                        // Suma godzin
+                        const sumaElem = document.createElement("p");
+                        sumaElem.innerHTML = `<strong>Suma godzin: ${sumaGodzin.toFixed(2)} h</strong>`;
+                        sekcja.appendChild(sumaElem);
+
+                        // Obliczenie i wyświetlenie wypłaty
+                        const wyplata = stawka * sumaGodzin;
+                        const wyplataElem = document.createElement("p");
+                        wyplataElem.innerHTML = `<strong>Wypłata: ${wyplata.toFixed(2)} zł</strong>`;
+                        sekcja.appendChild(wyplataElem);
+
+                        // Podpisy (canvas)
+                        const podpisy = document.createElement("div");
+                        podpisy.classList.add("row", "mb-5");
+
+                        podpisy.innerHTML = `
+                <div class="col-md-6">
+                    <p>Podpis pracownika:</p>
+                    <canvas width="400" height="150" class="border mb-2 w-100" id="podpis-pracownik-${id}"></canvas>
+                </div>
+                <div class="col-md-6">
+                    <p>Podpis szefa:</p>
+                    <canvas width="400" height="150" class="border mb-2 w-100" id="podpis-szef-${id}"></canvas>
+                </div>
+            `;
+                        sekcja.appendChild(podpisy);
+
+                        // Inicjalizacja podpisów
+                        function inicjalizujSignaturePad(canvasId) {
+                            const canvas = document.getElementById(canvasId);
+                            canvas.width = canvas.offsetWidth;
+                            canvas.height = canvas.offsetHeight;
+                            return new SignaturePad(canvas);
+                        }
+
+                        inicjalizujSignaturePad(`podpis-pracownik-${id}`);
+                        inicjalizujSignaturePad(`podpis-szef-${id}`);
+                    }
                 }
-            };
-
-            // Masowe dodawanie urlopów
-            document.getElementById("form-dla-wszystkich").addEventListener("submit", async (e) => {
-                e.preventDefault();
-
-                const dataOd = document.getElementById("dataOdAll").value;
-                const dataDo = document.getElementById("dataDoAll").value;
-                const typ = document.getElementById("typUrlopuAll").value;
-                const powod = document.getElementById("powodAll").value;
-
-                try {
-                    const res = await fetch(`http://localhost:8080/api/urlopy/dodajWszystkim?dataOd=${dataOd}&dataDo=${dataDo}&typ=${typ}&powod=${powod}`, {
-                        method: "POST",
-                        headers: { "Authorization": "Bearer " + token }
-                    });
-
-                    const text = await res.text();
-                    alert(text);
-                } catch (err) {
-                    console.error("Błąd masowego dodawania urlopów:", err);
-                }
-            });
-
-            pobierzPracownikow();
-        });
-    </script>
-
-
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const logoutButton = document.getElementById("logout-btn");
-            if (logoutButton) {
-                logoutButton.addEventListener("click", () => {
-                    localStorage.removeItem("token");
-                    window.location.href = "../../login.html"; // dopasuj ścieżkę do katalogu
-                });
-            } else {
-                console.error("Nie znaleziono przycisku logout-btn");
             }
+
+
+        //zapisywanie pdfa
+        document.getElementById("zapisz-pdf").addEventListener("click", async () => {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF("p", "mm", "a4");
+            const sekcje = document.querySelectorAll(".pdf-pracownik");
+
+            for (let i = 0; i < sekcje.length; i++) {
+                const sekcja = sekcje[i];
+
+                // 1. Zamiana canvasów na obrazki
+                const canvasy = sekcja.querySelectorAll("canvas");
+                canvasy.forEach(canvas => {
+                    const img = document.createElement("img");
+                    img.src = canvas.toDataURL("image/png");
+                    img.className = "signature";
+                    canvas.parentNode.insertBefore(img, canvas);
+                    canvas.remove();
+                });
+
+                // 2. Render sekcji do obrazu
+                const canvas = await html2canvas(sekcja, { scale: 2 });
+                const imgData = canvas.toDataURL("image/png");
+
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+
+                const imgProps = pdf.getImageProperties(imgData);
+                const ratio = imgProps.width / imgProps.height;
+
+                const imgWidth = pageWidth - 20;
+                const imgHeight = imgWidth / ratio;
+
+                // 3. Dodanie nowej strony jeśli to nie pierwsza
+                if (i > 0) pdf.addPage();
+
+                pdf.addImage(imgData, "PNG", 10, 10, imgWidth, Math.min(imgHeight, pageHeight - 20));
+            }
+
+            const teraz = new Date();
+            const data = teraz.toLocaleDateString('pl-PL').replaceAll(".", "-");
+            const godzina = teraz.toTimeString().slice(0, 5).replace(":", "-");
+
+            pdf.save(`Wypłata_GR_Jesionówka_${data}_${godzina}.pdf`);
         });
+
+
+
+        document.getElementById("formularz-daty").addEventListener("submit", async function (event) {
+            event.preventDefault(); // ZATRZYMUJE domyślne wysłanie formularza
+
+            const startDate = document.getElementById("startDate").value;
+            const endDate = document.getElementById("endDate").value;
+
+            if (!startDate || !endDate) {
+                alert("Proszę wybrać przedział dat.");
+                return;
+            }
+
+            await pobierzGodzinyDlaPracownikow(startDate, endDate);
+        });
+
+        // Pierwsze pobranie listy pracowników
+        document.addEventListener("DOMContentLoaded", pobierzListePracownikow);
     </script>
 </body>
 

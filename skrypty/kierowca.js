@@ -1,6 +1,35 @@
 let workStartTime = null;
 let breakStartTime = null;
 let workTimerInterval = null;
+let totalBreakTimeMs = 0;
+let isBreak = false;
+let alertElement = null;
+
+function saveStateToLocalStorage() {
+  localStorage.setItem("workStartTime", workStartTime?.toISOString() || "");
+  localStorage.setItem("breakStartTime", breakStartTime?.toISOString() || "");
+  localStorage.setItem("totalBreakTimeMs", totalBreakTimeMs.toString());
+  localStorage.setItem("isBreak", isBreak.toString());
+}
+
+function clearWorkState() {
+  localStorage.removeItem("workStartTime");
+  localStorage.removeItem("breakStartTime");
+  localStorage.removeItem("totalBreakTimeMs");
+  localStorage.removeItem("isBreak");
+}
+
+function loadStateFromLocalStorage() {
+  const savedWorkStart = localStorage.getItem("workStartTime");
+  const savedBreakStart = localStorage.getItem("breakStartTime");
+  const savedBreakTime = localStorage.getItem("totalBreakTimeMs");
+  const savedisBreak = localStorage.getItem("isBreak");
+
+  if (savedWorkStart) workStartTime = new Date(savedWorkStart);
+  if (savedBreakStart) breakStartTime = new Date(savedBreakStart);
+  if (savedBreakTime) totalBreakTimeMs = parseInt(savedBreakTime);
+  if (savedisBreak === "true") isBreak = true;
+}
 
 function showBootstrapAlert(message, type = "info") {
   const container = document.getElementById("statusAlertContainer");
@@ -23,136 +52,65 @@ function showBootstrapAlert(message, type = "info") {
   }, 5000);
 }
 
+async function startPraca(id) {
+  const token = localStorage.getItem("token");
+  const teraz = new Date();
+  const data = teraz.toISOString().slice(0, 10);
+  const czas = teraz.toTimeString().slice(0, 5);
+
+  workStartTime = new Date();
+  saveStateToLocalStorage();
+
+  if (!id || isNaN(id)) {
+    alert("Nieprawidłowy identyfikator pracownika");
+    return;
+  }
+  
+
+  try {
+    const url = `http://localhost:8080/api/czasPracy/startPraca?id=${id}&data=${data}&czas=${czas}`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) throw new Error(`Błąd HTTP: ${response.status}`);
+    const result = await response.text();
+    alert(`✅ ${result}`);
+  } catch (err) {
+    console.error("Błąd:", err);
+    alert("❌ Nie udało się rozpocząć pracy.");
+  }
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
 
-  if (!token) {
-    alert("Nie jesteś zalogowany!");
-    window.location.href = "/login.html";
-    return;
-  }
-
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    const username = payload.sub;
-    const imie = username.split(".")[0] || username;
-    const kierowcaSpan = document.querySelector(".navbar .nav-link strong");
-    if (kierowcaSpan) {
-      kierowcaSpan.textContent = imie.charAt(0).toUpperCase() + imie.slice(1);
-    }
-  } catch (err) {
-    console.error("Błąd przy dekodowaniu tokena:", err);
-    alert("Nieprawidłowy token logowania.");
-    window.location.href = "/login.html";
-  }
-
+  loadStateFromLocalStorage();
   const workTimeDisplay = document.getElementById("workTime");
   const breakAlert = document.getElementById("breakAlert");
   const alertElement = document.getElementById("startAlert");
-
-  function updateWorkTime() {
-    if (!workStartTime) return;
-    const now = new Date();
-    const diff = new Date(now - workStartTime);
-    const hours = String(diff.getUTCHours()).padStart(2, "0");
-    const minutes = String(diff.getUTCMinutes()).padStart(2, "0");
-    workTimeDisplay.textContent = `Czas pracy: ${hours}:${minutes}`;
-  }
-
-  document.getElementById("startWork").addEventListener("click", async () => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      alert("Brak tokena – użytkownik nie jest zalogowany.");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        "http://localhost:8080/api/czasPracy/startPracy",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Błąd: ${response.status} – ${text}`);
-      }
-
-      const result = await response.text();
-      console.log("✅", result);
-
-      localStorage.setItem("startPracy", new Date().toISOString());
-
-      if (alertElement) {
-        alertElement.classList.add("show");
-        alertElement.style.display = "block";
-        setTimeout(() => {
-          alertElement.classList.remove("show");
-          alertElement.style.display = "none";
-        }, 5000);
-      }
-    } catch (err) {
-      console.error("Błąd podczas rozpoczynania pracy:", err);
-      alert("❌ Nie udało się rozpocząć pracy.");
-    }
-  });
-
-  document.getElementById("startBreak").addEventListener("click", () => {
-    if (!isOnBreak) {
-      breakStartTime = new Date();
-      isOnBreak = true;
-      document.getElementById("startBreak").textContent = "Koniec przerwy";
-      showBootstrapAlert("🔁 Przerwa została rozpoczęta.", "warning");
-    } else {
-      const breakEnd = new Date();
-      const breakDuration = breakEnd - breakStartTime;
-      totalBreakTimeMs += breakDuration;
-      isOnBreak = false;
-      breakStartTime = null;
-      document.getElementById("startBreak").textContent = "Początek przerwy";
-
-      const alertDiv = document.getElementById("breakAlert");
-      alertDiv.classList.remove("alert-danger");
-      alertDiv.classList.add("alert-info");
-      alertDiv.textContent = `Łączny czas przerw: ${formatTime(
-        totalBreakTimeMs
-      )}`;
-      alertDiv.style.display = "block";
-
-      showBootstrapAlert("✅ Przerwa zakończona.", "success");
-    }
-  });
-
-  document.getElementById("stopWork").addEventListener("click", () => {
-    clearInterval(workTimerInterval);
-    workTimeDisplay.textContent = "Czas pracy: 00:00";
-    workStartTime = null;
-    breakStartTime = null;
-    breakAlert.style.display = "none";
-    localStorage.removeItem("startPracy");
-    showBootstrapAlert("🛑 Czas pracy został zakończony.", "danger");
-  });
-
-
-  function updateTimeDisplay() {
-    const start = localStorage.getItem("startPracy");
-    if (start) {
-      const diff = Date.now() - new Date(start).getTime();
-      document.getElementById(
-        "workTime"
-      ).textContent = `Czas pracy: ${formatTime(diff)}`;
-    }
-  }
-
-  setInterval(updateTimeDisplay, 60000);
   updateTimeDisplay();
 
+  if (!workStartTime) {
+    workTimeDisplay.textContent = "Czas pracy: 00:00";
+    breakAlert.style.display = "none";
+    clearWorkState();
+  }
+
+  checkBackendStatus();
+  setInterval(updateTimeDisplay, 60000);
+  clearInterval(workTimerInterval);
+  workTimeDisplay.textContent = "Czas pracy: 00:00";
+  workStartTime = null;
+  breakStartTime = null;
+  totalBreakTimeMs = 0;
+  isBreak = false;
+  breakAlert.style.display = "none";
+  clearWorkState();
+  showBootstrapAlert("🛑 Czas pracy został zakończony.", "danger");
   const collapse = document.getElementById("userTableCollapse");
   if (collapse) {
     collapse.addEventListener("show.bs.collapse", () => {
@@ -160,14 +118,175 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  checkBackendStatus();
 });
+
+function updateWorkTime() {
+  if (!workStartTime) return;
+  const now = new Date();
+  const diff = new Date(now - workStartTime);
+  const hours = String(diff.getUTCHours()).padStart(2, "0");
+  const minutes = String(diff.getUTCMinutes()).padStart(2, "0");
+  workTimeDisplay.textContent = `Czas pracy: ${hours}:${minutes}`;
+}
+
+document.getElementById("startWork").addEventListener("click", async () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Brak tokena – użytkownik nie jest zalogowany.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      "http://localhost:8080/api/czasPracy/startPracy",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`Błąd: ${response.status} – ${text}`);
+    }
+
+    const result = await response.text();
+    console.log("✅", result);
+
+    localStorage.setItem("startPracy", new Date().toISOString());
+
+    if (alertElement) {
+      alertElement.classList.add("show");
+      alertElement.style.display = "block";
+      setTimeout(() => {
+        alertElement.classList.remove("show");
+        alertElement.style.display = "none";
+      }, 5000);
+    }
+  } catch (err) {
+    console.error("Błąd podczas rozpoczynania pracy:", err);
+    alert("❌ Nie udało się rozpocząć pracy.");
+  }
+});
+
+document.getElementById("logout-btn")?.addEventListener("click", () => {
+  localStorage.clear();
+});
+
+document.getElementById("startBreak").addEventListener("click", async () => {
+  const token = localStorage.getItem("token");
+  const data = new Date().toISOString().slice(0, 10); // dzisiejsza data
+
+  if (!isOnBreak) {
+    // Rozpoczęcie przerwy
+    breakStartTime = new Date();
+    isOnBreak = true;
+    saveStateToLocalStorage();
+    document.getElementById("startBreak").textContent = "Koniec przerwy";
+    showBootstrapAlert("🔁 Przerwa została rozpoczęta.", "warning");
+  } else {
+    // Zakończenie przerwy
+    const breakEnd = new Date();
+    const breakDurationMs = breakEnd - breakStartTime;
+
+    if (
+      !isNaN(breakDurationMs) &&
+      breakDurationMs > 0 &&
+      breakDurationMs <= 4 * 60 * 60 * 1000
+    ) {
+      totalBreakTimeMs += breakDurationMs;
+
+      // Przekonwertuj ms → HH:mm:ss (wymagany przez backend)
+      const totalSeconds = Math.floor(breakDurationMs / 1000);
+      const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
+        2,
+        "0"
+      );
+      const seconds = String(totalSeconds % 60).padStart(2, "0");
+      const breakDurationFormatted = `${hours}:${minutes}:${seconds}`;
+
+      // Wyślij do backendu
+      try {
+        const response = await fetch(
+          `http://localhost:8080/api/czasPracy/przerwa?przerwa=${encodeURIComponent(
+            breakDurationFormatted
+          )}&data=${data}`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const msg = await response.text();
+          throw new Error(`Błąd HTTP ${response.status} – ${msg}`);
+        }
+
+        const result = await response.text();
+        console.log("✅ Przerwa wysłana:", result);
+      } catch (err) {
+        console.error("Błąd podczas wysyłania przerwy:", err);
+        alert("❌ Nie udało się zapisać przerwy na serwerze.");
+      }
+    } else {
+      console.warn("Nieprawidłowy czas przerwy:", breakDurationMs);
+    }
+
+    isOnBreak = false;
+    breakStartTime = null;
+    saveStateToLocalStorage();
+    document.getElementById("startBreak").textContent = "Początek przerwy";
+
+    const alertDiv = document.getElementById("breakAlert");
+    alertDiv.classList.remove("alert-danger");
+    alertDiv.classList.add("alert-info");
+    alertDiv.textContent = `Łączny czas przerw: ${formatTime(
+      totalBreakTimeMs
+    )}`;
+    alertDiv.style.display = "block";
+
+    showBootstrapAlert("✅ Przerwa zakończona.", "success");
+  }
+});
+
+
+
+document.getElementById("stopWork").addEventListener("click", () => {
+  clearInterval(workTimerInterval);
+  document.getElementById("workTime").textContent = "Czas pracy: 00:00";
+  document.getElementById("breakAlert").style.display = "none";
+  workStartTime = null;
+  breakStartTime = null;
+  totalBreakTimeMs = 0;
+  isBreak = false;
+  clearWorkState();
+  showBootstrapAlert("🛑 Czas pracy został zakończony.", "danger");
+});
+
+function updateTimeDisplay() {
+  const start = localStorage.getItem("startPracy");
+  if (start) {
+    const diff = Date.now() - new Date(start).getTime();
+    document.getElementById("workTime").textContent = `Czas pracy: ${formatTime(
+      diff
+    )}`;
+  }
+}
 
 function formatTime(ms) {
   const totalMinutes = Math.floor(ms / 60000);
-  const hours = String(Math.floor(totalMinutes / 60)).padStart(2, "0");
-  const minutes = String(totalMinutes % 60).padStart(2, "0");
-  return `${hours}:${minutes}`;
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+    2,
+    "0"
+  )}`;
 }
 
 async function checkBackendStatus() {
@@ -209,34 +328,74 @@ async function fetchAndDisplayUsers() {
     const tbody = document.querySelector("#userTable tbody");
     tbody.innerHTML = "";
 
-    users.forEach((user) => {
-      const row = document.createElement("tr");
+    users.forEach((p) => {
+      const tr = document.createElement("tr");
 
-      const imgSrc = user.zdjecieBase64
-        ? `data:image/jpeg;base64,${user.zdjecieBase64}`
-        : "https://via.placeholder.com/80x80?text=Brak";
-
-      row.innerHTML = `
-        <td>${user.imie || "-"}</td>
-        <td>${user.drugieImie || "-"}</td>
-        <td>${user.nazwisko || "-"}</td>
-        <td>${user.typPracownika || "-"}</td>
-        <td>${user.dataDolaczenia || "-"}</td>
-        <td><img src="${imgSrc}" alt="Zdjęcie" class="img-thumbnail" width="100"></td>
-        <td><input type="checkbox" class="form-check-input obecny-checkbox" data-id="${
-          user.idPracownika
-        }"></td>
-        <td><button class="btn btn-danger btn-sm" onclick="stopPraca(${
-          user.idPracownika
-        })">Stop pracy</button></td>
+      tr.innerHTML = `
+        <td>${p.imie} ${p.nazwisko}</td>
+        <td>${p.drugieImie || ""}</td>
+        <td>${p.dataDolaczenia || "-"}</td>
+        <td>${
+          p.zdjecie
+            ? `<img src="data:image/jpeg;base64,${p.zdjecie}" style="width:50px;">`
+            : ""
+        }</td>
+        <td>
+          <input type="checkbox" class="form-check-input obecny-checkbox" data-id="${
+            p.idPracownika
+          }">
+        </td>
+        <td>
+          <button class="btn btn-sm btn-outline-danger" onclick="stopPraca(${
+            p.idPracownika
+          })">Zatrzymaj</button>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-outline-success start-individual" data-id="${
+            p.idPracownika
+          }">Start</button>
+        </td>
       `;
 
-      tbody.appendChild(row);
+      tbody.appendChild(tr);
+    });
+
+    // Po załadowaniu tabeli, przypnij eventy do przycisków start
+    document.querySelectorAll(".start-individual").forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
+        const id = e.target.dataset.id;
+        await startPraca(parseInt(id));
+      });
     });
   } catch (error) {
     console.error("Nie udało się pobrać pracowników:", error);
   }
 }
+// zatrzymuej naliczanie czasu pracy dla pracownika
+async function stopPraca(id) {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/czasPracy/stopPracy?id=${id}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) throw new Error(`Błąd HTTP: ${response.status}`);
+
+    const result = await response.text();
+    alert(`🛑 Zatrzymano pracę pracownika ID ${id}.\n${result}`);
+  } catch (err) {
+    console.error("Błąd zatrzymania pracy:", err);
+    alert("❌ Nie udało się zatrzymać pracy.");
+  }
+}
+
 async function stopPracaDlaWielu() {
   const token = localStorage.getItem("token");
 
@@ -280,5 +439,35 @@ async function stopPracaDlaWielu() {
   } catch (err) {
     console.error("Błąd:", err);
     alert("❌ Nie udało się zakończyć pracy dla wielu pracowników.");
+  }
+}
+
+async function isOnBreak(id) {
+  //const token = localStorage.getItem("token");
+
+  const przerwa = "Początek"; // lub "Koniec" — w zależności od sytuacji
+  const data = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/czasPracy/przerwa?przerwa=${przerwa}&data=${data}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const msg = await response.text();
+      throw new Error(`Błąd HTTP ${response.status} – ${msg}`);
+    }
+
+    const result = await response.text();
+    alert(`✅ Zgłoszono przerwę dla ID ${id}: ${result}`);
+  } catch (err) {
+    console.error("Błąd podczas rejestrowania przerwy:", err);
+    alert("❌ Nie udało się zarejestrować przerwy.");
   }
 }
