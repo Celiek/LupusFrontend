@@ -292,7 +292,7 @@
 
                 try {
                     const token = localStorage.getItem("token");
-                    const response = await fetch("http://localhost:8080/api/pracownik/addPracownik", {
+                    const response = await fetch("https://frjesionowka.byst.re/api/pracownik/addPracownik", {
                         method: "POST",
                         body: formData,
                         headers: {
@@ -362,7 +362,7 @@
             message.textContent = "Dodawanie pracownika...";
             try {
                 const token = localStorage.getItem("token");
-                const response = await fetch("http://localhost:8080/api/pracownik/addPracownik", {
+                const response = await fetch("https://frjesionowka.byst.re/api/pracownik/addPracownik", {
                     method: "POST",
                     body: formData,
                     headers: { "Authorization": `Bearer ${token}` }

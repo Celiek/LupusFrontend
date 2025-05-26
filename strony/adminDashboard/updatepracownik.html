@@ -222,7 +222,7 @@
             console.log("Token użyty do pobierania użytkowników: " + token);
 
             try {
-                const response = await fetch("http://localhost:8080/api/pracownik/listall", {
+                const response = await fetch("https://frjesionowka.byst.re/api/pracownik/listall", {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}`,
@@ -320,7 +320,7 @@
                 }
 
                 try {
-                    const response = await fetch(`http://localhost:8080/api/pracownik/updatePracownik?idPracownika=${id}&imie=${encodeURIComponent(imie)}&dimie=${encodeURIComponent(drugieImie || "")}&nazwisko=${encodeURIComponent(nazwisko)}&typPracownika=${encodeURIComponent(typ)}&zdjecie=${encodeURIComponent(zdjecie || "")}&data=${encodeURIComponent(data)}&login=${encodeURIComponent(login)}&haslo=${encodeURIComponent(haslo)}`, {
+                    const response = await fetch(`https://frjesionowka.byst.re/api/pracownik/updatePracownik?idPracownika=${id}&imie=${encodeURIComponent(imie)}&dimie=${encodeURIComponent(drugieImie || "")}&nazwisko=${encodeURIComponent(nazwisko)}&typPracownika=${encodeURIComponent(typ)}&zdjecie=${encodeURIComponent(zdjecie || "")}&data=${encodeURIComponent(data)}&login=${encodeURIComponent(login)}&haslo=${encodeURIComponent(haslo)}`, {
                         method: "POST",
                         headers: {
                             "Authorization": `Bearer ${token}`
