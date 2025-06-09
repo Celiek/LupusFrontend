@@ -181,6 +181,8 @@
                                 <th>Typ Pracownika</th>
                                 <th>Data Dołączenia</th>
                                 <th>Login</th>
+                                <th>Email</th> 
+                                <th>Nr Konta</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -250,7 +252,7 @@
             const headers = [
                 "Imię", "Drugie Imię", "Zdjęcie", "Nazwisko",
                 "Typ Pracownika", "Data Dołączenia", "Login",
-                "Kraj Pochodzenia", "Numer WhatsApp"
+                "Kraj Pochodzenia", "Numer WhatsApp", "Email", "Nr Konta"
             ];
 
             const thead = document.createElement("thead");
@@ -285,6 +287,8 @@
             <td>${pracownik.login || "-"}</td>
             <td>${pracownik.krajPochodzenia || "-"}</td>
             <td>${pracownik.nrWhatsapp || "-"}</td>
+            <td>${pracownik.email || "-"}</td>
+            <td>${pracownik.nrKonta || "-"}</td>
         `;
                 tbody.appendChild(row);
             });
