@@ -27,15 +27,14 @@
                 </a>
                 <div class="accordion" id="sidebarAccordion">
                     <!-- Akordeon 1 -->
-                    <!-- Akordeon 1 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                                aria-expanded="true" aria-controls="collapseOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                 Pracownicy
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                        <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne"
                             data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
                                 <a href="addpracownik.html">Dodaj pracownika</a>
@@ -54,8 +53,8 @@
                     <!-- Akordeon 2 -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                                aria-expanded="false" aria-controls="collapseTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                 Czas pracy
                             </button>
                         </h2>
@@ -90,7 +89,7 @@
                             </div>
                         </div>
                     </div>
-                    
+                    <!-- Akordeon 4 - Dokumenty -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingFour">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -105,6 +104,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Akordeon 5 - Urlopy -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingFive">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -131,43 +131,17 @@
                             </div>
                         </div>
                     </div>
-                    
-                    </div>
+                </div>
             </div>
 
             <!-- Główna treść -->
             <div class="col-md-9 col-lg-10 p-4">
-                <!-- navbar tutaj bedzie  -->
                 <nav class="navbar navbar-expand-lg custom-navbar">
                     <div class="container-fluid">
                         <a class="navbar-brand" href="#">Navbar</a>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Link</a>
-                                </li>
-                                <!-- divider -->
-                                <li class="nav-item divider"></li>
-                                <!-- imie nazwisko i zdjecie uzytkownika -->
-                                <li class="nav-item">
-                                    <a class="nav-link d-flex" href="#" id="user-name"></a>
-                                </li>
-                                <li class="nav-item">
-                                    <button class="btn btn-danger ms-2" id="logout-btn">Wyloguj się</button>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                 </nav>
-                <div class=" justify-content-center align-items-center">
+                <div class="justify-content-center align-items-center">
                     <h1 class="h1-napis">Edycja Użytkowników</h1>
                     <div class="table-responsive">
                         <table id="usersTable" class="table table-striped table-bordered table-hover">
@@ -192,29 +166,22 @@
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
+
     <footer class="footer d-flex flex-wrap justify-content-between align-items-center">
         <p class="col-md-4 mb-0 text-muted">&copy; 2025 Gr Jesionówka</p>
-
-        <a href="/"
-            class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto  text-decoration-none">
-            <svg class="bi me-2" width="40" height="32">
-                <use xlink:href="#bootstrap" />
-            </svg>
-        </a>
-
         <ul class="nav col-md-4 justify-content-end">
             <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Twórca Gabriel Stachnik</a></li>
             <li class="nav-item"><a href="https://www.github.com/Celiek" class="nav-link px-2 text-muted">Github</a>
             </li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Adres email Tworcy: g.stachnik@onet.pl</a>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Adres email Twórcy: g.stachnik@onet.pl</a>
             </li>
         </ul>
     </footer>
+
     <script>
         // Funkcja do pobrania danych użytkowników
         async function fetchUsers() {
@@ -222,7 +189,7 @@
             console.log("Token użyty do pobierania użytkowników: " + token);
 
             try {
-                const response = await fetch("https://frjesionowka.byst.re/api/pracownik/listall", {
+                const response = await fetch("https://lupus24.byst.reapi/pracownik/listall", {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}`,
@@ -247,12 +214,14 @@
             tableBody.innerHTML = "";
 
             users.forEach(user => {
+                console.log(`Generowanie elementów dla użytkownika: ${user.idPracownika}`);  // Loguj ID użytkownika
                 const row = document.createElement("tr");
+
                 const imgSrc = user.zdjecie ? `data:image/jpeg;base64,${user.zdjecie}` : "https://via.placeholder.com/100";
                 const formattedDate = user.dataDolaczenia ? new Date(user.dataDolaczenia).toLocaleDateString('pl-PL') : "";
 
                 row.innerHTML = `
-            <td><input type="text" value="${user.idPracownika}" disabled class="form-control form-control-sm"></td>
+            <td><input type="text" value="${user.idPracownika}" id="id-${user.idPracownika}" disabled class="form-control form-control-sm"></td>
             <td><input type="text" value="${user.imie}" id="imie-${user.idPracownika}" class="form-control form-control-sm"></td>
             <td><input type="text" value="${user.drugieImie || ''}" id="drugie-imie-${user.idPracownika}" class="form-control form-control-sm"></td>
             <td><input type="text" value="${user.nazwisko}" id="nazwisko-${user.idPracownika}" class="form-control form-control-sm"></td>
@@ -266,7 +235,7 @@
                 <img src="${imgSrc}" alt="Zdjęcie" id="img-preview-${user.idPracownika}" width="100" class="img-thumbnail">
                 <input type="file" id="zdjecie-${user.idPracownika}" accept="image/*" class="form-control form-control-sm" onchange="updateImagePreview(event, '${user.idPracownika}')">
             </td>
-            <td><input type="text" value="${formattedDate}" disabled class="form-control form-control-sm"></td>
+            <td><input type="text" value="${formattedDate}" id="data-${user.idPracownika}" disabled class="form-control form-control-sm"></td>
             <td><input type="text" value="${user.login}" id="login-${user.idPracownika}" class="form-control form-control-sm"></td>
             <td><input type="password" value="${user.haslo}" id="haslo-${user.idPracownika}" class="form-control form-control-sm"></td>
             <td><input type="text" value="${user.krajPochodzenia || ''}" id="kraj-${user.idPracownika}" class="form-control form-control-sm"></td>
@@ -276,6 +245,7 @@
                 tableBody.appendChild(row);
             });
         }
+
 
         // Podgląd zdjęcia po zmianie
         function updateImagePreview(event, userId) {
@@ -291,68 +261,83 @@
             }
         }
 
-
         // Funkcja do przesłania zaktualizowanych danych
         async function editUser(userId) {
-            const confirmEdit = confirm("Czy na pewno chcesz zatwierdzić zmiany?");
-            const token = localStorage.getItem("token");
+                const confirmEdit = confirm("Czy na pewno chcesz zatwierdzić zmiany?");
+                const token = localStorage.getItem("token");  // Token JWT z localStorage
 
-            if (confirmEdit) {
-                const id = document.getElementById(`id-${userId}`).value;
-                const imie = document.getElementById(`imie-${userId}`).value;
-                const drugieImie = document.getElementById(`drugie-imie-${userId}`).value;
+                // Pobranie danych z formularza
+                const idElement = document.getElementById(`id-${userId}`);
+                const imieElement = document.getElementById(`imie-${userId}`);
+                const dataElement = document.getElementById(`data-${userId}`);
+                const loginElement = document.getElementById(`login-${userId}`);
+                const hasloElement = document.getElementById(`haslo-${userId}`);
+                const zdjecieInput = document.getElementById(`zdjecie-${userId}`);
+
+                // Pobranie danych
+                const id = idElement.value;
+                const imie = imieElement.value;
+                const dimie = document.getElementById(`drugie-imie-${userId}`).value;
                 const nazwisko = document.getElementById(`nazwisko-${userId}`).value;
                 const typ = document.getElementById(`typ-${userId}`).value;
-                const data = document.getElementById(`data-${userId}`).value;
-                const login = document.getElementById(`login-${userId}`).value;
-                const haslo = document.getElementById(`haslo-${userId}`).value;
-                const zdjecieInput = document.getElementById(`zdjecie-${userId}`);
-                let zdjecie = null;
+                const data = dataElement.value;  // Zakłada się, że data jest w formacie 'yyyy-MM-dd'
+                const login = loginElement.value;
+                const haslo = hasloElement.value;
+                const zdjecie = zdjecieInput.files[0];  // Pobieramy plik zdjęcia, jeśli wybrano
 
-                if (zdjecieInput.files[0]) {
-                    const reader = new FileReader();
-                    zdjecie = await new Promise(resolve => {
-                        reader.onload = function (e) {
-                            resolve(e.target.result.split(",")[1]); // Pobierz base64
-                        };
-                        reader.readAsDataURL(zdjecieInput.files[0]);
-                    });
-                }
+                const krajPochodzenia = document.getElementById(`kraj-${userId}`).value;  // Nowe pole dla kraju pochodzenia
+                const nrWhatsapp = document.getElementById(`whatsapp-${userId}`).value;  // Nowe pole dla numeru WhatsApp
+                // Upewnij się, że użytkownik potwierdził zmiany
+                if (confirmEdit) {
+                    // Tworzymy obiekt FormData, aby przesłać dane w formacie multipart/form-data
+                    const formData = new FormData();
+                    formData.append("idPracownika", id);
+                    formData.append("imie", imie);
+                    formData.append("dimie", dimie);
+                    formData.append("nazwisko", nazwisko);
+                    formData.append("typPracownika", typ);
+                    formData.append("kraj_pochodzenia",krajPochodzenia);
+                    formData.append("nr_whatsapp",nrWhatsapp);
+                    
 
-                try {
-                    const response = await fetch(`https://frjesionowka.byst.re/api/pracownik/updatePracownik?idPracownika=${id}&imie=${encodeURIComponent(imie)}&dimie=${encodeURIComponent(drugieImie || "")}&nazwisko=${encodeURIComponent(nazwisko)}&typPracownika=${encodeURIComponent(typ)}&zdjecie=${encodeURIComponent(zdjecie || "")}&data=${encodeURIComponent(data)}&login=${encodeURIComponent(login)}&haslo=${encodeURIComponent(haslo)}`, {
-                        method: "POST",
-                        headers: {
-                            "Authorization": `Bearer ${token}`
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                    // Sprawdzamy, czy zdjęcie zostało wybrane
+                    if (zdjecie) {
+                        formData.append("zdjecie", zdjecie);  // Dodajemy plik zdjęcia
+                    } else {
+                        formData.append("zdjecie", "");  // Jeśli brak pliku, dodajemy pusty ciąg
                     }
+                    
+                    const data_zatrudnienia = data.split('.').reverse().join('-');
 
-                    alert("Zmiany zostały zatwierdzone.");
-                    fetchUsers(); // Odświeżenie tabeli
-                } catch (error) {
-                    console.error("Błąd podczas aktualizacji użytkownika:", error);
+                    formData.append("data", data_zatrudnienia);  // Data (w formacie yyyy-MM-dd)
+                    formData.append("login", login);
+                    formData.append("haslo", haslo);
+
+                    // Wykonujemy zapytanie POST do API z FormData
+                    try {
+                        const response = await fetch(`https://lupus24.byst.reapi/pracownik/updatePracownik`, {
+                            method: "POST",
+                            headers: {
+                                "Authorization": `Bearer ${token}`,  // Nagłówek z tokenem JWT
+                            },
+                            body: formData,  // Przesyłamy FormData w ciele zapytania
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        alert("Zmiany zostały zatwierdzone.");
+                        fetchUsers();  // Odświeżenie tabeli użytkowników po zmianie
+                    } catch (error) {
+                        console.error("Błąd podczas aktualizacji użytkownika:", error);
+                        alert("Błąd podczas aktualizacji użytkownika.");
+                    }
                 }
             }
-        }
+
         // Pobranie danych podczas ładowania strony
         document.addEventListener("DOMContentLoaded", fetchUsers);
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const logoutButton = document.getElementById("logout-btn");
-            if (logoutButton) {
-                logoutButton.addEventListener("click", () => {
-                    localStorage.removeItem("token");
-                    window.location.href = "../../login.html"; // dopasuj ścieżkę do katalogu
-                });
-            } else {
-                console.error("Nie znaleziono przycisku logout-btn");
-            }
-        });
     </script>
 </body>
 

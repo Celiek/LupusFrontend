@@ -171,7 +171,7 @@
                 </nav>
                 <div class=" justify-content-center align-items-center">
                     <div class="container mt-5">
-                        <h2>Dodaj urlopy</h2>
+                        <h2>Dodaj urlop</h2>
 
                         <!-- Formularz zbiorczego dodawania -->
                         <form id="form-dla-wszystkich" class="mb-4">
@@ -254,15 +254,15 @@
                 data.forEach(p => {
                     const tr = document.createElement("tr");
 
-                    tr.innerHTML = `
-                            <td>${p.id}</td>
-                            <td>${p.imie} ${p.nazwisko}</td>
-                            <td><input type="date" class="form-control" id="od-${p.id}"></td>
-                            <td><input type="date" class="form-control" id="do-${p.id}"></td>
-                            <td><input type="text" class="form-control" id="typ-${p.id}" placeholder="Typ"></td>
-                            <td><input type="text" class="form-control" id="powod-${p.id}" placeholder="Powód"></td>
-                            <td><button class="btn btn-primary" onclick="dodajUrlop(${p.id})">Dodaj</button></td>
-                        `;
+                            tr.innerHTML = `
+                    <td>${p.idPracownika}</td>
+                    <td>${p.imie} ${p.nazwisko}</td>
+                    <td><input type="date" class="form-control" id="od-${p.idPracownika}"></td>
+                    <td><input type="date" class="form-control" id="do-${p.idPracownika}"></td>
+                    <td><input type="text" class="form-control" id="typ-${p.idPracownika}" placeholder="Typ"></td>
+                    <td><input type="text" class="form-control" id="powod-${p.idPracownika}" placeholder="Powód"></td>
+                    <td><button class="btn btn-primary" onclick="dodajUrlop(${p.idPracownika})">Dodaj</button></td>
+                `;
                     tbody.appendChild(tr);
                 });
             }
@@ -280,7 +280,7 @@
                 }
 
                 try {
-                    const res = await fetch(`https://frjesionowka.byst.re/api/urlopy/dodaj?id_Pracownika=${id}&data_Od=${data_Od}&data_Do=${data_Do}&typ_Urlopu=${typ}&powod=${powod}`, {
+                    const res = await fetch(`https://lupus24.byst.reapi/urlopy/dodaj?id_Pracownika=${id}&data_Od=${data_Od}&data_Do=${data_Do}&typ_Urlopu=${typ}&powod=${powod}`, {
                         method: "POST",
                         headers: { "Authorization": "Bearer " + token }
                     });
@@ -317,7 +317,7 @@
             pobierzPracownikow();
         });
     </script>
-    
+
 
 
     <script>

@@ -25,19 +25,19 @@
 
             try {
                 // 1. Liczba pracowników dzisiaj
-                const responseCount = await fetch("https://frjesionowka.byst.re/api/pracownik/nowiDzis", { headers });
+                const responseCount = await fetch("https://lupus24.byst.reapi/pracownik/nowiDzis", { headers });
                 const todayCount = await responseCount.text();
 
                 // 2. Godzina rozpoczęcia pracy
-                const responseStartTime = await fetch("https://frjesionowka.byst.re/api/pracownik/pierwszyStartDzisiaj", { headers });
+                const responseStartTime = await fetch("https://lupus24.byst.reapi/pracownik/pierwszyStartDzisiaj", { headers });
                 const startTime = await responseStartTime.text();
 
                 // 3. Czas przerw
-                const responseBreak = await fetch("https://frjesionowka.byst.re/api/pracownik/sumaPrzerwDzisiaj", { headers });
+                const responseBreak = await fetch("https://lupus24.byst.reapi/pracownik/sumaPrzerwDzisiaj", { headers });
                 const breakTime = await responseBreak.text();
 
                 // 4. Przepracowane godziny
-                const responseWorkTime = await fetch("https://frjesionowka.byst.re/api/pracownik/czasPracyToday", { headers });
+                const responseWorkTime = await fetch("https://lupus24.byst.reapi/pracownik/czasPracyToday", { headers });
                 const workTime = await responseWorkTime.text();
 
                 // Debug:
@@ -47,11 +47,18 @@
                 // console.log("Start pracy:", startTime);
                 // console.log("Czas przerwy:", breakTime);
 
+               // Funkcja do formatowania godziny (godzina:minuta)
+                function formatTime(time) {
+                    // Zakładając, że czas jest w formacie HH:mm:ss
+                    let timeParts = time.split(":");
+                    return timeParts[0] + ":" + timeParts[1];  // Zwróć godzinę i minutę
+                }
+
                 // Wstawienie danych do kart
                 const cardTexts = document.querySelectorAll('.card-text p:nth-child(2)');
                 cardTexts[0].textContent = `${workTime} godz.`;     // Przepracowane godziny
                 cardTexts[1].textContent = `${todayCount} osób`;     // Ilość osób pracujących
-                cardTexts[2].textContent = `${startTime}`;           // Start pracy
+                cardTexts[2].textContent = `${formatTime(startTime)}`; // Start pracy (godzina:minuta)
                 cardTexts[3].textContent = `${breakTime} min`;       // Czas przerw
 
             } catch (e) {
@@ -95,7 +102,7 @@
                                 Pracownicy
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                        <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne"
                             data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
                                 <a href="addpracownik.html">Dodaj pracownika</a>
@@ -322,7 +329,7 @@
 
     <script>
         const token = localStorage.getItem("token");
-        fetch("https://frjesionowka.byst.re/api/urlopy/wszystkie", {
+        fetch("https://lupus24.byst.reapi/urlopy/wszystkie", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

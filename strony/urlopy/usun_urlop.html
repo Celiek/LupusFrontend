@@ -37,7 +37,7 @@
                                 Pracownicy
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
                             data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
                                 <a href="addpracownik.html">Dodaj pracownika</a>
@@ -216,7 +216,7 @@
 
         async function wypelnijTabeleUrlopow() {
             try {
-                const res = await fetch("https://frjesionowka.byst.re/api/urlopy/wszystkie", {
+                const res = await fetch("https://lupus24.byst.reapi/urlopy/wszystkie", {
                     headers: {
                         "Authorization": "Bearer " + token
                     }
@@ -252,7 +252,7 @@
             if (!confirm("Czy na pewno chcesz usunąć ten urlop?")) return;
 
             try {
-                const res = await fetch(`https://frjesionowka.byst.re/api/urlopy/usunUrlop?id=${id}`, {
+                const res = await fetch(`https://lupus24.byst.reapi/urlopy/usunUrlop?id=${id}`, {
                     method: "POST",
                     headers: {
                         "Authorization": "Bearer " + token

@@ -68,7 +68,7 @@ async function startPraca(id) {
   
 
   try {
-    const url = `https://frjesionowka.byst.re/api/czasPracy/startPraca?id=${id}&data=${data}&czas=${czas}`;
+    const url = `https://lupus24.byst.reapi/czasPracy/startPraca?id=${id}&data=${data}&czas=${czas}`;
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -139,7 +139,7 @@ document.getElementById("startWork").addEventListener("click", async () => {
 
   try {
     const response = await fetch(
-      "https://frjesionowka.byst.re/api/czasPracy/startPracy",
+      "https://lupus24.byst.reapi/czasPracy/startPracy",
       {
         method: "POST",
         headers: {
@@ -212,7 +212,7 @@ document.getElementById("startBreak").addEventListener("click", async () => {
       // Wyślij do backendu
       try {
         const response = await fetch(
-          `https://frjesionowka.byst.re/api/czasPracy/przerwa?przerwa=${encodeURIComponent(
+          `https://lupus24.byst.reapi/czasPracy/przerwa?przerwa=${encodeURIComponent(
             breakDurationFormatted
           )}&data=${data}`,
           {
@@ -294,7 +294,7 @@ async function checkBackendStatus() {
   const statusText = document.getElementById("status-text");
 
   try {
-    const response = await fetch("https://frjesionowka.byst.re/api/ping");
+    const response = await fetch("https://lupus24.byst.reapi/ping");
     if (response.ok) {
       statusIcon.classList.add("connected");
       statusIcon.classList.remove("disconnected");
@@ -314,7 +314,7 @@ async function fetchAndDisplayUsers() {
 
   try {
     const response = await fetch(
-      "https://frjesionowka.byst.re/api/pracownik/listall",
+      "https://lupus24.byst.reapi/pracownik/listall",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -377,7 +377,7 @@ async function stopPraca(id) {
 
   try {
     const response = await fetch(
-      `https://frjesionowka.byst.re/api/czasPracy/stopPracy?id=${id}`,
+      `https://lupus24.byst.reapi/czasPracy/stopPracy?id=${id}`,
       {
         method: "POST",
         headers: {
@@ -414,7 +414,7 @@ async function stopPracaDlaWielu() {
 
   try {
     const response = await fetch(
-      "https://frjesionowka.byst.re/api/czasPracy/stopPracaWielu",
+      "https://lupus24.byst.reapi/czasPracy/stopPracaWielu",
       {
         method: "POST",
         headers: {
@@ -450,7 +450,7 @@ async function isOnBreak(id) {
 
   try {
     const response = await fetch(
-      `https://frjesionowka.byst.re/api/czasPracy/przerwa?przerwa=${przerwa}&data=${data}`,
+      `https://lupus24.byst.reapi/czasPracy/przerwa?przerwa=${przerwa}&data=${data}`,
       {
         method: "POST",
         headers: {

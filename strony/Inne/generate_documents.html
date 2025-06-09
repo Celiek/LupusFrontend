@@ -81,19 +81,19 @@
                                 Pracownicy
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
                             data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
-                                <a href="addpracownik.html">Dodaj pracownika</a>
+                                <a href="../adminDashboard/addpracownik.html">Dodaj pracownika</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="removepracownik.html">Usuń pracownika</a>
+                                <a href="../adminDashboard/removepracownik.html">Usuń pracownika</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="updatepracownik.html">Zaktualizuj dane pracownika</a>
+                                <a href="../adminDashboard/updatepracownik.html">Zaktualizuj dane pracownika</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="lista.html">Lista pracowników</a>
+                                <a href="../adminDashboard/lista.html">Lista pracowników</a>
                             </div>
                         </div>
                     </div>
@@ -108,16 +108,16 @@
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
                             data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
-                                <a href="czas_pracy_today.html">Czas pracy dzisiaj</a>
+                                <a href="../adminDashboard/czas_pracy_today.html">Czas pracy dzisiaj</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="czas_pracy_yesterday.html">Czas pracy wczoraj</a>
+                                <a href="../adminDashboard/czas_pracy_yesterday.html">Czas pracy wczoraj</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="czas_pracy_month.html">Czas pracy w tym miesiącu</a>
+                                <a href="../adminDashboard/czas_pracy_month.html">Czas pracy w tym miesiącu</a>
                             </div>
                             <div class="accordion-body">
-                                <a href="czas_pracy_season.html">Czas pracy w tym sezonie</a>
+                                <a href="../adminDashboard/czas_pracy_season.html">Czas pracy w tym sezonie</a>
                             </div>
                         </div>
                     </div>
@@ -269,7 +269,7 @@
         let listaPracownikow = [];
 
         async function pobierzListePracownikow() {
-            const res = await fetch("https://frjesionowka.byst.re/api/pracownik/listall", {
+            const res = await fetch("https://lupus24.byst.reapi/pracownik/listall", {
                 headers: { Authorization: "Bearer " + token }
             });
             listaPracownikow = await res.json();
@@ -290,7 +290,7 @@
                     const imie = p.imie;
                     const nazwisko = p.nazwisko;
 
-                    const res = await fetch(`https://frjesionowka.byst.re/api/czasPracy/dniPracyZakres?idPracownika=${id}&dataOd=${startDate}&dataDo=${endDate}`, {
+                    const res = await fetch(`https://lupus24.byst.reapi/czasPracy/dniPracyZakres?idPracownika=${id}&dataOd=${startDate}&dataDo=${endDate}`, {
                         headers: { Authorization: "Bearer " + token }
                     });
 
@@ -319,7 +319,7 @@
                         const tbody = document.createElement("tbody");
                         let sumaGodzin = 0;
 
-                        const resUrlop = await fetch(`https://frjesionowka.byst.re/api/urlopy/urlopyPracownika?idPracownika=${id}`, {
+                        const resUrlop = await fetch(`https://lupus24.byst.reapi/urlopy/urlopyPracownika?idPracownika=${id}`, {
                             headers: { Authorization: "Bearer " + token }
                         });
                         const dniUrlopu = resUrlop.ok ? await resUrlop.json() : [];

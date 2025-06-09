@@ -30,7 +30,7 @@
                                 Pracownicy
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
                             data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
                                 <a href="czas_pracy.html">Czas pracy pracowników</a>
@@ -149,26 +149,32 @@
             </div>
         </div>
     </div>
-        <footer class="footer d-flex flex-wrap justify-content-between align-items-center">
-            <p class="col-md-4 mb-0 text-muted">&copy; 2025 Lupus</p>
-        
-            <a href="/"
-                class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto  text-decoration-none">
-                <svg class="bi me-2" width="40" height="32">
-                    <use xlink:href="#bootstrap" />
-                </svg>
-            </a>
-        
-            <ul class="nav col-md-4 justify-content-end">
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Twórca Gabriel Stachnik</a></li>
-                <li class="nav-item"><a href="https://www.github.com/Celiek" class="nav-link px-2 text-muted">Github</a>
-                </li>
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Adres email Tworcy: g.stachnik@onet.pl</a>
-                </li>
-            </ul>
-        </footer>
+    <footer class="footer d-flex flex-wrap justify-content-between align-items-center">
+        <p class="col-md-4 mb-0 text-muted">&copy; 2025 Lupus</p>
+
+        <a href="/"
+            class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto  text-decoration-none">
+            <svg class="bi me-2" width="40" height="32">
+                <use xlink:href="#bootstrap" />
+            </svg>
+        </a>
+
+        <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Twórca Gabriel Stachnik</a></li>
+            <li class="nav-item"><a href="https://www.github.com/Celiek" class="nav-link px-2 text-muted">Github</a>
+            </li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Adres email Tworcy: g.stachnik@onet.pl</a>
+            </li>
+        </ul>
+    </footer>
 
     <script>
+        function formatTime(time) {
+            // Zakładając, że czas jest w formacie HH:mm:ss
+            let timeParts = time.split(":");
+            return timeParts[0] + ":" + timeParts[1];  // Zwróć godzinę i minutę
+        }
+
         // Obsługa kliknięcia przycisku
         document.getElementById("pobierzDane").addEventListener("click", async function () {
             const data = document.getElementById("data").value;
@@ -182,7 +188,7 @@
 
             try {
                 // Wywołanie API
-                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/findCzasPracyByDate?dataPracy=${data}`, {
+                const response = await fetch(`https://lupus24.byst.reapi/czasPracy/findCzasPracyByDate?dataPracy=${data}`, {
                     method: 'GET',
                     headers: {
                         "Authorization": `Bearer ${token}`,

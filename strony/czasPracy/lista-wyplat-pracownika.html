@@ -40,7 +40,7 @@
                                 Pracownicy
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
                             data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
                                 <a href="../adminDashboard/czas_pracy.html">Czas pracy pracowników</a>
@@ -231,7 +231,7 @@
                 const token = localStorage.getItem("token");
                 if (!token) throw new Error("Brak tokena – użytkownik niezalogowany.");
 
-                const url = `https://frjesionowka.byst.re/api/wyplataTyg/getWeeklyPaychek?imie=${encodeURIComponent(imie)}&nazwisko=${encodeURIComponent(nazwisko)}&data=${data}`;
+                const url = `https://lupus24.byst.reapi/wyplataTyg/getWeeklyPaychek?imie=${encodeURIComponent(imie)}&nazwisko=${encodeURIComponent(nazwisko)}&data=${data}`;
 
                 const response = await fetch(url, {
                     method: "GET",

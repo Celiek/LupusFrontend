@@ -35,7 +35,7 @@
                                 Pracownicy
                             </button>
                         </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
                             data-bs-parent="#sidebarAccordion">
                             <div class="accordion-body">
                                 <a href="addpracownik.html">Dodaj pracownika</a>
@@ -241,7 +241,7 @@
             const endDate = lastDay.toISOString().split("T")[0];
 
             try {
-                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, {
+                const response = await fetch(`https://lupus24.byst.reapi/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, {
                     headers
                 });
 
@@ -286,7 +286,7 @@
             const endDate = new Date(year, month + 1, 0).toISOString().split("T")[0];
 
         try {
-            const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracyByDate?startDate=${startDate}&endDate=${endDate}`, {
+            const response = await fetch(`https://lupus24.byst.reapi/czasPracy/sumGodzinyPracyByDate?startDate=${startDate}&endDate=${endDate}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -339,7 +339,7 @@
             const endDate = lastDay.toISOString().split("T")[0];
 
             try {
-                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, {
+                const response = await fetch(`https://lupus24.byst.reapi/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, {
                     headers
                 });
 
@@ -402,7 +402,7 @@
             const endDate = lastDay.toISOString().split("T")[0];
 
             try {
-                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, {
+                const response = await fetch(`https://lupus24.byst.reapi/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, {
                     headers
                 });
 
