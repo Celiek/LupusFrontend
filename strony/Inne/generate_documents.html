@@ -269,7 +269,7 @@
         let listaPracownikow = [];
 
         async function pobierzListePracownikow() {
-            const res = await fetch("https://lupus24.byst.reapi/pracownik/listall", {
+            const res = await fetch("https://frjesionowka.byst.re/api/pracownik/listall", {
                 headers: { Authorization: "Bearer " + token }
             });
             listaPracownikow = await res.json();
@@ -290,7 +290,7 @@
                     const imie = p.imie;
                     const nazwisko = p.nazwisko;
 
-                    const res = await fetch(`https://lupus24.byst.reapi/czasPracy/dniPracyZakres?idPracownika=${id}&dataOd=${startDate}&dataDo=${endDate}`, {
+                    const res = await fetch(`https://frjesionowka.byst.re/api/czasPracy/dniPracyZakres?idPracownika=${id}&dataOd=${startDate}&dataDo=${endDate}`, {
                         headers: { Authorization: "Bearer " + token }
                     });
 
@@ -319,7 +319,7 @@
                         const tbody = document.createElement("tbody");
                         let sumaGodzin = 0;
 
-                        const resUrlop = await fetch(`https://lupus24.byst.reapi/urlopy/urlopyPracownika?idPracownika=${id}`, {
+                        const resUrlop = await fetch(`https://frjesionowka.byst.re/api/urlopy/urlopyPracownika?idPracownika=${id}`, {
                             headers: { Authorization: "Bearer " + token }
                         });
                         const dniUrlopu = resUrlop.ok ? await resUrlop.json() : [];

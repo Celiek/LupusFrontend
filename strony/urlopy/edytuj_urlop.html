@@ -219,7 +219,7 @@
 
         async function wypelnijTabeleUrlopow() {
                 try {
-                    const res = await fetch("https://lupus24.byst.reapi/urlopy/wszystkie", {
+                    const res = await fetch("https://frjesionowka.byst.re/api/urlopy/wszystkie", {
                         headers: { "Authorization": "Bearer " + token }
                     });
 
@@ -267,7 +267,7 @@
                 }
 
                 try {
-                    const url = `https://lupus24.byst.reapi/urlopy/zaktualizujUrlop?id=${id}&idPracownika=${idPracownika}&dataOd=${dataOd}&dataDo=${dataDo}&typUrlopu=${typUrlopu}&powod=${powod}`;
+                    const url = `https://frjesionowka.byst.re/api/urlopy/zaktualizujUrlop?id=${id}&idPracownika=${idPracownika}&dataOd=${dataOd}&dataDo=${dataDo}&typUrlopu=${typUrlopu}&powod=${powod}`;
                     const res = await fetch(url, {
                         method: "POST",
                         headers: { "Authorization": "Bearer " + token }

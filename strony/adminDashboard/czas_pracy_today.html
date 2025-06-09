@@ -235,13 +235,13 @@
 
             try {
                 // Ilość pracowników dzisiaj
-                const resPracownicy = await fetch("https://lupus24.byst.reapi/pracownik/nowiDzis", { headers });
+                const resPracownicy = await fetch("https://frjesionowka.byst.re/api/pracownik/nowiDzis", { headers });
                 const liczbaPracownikow = await resPracownicy.text();
                 document.getElementById("liczba-pracownikow").textContent = liczbaPracownikow + " osób";
 
                 // Czas pracy dzisiaj
                // Czas pracy dzisiaj
-                const resGodziny = await fetch("https://lupus24.byst.reapi/pracownik/czasPracyToday", { headers });
+                const resGodziny = await fetch("https://frjesionowka.byst.re/api/pracownik/czasPracyToday", { headers });
                 const godziny = parseFloat(await resGodziny.text());
 
                 const godzinyCale = Math.floor(godziny); // część całkowita - godziny
@@ -268,7 +268,7 @@
             console.log(dzisiaj)
 
             try {
-                const response = await fetch("https://lupus24.byst.reapi/pracownik/godzinyPracy?data=" + dzisiaj, {
+                const response = await fetch("https://frjesionowka.byst.re/api/pracownik/godzinyPracy?data=" + dzisiaj, {
                     headers: {
                         "Authorization": "Bearer " + token
                     }

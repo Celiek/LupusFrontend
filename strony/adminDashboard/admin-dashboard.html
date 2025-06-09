@@ -25,19 +25,19 @@
 
             try {
                 // 1. Liczba pracowników dzisiaj
-                const responseCount = await fetch("https://lupus24.byst.reapi/pracownik/nowiDzis", { headers });
+                const responseCount = await fetch("https://frjesionowka.byst.re/api/pracownik/nowiDzis", { headers });
                 const todayCount = await responseCount.text();
 
                 // 2. Godzina rozpoczęcia pracy
-                const responseStartTime = await fetch("https://lupus24.byst.reapi/pracownik/pierwszyStartDzisiaj", { headers });
+                const responseStartTime = await fetch("https://frjesionowka.byst.re/api/pracownik/pierwszyStartDzisiaj", { headers });
                 const startTime = await responseStartTime.text();
 
                 // 3. Czas przerw
-                const responseBreak = await fetch("https://lupus24.byst.reapi/pracownik/sumaPrzerwDzisiaj", { headers });
+                const responseBreak = await fetch("https://frjesionowka.byst.re/api/pracownik/sumaPrzerwDzisiaj", { headers });
                 const breakTime = await responseBreak.text();
 
                 // 4. Przepracowane godziny
-                const responseWorkTime = await fetch("https://lupus24.byst.reapi/pracownik/czasPracyToday", { headers });
+                const responseWorkTime = await fetch("https://frjesionowka.byst.re/api/pracownik/czasPracyToday", { headers });
                 const workTime = await responseWorkTime.text();
 
                 // Debug:
@@ -329,7 +329,7 @@
 
     <script>
         const token = localStorage.getItem("token");
-        fetch("https://lupus24.byst.reapi/urlopy/wszystkie", {
+        fetch("https://frjesionowka.byst.re/api/urlopy/wszystkie", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

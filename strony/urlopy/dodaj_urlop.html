@@ -280,7 +280,7 @@
                 }
 
                 try {
-                    const res = await fetch(`https://lupus24.byst.reapi/urlopy/dodaj?id_Pracownika=${id}&data_Od=${data_Od}&data_Do=${data_Do}&typ_Urlopu=${typ}&powod=${powod}`, {
+                    const res = await fetch(`https://frjesionowka.byst.re/api/urlopy/dodaj?id_Pracownika=${id}&data_Od=${data_Od}&data_Do=${data_Do}&typ_Urlopu=${typ}&powod=${powod}`, {
                         method: "POST",
                         headers: { "Authorization": "Bearer " + token }
                     });
