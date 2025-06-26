@@ -25,19 +25,19 @@
 
             try {
                 // 1. Liczba pracowników dzisiaj
-                const responseCount = await fetch("https://frjesionowka.byst.re/api/pracownik/nowiDzis", { headers });
+                const responseCount = await fetch("http://localhost:8080/api/pracownik/nowiDzis", { headers });
                 const todayCount = await responseCount.text();
 
                 // 2. Godzina rozpoczęcia pracy
-                const responseStartTime = await fetch("https://frjesionowka.byst.re/api/pracownik/pierwszyStartDzisiaj", { headers });
+                const responseStartTime = await fetch("http://localhost:8080/api/pracownik/pierwszyStartDzisiaj", { headers });
                 const startTime = await responseStartTime.text();
 
                 // 3. Czas przerw
-                const responseBreak = await fetch("https://frjesionowka.byst.re/api/pracownik/sumaPrzerwDzisiaj", { headers });
+                const responseBreak = await fetch("http://localhost:8080/api/pracownik/sumaPrzerwDzisiaj", { headers });
                 const breakTime = await responseBreak.text();
 
                 // 4. Przepracowane godziny
-                const responseWorkTime = await fetch("https://frjesionowka.byst.re/api/pracownik/czasPracyToday", { headers });
+                const responseWorkTime = await fetch("http://localhost:8080/api/pracownik/czasPracyToday", { headers });
                 const workTime = await responseWorkTime.text();
 
                 // Debug:
@@ -47,7 +47,7 @@
                 // console.log("Start pracy:", startTime);
                 // console.log("Czas przerwy:", breakTime);
 
-               // Funkcja do formatowania godziny (godzina:minuta)
+                // Funkcja do formatowania godziny (godzina:minuta)
                 function formatTime(time) {
                     // Zakładając, że czas jest w formacie HH:mm:ss
                     let timeParts = time.split(":");
@@ -139,6 +139,9 @@
                             </div>
                             <div class="accordion-body">
                                 <a href="czas_pracy_season.html">Czas pracy w tym sezonie</a>
+                            </div>
+                            <div class="accordion-body">
+                                <a href="../czasPracy/popraw-czas-pracy.html">Popraw czas pracy</a>
                             </div>
                         </div>
                     </div>
@@ -302,24 +305,21 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="urlopy">
-                            <h2>Lista urlopowiczów</h2>
-                            <table class="table table-rounded mt-3" id="urlopy-table">
-                                <thead>
+
+                        <!-- tutaj wstawić treść -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="userTable">
+                                <thead class="table-light">
                                     <tr>
-                                        <th>Imię i nazwisko</th>
-                                        <th>Data od</th>
-                                        <th>Data do</th>
-                                        <th>Typ urlopu</th>
-                                        <th>Powod urlopu</th>
+                                        <th>Imię i Nazwisko</th>
+                                        <th>Zdjęcie</th>
+                                        <th>ID Pracownika</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!-- Wiersze będą dynamicznie dodawane -->
                                 </tbody>
                             </table>
-
-                            <div id="blad" class="alert alert-danger d-none" role="alert">
-                                Nie udało się pobrać danych. </div>
                         </div>
                     </div>
                 </div>
@@ -327,41 +327,86 @@
         </div>
     </div>
 
-    <script>
-        const token = localStorage.getItem("token");
-        fetch("https://frjesionowka.byst.re/api/urlopy/wszystkie", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
-            }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Błąd serwera");
-                }
-                return response.json();
-            })
-            .then(data => {
-                const tbody = document.querySelector("#urlopy-table tbody");
-                data.forEach(row => {
-                    const tr = document.createElement("tr");
-                    row.slice(0, 5).forEach(cell => {
-                        const td = document.createElement("td");
-                        td.textContent = cell;
-                        tr.appendChild(td);
-                    });
-                    tbody.appendChild(tr);
-                });
-            })
-            .catch(error => {
-                console.error(error);
-                document.getElementById("blad").classList.remove("d-none");
-            });
-    </script>
 
     <script>
+        async function fetchPracownicyNieRozpoczeliPracy() {
+            const token = localStorage.getItem("token");
+            const data = new Date().toISOString().slice(0, 10);  // Pobierz dzisiejszą datę (YYYY-MM-DD)
+
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    console.error("Brak tokena!");
+                    return;
+                }
+
+                const response = await fetch(`http://localhost:8080/api/czasPracy/listaNieRozpoczeliPracy?data=${data}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error(`Błąd: ${response.status}`);
+
+                const pracownicy = await response.json();
+                populateTable(pracownicy);  // Funkcja do wypełnienia tabeli
+            } catch (error) {
+                console.error("Nie udało się pobrać pracowników:", error);
+            }
+        }
+
+        function populateTable(pracownicy) {
+            const tbody = document.querySelector("#userTable tbody");
+            tbody.innerHTML = "";  // Czyść tabelę przed dodaniem nowych danych
+
+            pracownicy.forEach(p => {
+                const tr = document.createElement("tr");
+
+                // Jeśli zdjęcie istnieje, wyświetl je, w przeciwnym razie użyj placeholdera
+                const imgSrc = p[3]  // Zakładam, że zdjęcie jest w czwartym elemencie (indeks 3) w tablicy
+                    ? `data:image/jpeg;base64,${p[3]}`
+                    : "https://via.placeholder.com/100";  // Placeholder jeśli brak zdjęcia
+
+                tr.innerHTML = `
+      <td>${p[1]} ${p[2]}</td>  <!-- Imię i nazwisko -->
+      <td><img src="${imgSrc}" alt="Zdjęcie" width="50" class="img-thumbnail"></td>  <!-- Zdjęcie -->
+      <td>${p[0]}</td>  <!-- ID Pracownika -->
+    `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Wywołanie funkcji po załadowaniu strony
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchPracownicyNieRozpoczeliPracy();  // Załaduj pracowników, którzy nie rozpoczęli pracy
+        });
+
+        function populateTable(pracownicy) {
+            const tbody = document.querySelector("#userTable tbody");
+            tbody.innerHTML = "";  // Czyść tabelę przed dodaniem nowych danych
+
+            pracownicy.forEach(p => {
+                const tr = document.createElement("tr");
+
+                tr.innerHTML = `
+      <td>${p[1]} ${p[2]}</td>  <!-- Imię i nazwisko -->
+      <td>${p[0]}</td>          <!-- ID pracownika -->
+    `;
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Wywołanie funkcji po załadowaniu strony
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchPracownicyNieRozpoczeliPracy();  // Załaduj pracowników, którzy nie rozpoczęli pracy
+        });
+
+
         console.log("Token:", localStorage.getItem("token"));
+        const token = localStorage.getItem("token");
         // Rozdzielenie tokena na części (header, payload, signature)
         //onst token = localStorage.getItem("token");
         const tokenParts = token.split(".");

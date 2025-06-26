@@ -75,6 +75,9 @@
                             <div class="accordion-body">
                                 <a href="czas_pracy_season.html">Czas pracy w tym sezonie</a>
                             </div>
+                            <div class="accordion-body">
+                                <a href="../czasPracy/popraw-czas-pracy.html">Popraw czas pracy</a>
+                            </div>
                         </div>
                     </div>
                     <!-- Akordeon 3 -->
@@ -219,7 +222,7 @@
 
         async function wypelnijTabeleUrlopow() {
                 try {
-                    const res = await fetch("https://frjesionowka.byst.re/api/urlopy/wszystkie", {
+                    const res = await fetch("http://localhost:8080/api/urlopy/wszystkie", {
                         headers: { "Authorization": "Bearer " + token }
                     });
 
@@ -267,7 +270,7 @@
                 }
 
                 try {
-                    const url = `https://frjesionowka.byst.re/api/urlopy/zaktualizujUrlop?id=${id}&idPracownika=${idPracownika}&dataOd=${dataOd}&dataDo=${dataDo}&typUrlopu=${typUrlopu}&powod=${powod}`;
+                    const url = `http://localhost:8080/api/urlopy/zaktualizujUrlop?id=${id}&idPracownika=${idPracownika}&dataOd=${dataOd}&dataDo=${dataDo}&typUrlopu=${typUrlopu}&powod=${powod}`;
                     const res = await fetch(url, {
                         method: "POST",
                         headers: { "Authorization": "Bearer " + token }

@@ -73,6 +73,9 @@
                             <div class="accordion-body">
                                 <a href="czas_pracy_season.html">Czas pracy w tym sezonie</a>
                             </div>
+                            <div class="accordion-body">
+                                <a href="../czasPracy/popraw-czas-pracy.html">Popraw czas pracy</a>
+                            </div>
                         </div>
                     </div>
                     <!-- Akordeon 3 -->
@@ -234,7 +237,7 @@
             const endDate = "2025-09-30";
 
             try {
-                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, { headers });
+                const response = await fetch(`http://localhost:8080/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, { headers });
                 if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
 
                 const data = await response.json();
@@ -268,7 +271,7 @@
             const endDate = "2025-09-30";
 
             try {
-                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracyByDate?startDate=${startDate}&endDate=${endDate}`, { headers });
+                const response = await fetch(`http://localhost:8080/api/czasPracy/sumGodzinyPracyByDate?startDate=${startDate}&endDate=${endDate}`, { headers });
                 if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
 
                 const data = await response.json();
@@ -323,7 +326,7 @@
 
 
         try {
-            const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracyByDate?startDate=${startDate}&endDate=${endDate}`, {
+            const response = await fetch(`http://localhost:8080/api/czasPracy/sumGodzinyPracyByDate?startDate=${startDate}&endDate=${endDate}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -371,7 +374,7 @@
 
 
             try {
-                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, { headers });
+                const response = await fetch(`http://localhost:8080/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, { headers });
                 if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
 
                 const data = await response.json();
@@ -407,7 +410,7 @@
 
 
             try {
-                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracyByDate?startDate=${startDate}&endDate=${endDate}`, { headers });
+                const response = await fetch(`http://localhost:8080/api/czasPracy/sumGodzinyPracyByDate?startDate=${startDate}&endDate=${endDate}`, { headers });
                 if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
 
                 const data = await response.json();
@@ -488,7 +491,7 @@
             const endDate = lastDay.toISOString().split("T")[0];
 
             try {
-                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, {
+                const response = await fetch(`http://localhost:8080/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, {
                     headers
                 });
 

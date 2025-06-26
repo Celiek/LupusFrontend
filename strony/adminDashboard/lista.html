@@ -75,6 +75,9 @@
                             <div class="accordion-body">
                                 <a href="czas_pracy_season.html">Czas pracy w tym sezonie</a>
                             </div>
+                            <div class="accordion-body">
+                                <a href="../czasPracy/popraw-czas-pracy.html">Popraw czas pracy</a>
+                            </div>
                         </div>
                     </div>
                     <!-- Akordeon 3 -->
@@ -193,6 +196,19 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Powiększone zdjęcie</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Powiększone zdjęcie" class="img-fluid">
+                </div>
+            </div>
+        </div>
+        </div>
     <footer class="footer d-flex flex-wrap justify-content-between align-items-center">
         <p class="col-md-4 mb-0 text-muted">&copy; 2025 GR Jesionówka/p>
 
@@ -212,12 +228,23 @@
         </ul>
     </footer>
     <script>
+        // powiększanie zdjęcia po kliknięciu 
+        function handleImageClick(event) {
+                const imageSrc = event.target.src; // Pobieramy źródło klikniętego obrazu
+                const modalImage = document.getElementById('modalImage'); // Element obrazu w modalnym oknie
+                modalImage.src = imageSrc; // Ustawiamy to samo źródło w modalnym oknie
+
+                // Pokazujemy modal
+                const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+                imageModal.show();
+            }
+
         // Pobranie danych z endpointa
         async function fetchPracownicy() {
             const token = localStorage.getItem("token"); // Pobierz token z localStorage
             console.log("Token:", localStorage.getItem("token"));
             try {
-                const response = await fetch("https://frjesionowka.byst.re/api/pracownik/listall", {
+                const response = await fetch("http://localhost:8080/api/pracownik/listall", {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}`, // Wysłanie tokena w nagłówku
@@ -238,49 +265,47 @@
 
         // Funkcja do wypełnienia tabeli danymi w stylu Bootstrap
         function populateTable(pracownicy) {
-            console.table(pracownicy);
-            const container = document.getElementById("wyniki");
-            container.innerHTML = ""; // Czyścimy kontener
+                const container = document.getElementById("wyniki");
+                container.innerHTML = ""; // Czyścimy kontener
 
-            const tableResponsiveDiv = document.createElement("div");
-            tableResponsiveDiv.className = "table-responsive";
+                const tableResponsiveDiv = document.createElement("div");
+                tableResponsiveDiv.className = "table-responsive";
 
-            const table = document.createElement("table");
-            table.className = "table table-striped table-bordered table-hover";
+                const table = document.createElement("table");
+                table.className = "table table-striped table-bordered table-hover";
 
-            // ✅ DODANE nowe kolumny
-            const headers = [
-                "Imię", "Drugie Imię", "Zdjęcie", "Nazwisko",
-                "Typ Pracownika", "Data Dołączenia", "Login",
-                "Kraj Pochodzenia", "Numer WhatsApp", "Email", "Nr Konta"
-            ];
+                const headers = [
+                    "Imię", "Drugie Imię", "Zdjęcie", "Nazwisko",
+                    "Typ Pracownika", "Data Dołączenia", "Login",
+                    "Kraj Pochodzenia", "Numer WhatsApp", "Email", "Nr Konta"
+                ];
 
-            const thead = document.createElement("thead");
-            const headerRow = document.createElement("tr");
-            headers.forEach(header => {
-                const th = document.createElement("th");
-                th.textContent = header;
-                headerRow.appendChild(th);
-            });
-            thead.appendChild(headerRow);
-            table.appendChild(thead);
+                const thead = document.createElement("thead");
+                const headerRow = document.createElement("tr");
+                headers.forEach(header => {
+                    const th = document.createElement("th");
+                    th.textContent = header;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
 
-            const tbody = document.createElement("tbody");
-            pracownicy.forEach(pracownik => {
-                const row = document.createElement("tr");
+                const tbody = document.createElement("tbody");
+                pracownicy.forEach(pracownik => {
+                    const row = document.createElement("tr");
 
-                const imgSrc = pracownik.zdjecie
-                    ? `data:image/jpeg;base64,${pracownik.zdjecie}`
-                    : "https://via.placeholder.com/100";
+                    const imgSrc = pracownik.zdjecie
+                        ? `data:image/jpeg;base64,${pracownik.zdjecie}`
+                        : "https://via.placeholder.com/100";
 
-                const formattedDate = pracownik.dataDolaczenia
-                    ? new Date(pracownik.dataDolaczenia).toLocaleDateString('pl-PL')
-                    : "Brak daty";
+                    const formattedDate = pracownik.dataDolaczenia
+                        ? new Date(pracownik.dataDolaczenia).toLocaleDateString('pl-PL')
+                        : "Brak daty";
 
-                row.innerHTML = `
+                    row.innerHTML = `
             <td>${pracownik.imie || "-"}</td>
             <td>${pracownik.drugieImie || "-"}</td>
-            <td><img src="${imgSrc}" alt="Zdjęcie" width="100" class="img-thumbnail"></td>
+            <td><img src="${imgSrc}" alt="Zdjęcie" width="100" class="img-thumbnail" onclick="handleImageClick(event)"></td>
             <td>${pracownik.nazwisko || "-"}</td>
             <td>${pracownik.typPracownika || "-"}</td>
             <td>${formattedDate}</td>
@@ -290,13 +315,13 @@
             <td>${pracownik.email || "-"}</td>
             <td>${pracownik.nrKonta || "-"}</td>
         `;
-                tbody.appendChild(row);
-            });
+                    tbody.appendChild(row);
+                });
 
-            table.appendChild(tbody);
-            tableResponsiveDiv.appendChild(table);
-            container.appendChild(tableResponsiveDiv);
-        }
+                table.appendChild(tbody);
+                tableResponsiveDiv.appendChild(table);
+                container.appendChild(tableResponsiveDiv);
+            }
 
 
         // Wywołanie funkcji podczas ładowania strony

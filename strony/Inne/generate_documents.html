@@ -119,6 +119,9 @@
                             <div class="accordion-body">
                                 <a href="../adminDashboard/czas_pracy_season.html">Czas pracy w tym sezonie</a>
                             </div>
+                            <div class="accordion-body">
+                                <a href="../czasPracy/popraw-czas-pracy.html">Popraw czas pracy</a>
+                            </div>
                         </div>
                     </div>
                     <!-- Akordeon 3 -->
@@ -269,7 +272,7 @@
         let listaPracownikow = [];
 
         async function pobierzListePracownikow() {
-            const res = await fetch("https://frjesionowka.byst.re/api/pracownik/listall", {
+            const res = await fetch("http://localhost:8080/api/pracownik/listall", {
                 headers: { Authorization: "Bearer " + token }
             });
             listaPracownikow = await res.json();
@@ -290,7 +293,7 @@
                     const imie = p.imie;
                     const nazwisko = p.nazwisko;
 
-                    const res = await fetch(`https://frjesionowka.byst.re/api/czasPracy/dniPracyZakres?idPracownika=${id}&dataOd=${startDate}&dataDo=${endDate}`, {
+                    const res = await fetch(`http://localhost:8080/api/czasPracy/dniPracyZakres?idPracownika=${id}&dataOd=${startDate}&dataDo=${endDate}`, {
                         headers: { Authorization: "Bearer " + token }
                     });
 
@@ -313,41 +316,68 @@
                         table.classList.add("table", "table-bordered", "mb-2");
 
                         const thead = document.createElement("thead");
-                        thead.innerHTML = `<tr><th>Data pracy</th><th>Ilość godzin</th><th>Urlop?</th></tr>`;
+                        thead.innerHTML = `<tr><th>ID Pracownika</th><th>Data pracy</th><th>Ilość godzin</th><th>Urlop?</th><th>Powód</th></tr>`;
                         table.appendChild(thead);
 
                         const tbody = document.createElement("tbody");
                         let sumaGodzin = 0;
 
-                        const resUrlop = await fetch(`https://frjesionowka.byst.re/api/urlopy/urlopyPracownika?idPracownika=${id}`, {
+                        // Pobieranie dni urlopu pracownika
+                        const resUrlop = await fetch(`http://localhost:8080/api/urlopy/urlopyPracownika?idPracownika=${id}`, {
                             headers: { Authorization: "Bearer " + token }
                         });
                         const dniUrlopu = resUrlop.ok ? await resUrlop.json() : [];
+
+                        // Mapa powodów dla każdego dnia urlopu
+                        const powodMap = dniUrlopu.reduce((acc, entry) => {
+                            const startDate = entry[1]; // data od
+                            const endDate = entry[2]; // data do
+                            const powod = entry[3]; // powód urlopu
+
+                            // Mapa dat dla urlopu z przypisanym powodem
+                            const currentDate = new Date(startDate);
+                            while (currentDate <= new Date(endDate)) {
+                                const dateKey = currentDate.toISOString().split("T")[0]; // yyyy-mm-dd
+                                acc[dateKey] = powod;
+                                currentDate.setDate(currentDate.getDate() + 1);
+                            }
+                            return acc;
+                        }, {});
 
                         let current = new Date(startDate);
                         const koniec = new Date(endDate);
 
                         while (current <= koniec) {
-                            const dataStr = current.toISOString().split("T")[0];
+                            const dataStr = current.toISOString().split("T")[0]; // Format daty yyyy-mm-dd
+                            const entry = dane.find(e => e[3].startsWith(dataStr));  // e[3] to data pracy
 
-                            const entry = dane.find(e => e[3].startsWith(dataStr));
                             const godziny = entry ? parseFloat(entry[4]) || 0 : 0;
                             if (entry) sumaGodzin += godziny;
 
-                            const isUrlop = dniUrlopu.includes(dataStr);
+                            const isUrlop = dniUrlopu.some(urlop => urlop[1] <= dataStr && urlop[2] >= dataStr);  // Sprawdzamy, czy data jest w okresie urlopu
 
-                            const godzinyText = entry ? godziny.toFixed(2) + " h" : "";
+                            // Powód urlopu znajduje się w mapie powodMap
+                            const powod = powodMap[dataStr] || "---";  // Pobierz powód z mapy lub wyświetl "---" jeśli brak
+
+                            // Konwertowanie godzin na format hh:mm
+                            const h = Math.floor(godziny); // Całkowita część to godziny
+                            const m = Math.round((godziny - h) * 60); // Część dziesiętna to minuty
+                            const godzinyFormat = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+
                             const statusText = entry ? "" : "Wolne";
 
+                            // Dodajemy wiersz do tabeli
                             const tr = document.createElement("tr");
                             tr.innerHTML = `
+                    <td>${id}</td>
                     <td>${dataStr}</td>
-                    <td>${godzinyText}</td>
+                    <td>${godzinyFormat}</td>
                     <td>${isUrlop ? "Urlop" : statusText}</td>
+                    <td>${powod}</td>
                 `;
                             tbody.appendChild(tr);
 
-                            current.setDate(current.getDate() + 1);
+                            current.setDate(current.getDate() + 1);  // Przechodzimy do następnego dnia
                         }
 
                         table.appendChild(tbody);
@@ -363,37 +393,9 @@
                         const wyplataElem = document.createElement("p");
                         wyplataElem.innerHTML = `<strong>Wypłata: ${wyplata.toFixed(2)} zł</strong>`;
                         sekcja.appendChild(wyplataElem);
-
-                        // Podpisy (canvas)
-                        const podpisy = document.createElement("div");
-                        podpisy.classList.add("row", "mb-5");
-
-                        podpisy.innerHTML = `
-                <div class="col-md-6">
-                    <p>Podpis pracownika:</p>
-                    <canvas width="400" height="150" class="border mb-2 w-100" id="podpis-pracownik-${id}"></canvas>
-                </div>
-                <div class="col-md-6">
-                    <p>Podpis szefa:</p>
-                    <canvas width="400" height="150" class="border mb-2 w-100" id="podpis-szef-${id}"></canvas>
-                </div>
-            `;
-                        sekcja.appendChild(podpisy);
-
-                        // Inicjalizacja podpisów
-                        function inicjalizujSignaturePad(canvasId) {
-                            const canvas = document.getElementById(canvasId);
-                            canvas.width = canvas.offsetWidth;
-                            canvas.height = canvas.offsetHeight;
-                            return new SignaturePad(canvas);
-                        }
-
-                        inicjalizujSignaturePad(`podpis-pracownik-${id}`);
-                        inicjalizujSignaturePad(`podpis-szef-${id}`);
                     }
                 }
             }
-
 
         //zapisywanie pdfa
         document.getElementById("zapisz-pdf").addEventListener("click", async () => {

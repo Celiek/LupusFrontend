@@ -68,7 +68,7 @@ async function startPraca(id) {
   
 
   try {
-    const url = `https://frjesionowka.byst.re/api/czasPracy/startPraca?id=${id}&data=${data}&czas=${czas}`;
+    const url = `http://localhost:8080/api/czasPracy/startPraca?id=${id}&data=${data}&czas=${czas}`;
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -120,6 +120,119 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+//powiększa zdjęcie po kliknięciu 
+function handleImageClick(event) {
+  const imageSrc = event.target.src;
+  const modalImage = document.getElementById("modalImage");
+  modalImage.src = imageSrc;
+
+  // Pokazuje modal
+  const imageModal = new bootstrap.Modal(document.getElementById("imageModal"));
+  imageModal.show();
+}
+
+// Funkcja do zmiany statusu pracy w navbarze
+function updateWorkStatus(isWorkStarted) {
+  const statusIcon = document.getElementById('work-status-icon');
+  const statusText = document.getElementById('work-status-text');
+
+  if (isWorkStarted) {
+      // Zmieniamy ikonę na zieloną i tekst
+      statusIcon.classList.add('connected');
+      statusIcon.classList.remove('disconnected');
+      statusText.textContent = 'Praca rozpoczęta';
+  } else {
+      // Zmieniamy ikonę na czerwoną i tekst
+      statusIcon.classList.add('disconnected');
+      statusIcon.classList.remove('connected');
+      statusText.textContent = 'Czas pracy: 00:00';
+  }
+}
+
+// Funkcja start pracy
+async function startPraca(id) {
+  const token = localStorage.getItem("token");
+  const teraz = new Date();
+  const data = teraz.toISOString().slice(0, 10);
+  const czas = teraz.toTimeString().slice(0, 5);
+
+  workStartTime = new Date();
+  saveStateToLocalStorage();
+
+  if (!id || isNaN(id)) {
+      alert("Nieprawidłowy identyfikator pracownika");
+      return;
+  }
+
+  try {
+      const url = `http://localhost:8080/api/czasPracy/startPraca?id=${id}&data=${data}&czas=${czas}`;
+      const response = await fetch(url, {
+          method: "POST",
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+
+      if (!response.ok) throw new Error(`Błąd HTTP: ${response.status}`);
+      const result = await response.text();
+      alert(`✅ ${result}`);
+
+      // Zmiana statusu pracy na rozpoczętą
+      updateWorkStatus(true); // Ustawiamy status pracy na rozpoczęty
+  } catch (err) {
+      console.error("Błąd:", err);
+      alert("❌ Nie udało się rozpocząć pracy.");
+  }
+}
+
+// Event listener dla przycisku "Start pracy"
+document.getElementById("startWork").addEventListener("click", async () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+      alert("Brak tokena – użytkownik nie jest zalogowany.");
+      return;
+  }
+
+  try {
+      const response = await fetch(
+          "http://localhost:8080/api/czasPracy/startPracy",
+          {
+              method: "POST",
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },
+          }
+      );
+
+      if (!response.ok) {
+          const text = await response.text();
+          throw new Error(`Błąd: ${response.status} – ${text}`);
+      }
+
+      const result = await response.text();
+      console.log("✅", result);
+
+      localStorage.setItem("startPracy", new Date().toISOString());
+
+      // Pokazuje alert, że praca została rozpoczęta
+      const alertElement = document.getElementById("startAlert");
+      alertElement.classList.add("show");
+      alertElement.style.display = "block";
+      setTimeout(() => {
+          alertElement.classList.remove("show");
+          alertElement.style.display = "none";
+      }, 5000);
+
+      // Zmiana statusu w navbarze
+      updateWorkStatus(true); // Ustawiamy status pracy na rozpoczęty
+  } catch (err) {
+      console.error("Błąd podczas rozpoczynania pracy:", err);
+      alert("❌ Nie udało się rozpocząć pracy.");
+  }
+});
+
+
 function updateWorkTime() {
   if (!workStartTime) return;
   const now = new Date();
@@ -139,7 +252,7 @@ document.getElementById("startWork").addEventListener("click", async () => {
 
   try {
     const response = await fetch(
-      "https://frjesionowka.byst.re/api/czasPracy/startPracy",
+      "http://localhost:8080/api/czasPracy/startPracy",
       {
         method: "POST",
         headers: {
@@ -212,7 +325,7 @@ document.getElementById("startBreak").addEventListener("click", async () => {
       // Wyślij do backendu
       try {
         const response = await fetch(
-          `https://frjesionowka.byst.re/api/czasPracy/przerwa?przerwa=${encodeURIComponent(
+          `http://localhost:8080/api/czasPracy/przerwa?przerwa=${encodeURIComponent(
             breakDurationFormatted
           )}&data=${data}`,
           {
@@ -270,12 +383,14 @@ document.getElementById("stopWork").addEventListener("click", () => {
 });
 
 function updateTimeDisplay() {
-  const start = localStorage.getItem("startPracy");
-  if (start) {
-    const diff = Date.now() - new Date(start).getTime();
-    document.getElementById("workTime").textContent = `Czas pracy: ${formatTime(
-      diff
-    )}`;
+  const workTimeDisplay = document.getElementById("workTime");
+  const workDuration = localStorage.getItem("workDuration");
+
+  if (workDuration) {
+    const formattedTime = formatTime(parseInt(workDuration)); // Konwersja czasu w ms do formatu hh:mm
+    workTimeDisplay.textContent = `Czas pracy: ${formattedTime}`;
+  } else {
+    workTimeDisplay.textContent = "Czas pracy: 00:00";
   }
 }
 
@@ -294,7 +409,7 @@ async function checkBackendStatus() {
   const statusText = document.getElementById("status-text");
 
   try {
-    const response = await fetch("https://frjesionowka.byst.re/api/ping");
+    const response = await fetch("http://localhost:8080/api/ping");
     if (response.ok) {
       statusIcon.classList.add("connected");
       statusIcon.classList.remove("disconnected");
@@ -314,7 +429,7 @@ async function fetchAndDisplayUsers() {
 
   try {
     const response = await fetch(
-      "https://frjesionowka.byst.re/api/pracownik/listall",
+      "http://localhost:8080/api/pracownik/listall",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -331,30 +446,32 @@ async function fetchAndDisplayUsers() {
     users.forEach((p) => {
       const tr = document.createElement("tr");
 
+      const imgSrc = p.zdjecie
+        ? `data:image/jpeg;base64,${p.zdjecie}`
+        : "https://via.placeholder.com/100";
+
       tr.innerHTML = `
-        <td>${p.imie} ${p.nazwisko}</td>
-        <td>${p.drugieImie || ""}</td>
-        <td>${p.dataDolaczenia || "-"}</td>
-        <td>${
-          p.zdjecie
-            ? `<img src="data:image/jpeg;base64,${p.zdjecie}" style="width:50px;">`
-            : ""
-        }</td>
-        <td>
-          <input type="checkbox" class="form-check-input obecny-checkbox" data-id="${
-            p.idPracownika
-          }">
-        </td>
-        <td>
-          <button class="btn btn-sm btn-outline-danger" onclick="stopPraca(${
-            p.idPracownika
-          })">Zatrzymaj</button>
-        </td>
-        <td>
-          <button class="btn btn-sm btn-outline-success start-individual" data-id="${
-            p.idPracownika
-          }">Start</button>
-        </td>
+          <td>${p.imie} ${p.nazwisko}</td>
+          <td>${p.drugieImie || ""}</td>
+          <td>${p.dataDolaczenia || "-"}</td>
+          <td>
+              <img src="${imgSrc}" alt="Zdjęcie" width="100" class="img-thumbnail" onclick="handleImageClick(event)">
+          </td>
+          <td>
+              <input type="checkbox" class="form-check-input obecny-checkbox" data-id="${
+                p.idPracownika
+              }">
+          </td>
+          <td>
+              <button class="btn btn-sm btn-outline-danger" onclick="stopPraca(${
+                p.idPracownika
+              })">Zatrzymaj</button>
+          </td>
+          <td>
+              <button class="btn btn-sm btn-outline-success start-individual" data-id="${
+                p.idPracownika
+              }">Start</button>
+          </td>
       `;
 
       tbody.appendChild(tr);
@@ -377,7 +494,7 @@ async function stopPraca(id) {
 
   try {
     const response = await fetch(
-      `https://frjesionowka.byst.re/api/czasPracy/stopPracy?id=${id}`,
+      `http://localhost:8080/api/czasPracy/stopPracy?id=${id}`,
       {
         method: "POST",
         headers: {
@@ -390,11 +507,45 @@ async function stopPraca(id) {
 
     const result = await response.text();
     alert(`🛑 Zatrzymano pracę pracownika ID ${id}.\n${result}`);
+
+    // Zapisanie czasu pracy do localStorage
+    const endTime = new Date();
+    const workDuration = endTime - new Date(localStorage.getItem("startPracy")); // Różnica czasu
+    localStorage.setItem("workEndTime", endTime.toISOString());
+    localStorage.setItem("workDuration", workDuration); // Przechowujemy czas pracy w ms
+
+    // Wyświetlenie powiadomienia o całkowitym czasie pracy
+    showWorkTimeNotification(workDuration); // Funkcja pokazująca powiadomienie
   } catch (err) {
     console.error("Błąd zatrzymania pracy:", err);
     alert("❌ Nie udało się zatrzymać pracy.");
   }
 }
+
+//wyswietla powaiadominie stop czasu pracy
+function showWorkTimeNotification(workDuration) {
+  const workTimeAlert = document.createElement("div");
+  workTimeAlert.classList.add(
+    "alert",
+    "alert-info",
+    "alert-dismissible",
+    "fade",
+    "show"
+  );
+  workTimeAlert.setAttribute("role", "alert");
+  workTimeAlert.innerHTML = `
+      <strong>Czas pracy dzisiaj:</strong> ${formatTime(workDuration)} 
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  `;
+  document.body.appendChild(workTimeAlert); // Można wybrać miejsce na stronie
+
+  // Automatyczne zamknięcie powiadomienia po 5 sekundach
+  setTimeout(() => {
+    const alertInstance = new bootstrap.Alert(workTimeAlert);
+    alertInstance.close();
+  }, 5000);
+}
+
 
 async function stopPracaDlaWielu() {
   const token = localStorage.getItem("token");
@@ -414,7 +565,7 @@ async function stopPracaDlaWielu() {
 
   try {
     const response = await fetch(
-      "https://frjesionowka.byst.re/api/czasPracy/stopPracaWielu",
+      "http://localhost:8080/api/czasPracy/stopPracaWielu",
       {
         method: "POST",
         headers: {
@@ -450,7 +601,7 @@ async function isOnBreak(id) {
 
   try {
     const response = await fetch(
-      `https://frjesionowka.byst.re/api/czasPracy/przerwa?przerwa=${przerwa}&data=${data}`,
+      `http://localhost:8080/api/czasPracy/przerwa?przerwa=${przerwa}&data=${data}`,
       {
         method: "POST",
         headers: {

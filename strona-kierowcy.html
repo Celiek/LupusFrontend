@@ -70,6 +70,16 @@
             background-color: #ccc;
             margin: 2rem 0;
         }
+
+        /* .status-icon.connected {
+            color: #261ad3;
+            /* Kolor zielony dla pracy rozpoczętej */
+        /* } */ */
+
+        .status-icon.disconnected {
+            color: #ff4d4d;
+            /* Kolor czerwony dla braku pracy */
+        }
     </style>
 </head>
 
@@ -91,6 +101,12 @@
                             <div class="status-wrapper">
                                 <i class="fas fa-circle status-icon" id="status-icon"></i>
                                 <span class="status-text" id="status-text">Sprawdzanie połączenia...</span>
+                            </div>
+                        </li>
+                        <li class="nav-item me-4">
+                            <div class="status-wrapper">
+                                <i class="fas fa-circle status-icon" id="work-status-icon"></i>
+                                <span class="status-text" id="work-status-text">Czas pracy: 00:00</span>
                             </div>
                         </li>
                         <li class="nav-item">
@@ -192,8 +208,23 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Zamknij"></button>
         </div>
     </div>
-
-
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Powiększone zdjęcie</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Powiększone zdjęcie" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Alert Container -->
+    <div id="statusAlertContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <!-- Tutaj będą pojawiać się powiadomienia -->
+    </div>
     <script src="skrypty/kierowca.js"></script>
 </body>
 
