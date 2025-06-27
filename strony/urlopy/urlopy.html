@@ -213,7 +213,7 @@
             const token = localStorage.getItem("token"); // Pobierz token z localStorage
             console.log("Token:", localStorage.getItem("token"));
             try {
-                const response = await fetch("http://localhost:8080/api/urlopy/wszystkie", {
+                const response = await fetch("https://frjesionowka.byst.re/api/urlopy/wszystkie", {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}`, // Wysłanie tokena w nagłówku
@@ -276,7 +276,7 @@
             const token = localStorage.getItem("token");
 
             try {
-                const response = await fetch("http://localhost:8080/api/urlopy/wszystkie", {
+                const response = await fetch("https://frjesionowka.byst.re/api/urlopy/wszystkie", {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }

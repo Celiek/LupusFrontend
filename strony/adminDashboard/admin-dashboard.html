@@ -25,19 +25,19 @@
 
             try {
                 // 1. Liczba pracowników dzisiaj
-                const responseCount = await fetch("http://localhost:8080/api/pracownik/nowiDzis", { headers });
+                const responseCount = await fetch("https://frjesionowka.byst.re/api/pracownik/nowiDzis", { headers });
                 const todayCount = await responseCount.text();
 
                 // 2. Godzina rozpoczęcia pracy
-                const responseStartTime = await fetch("http://localhost:8080/api/pracownik/pierwszyStartDzisiaj", { headers });
+                const responseStartTime = await fetch("https://frjesionowka.byst.re/api/pracownik/pierwszyStartDzisiaj", { headers });
                 const startTime = await responseStartTime.text();
 
                 // 3. Czas przerw
-                const responseBreak = await fetch("http://localhost:8080/api/pracownik/sumaPrzerwDzisiaj", { headers });
+                const responseBreak = await fetch("https://frjesionowka.byst.re/api/pracownik/sumaPrzerwDzisiaj", { headers });
                 const breakTime = await responseBreak.text();
 
                 // 4. Przepracowane godziny
-                const responseWorkTime = await fetch("http://localhost:8080/api/pracownik/czasPracyToday", { headers });
+                const responseWorkTime = await fetch("https://frjesionowka.byst.re/api/pracownik/czasPracyToday", { headers });
                 const workTime = await responseWorkTime.text();
 
                 // Debug:
@@ -340,7 +340,7 @@
                     return;
                 }
 
-                const response = await fetch(`http://localhost:8080/api/czasPracy/listaNieRozpoczeliPracy?data=${data}`, {
+                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/listaNieRozpoczeliPracy?data=${data}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`
