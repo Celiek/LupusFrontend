@@ -236,7 +236,7 @@
             </td>
             <td>
                 <img src="${imgSrc}" alt="Zdjęcie" id="img-preview-${user.idPracownika}" width="100" class="img-thumbnail">
-                <input type="file" id="zdjecie-${user.idPracownika}" accept="image/*" class="form-control form-control-sm" onchange="updateImagePreview(event, '${user.idPracownika}')">
+                <input type="file" id="zdjecie-${user.idPracownika}" accept=".jpg,.jpeg,.png" class="form-control form-control-sm" onchange="updateImagePreview(event, '${user.idPracownika}')">
             </td>
             <td><input type="text" value="${formattedDate}" id="data-${user.idPracownika}" disabled class="form-control form-control-sm"></td>
             <td><input type="text" value="${user.login}" id="login-${user.idPracownika}" class="form-control form-control-sm"></td>

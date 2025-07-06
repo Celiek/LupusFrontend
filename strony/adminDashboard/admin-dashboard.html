@@ -313,7 +313,6 @@
                                     <tr>
                                         <th>Imię i Nazwisko</th>
                                         <th>Zdjęcie</th>
-                                        <th>ID Pracownika</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -334,7 +333,6 @@
             const data = new Date().toISOString().slice(0, 10);  // Pobierz dzisiejszą datę (YYYY-MM-DD)
 
             try {
-                const token = localStorage.getItem("token");
                 if (!token) {
                     console.error("Brak tokena!");
                     return;
@@ -350,54 +348,46 @@
                 if (!response.ok) throw new Error(`Błąd: ${response.status}`);
 
                 const pracownicy = await response.json();
+                // console.log("Pracownicy:", pracownicy);
                 populateTable(pracownicy);  // Funkcja do wypełnienia tabeli
             } catch (error) {
                 console.error("Nie udało się pobrać pracowników:", error);
             }
-        }
+            }
 
-        function populateTable(pracownicy) {
-            const tbody = document.querySelector("#userTable tbody");
-            tbody.innerHTML = "";  // Czyść tabelę przed dodaniem nowych danych
+            function populateTable(pracownicy) {
+                    const tbody = document.querySelector("#userTable tbody");
+                    tbody.innerHTML = "";
 
-            pracownicy.forEach(p => {
-                const tr = document.createElement("tr");
+                    pracownicy.forEach(p => {
+                        const tr = document.createElement("tr");
 
-                // Jeśli zdjęcie istnieje, wyświetl je, w przeciwnym razie użyj placeholdera
-                const imgSrc = p[3]  // Zakładam, że zdjęcie jest w czwartym elemencie (indeks 3) w tablicy
-                    ? `data:image/jpeg;base64,${p[3]}`
-                    : "https://via.placeholder.com/100";  // Placeholder jeśli brak zdjęcia
+                        // Kolumna: Imię i nazwisko
+                        const tdName = document.createElement("td");
+                        tdName.textContent = `${p[1]} ${p[2]}`; // p[1] = imię, p[2] = nazwisko
+                        tr.appendChild(tdName);
 
-                tr.innerHTML = `
-      <td>${p[1]} ${p[2]}</td>  <!-- Imię i nazwisko -->
-      <td><img src="${imgSrc}" alt="Zdjęcie" width="50" class="img-thumbnail"></td>  <!-- Zdjęcie -->
-      <td>${p[0]}</td>  <!-- ID Pracownika -->
-    `;
+                        // Kolumna: Zdjęcie
+                        const tdImg = document.createElement("td");
+                        const img = document.createElement("img");
+                        img.src = p[3] ? `data:image/jpeg;base64,${p[3]}` : "https://via.placeholder.com/100";
+                        img.alt = "Zdjęcie";
+                        img.width = 50;
+                        img.className = "img-thumbnail";
+                        tdImg.appendChild(img);
+                        tr.appendChild(tdImg);
 
-                tbody.appendChild(tr);
-            });
-        }
+                        tbody.appendChild(tr);
+                    });
+                }
+
+
+
 
         // Wywołanie funkcji po załadowaniu strony
         document.addEventListener("DOMContentLoaded", () => {
             fetchPracownicyNieRozpoczeliPracy();  // Załaduj pracowników, którzy nie rozpoczęli pracy
         });
-
-        function populateTable(pracownicy) {
-            const tbody = document.querySelector("#userTable tbody");
-            tbody.innerHTML = "";  // Czyść tabelę przed dodaniem nowych danych
-
-            pracownicy.forEach(p => {
-                const tr = document.createElement("tr");
-
-                tr.innerHTML = `
-      <td>${p[1]} ${p[2]}</td>  <!-- Imię i nazwisko -->
-      <td>${p[0]}</td>          <!-- ID pracownika -->
-    `;
-
-                tbody.appendChild(tr);
-            });
-        }
 
         // Wywołanie funkcji po załadowaniu strony
         document.addEventListener("DOMContentLoaded", () => {
