@@ -231,7 +231,7 @@
                 const token = localStorage.getItem("token");
                 if (!token) throw new Error("Brak tokena – użytkownik niezalogowany.");
 
-                const url = `https://frjesionowka.byst.re/api/wyplataTyg/getWeeklyPaychek?imie=${encodeURIComponent(imie)}&nazwisko=${encodeURIComponent(nazwisko)}&data=${data}`;
+                const url = `https://lupus24.byst.re/api/wyplataTyg/getWeeklyPaychek?imie=${encodeURIComponent(imie)}&nazwisko=${encodeURIComponent(nazwisko)}&data=${data}`;
 
                 const response = await fetch(url, {
                     method: "GET",
