@@ -277,24 +277,28 @@
 
     <script>
         document.getElementById("addUserForm").addEventListener("submit", async function (event) {
-            event.preventDefault(); // Zapobiega przeładowaniu strony
+                event.preventDefault(); // Zapobiega przeładowaniu strony
 
-            const imie = document.getElementById("imie").value.trim();
-            const nazwisko = document.getElementById("nazwisko").value.trim();
-            const loginInput = document.getElementById("login").value.trim();
+                const imie = document.getElementById("imie").value.trim();
+                const nazwisko = document.getElementById("nazwisko").value.trim();
+                const loginInput = document.getElementById("login").value.trim();
+                const login = loginInput === "" ? `${imie.toLowerCase()}.${nazwisko.toLowerCase()}` : loginInput;
 
-            const login = loginInput === "" ? `${imie.toLowerCase()}.${nazwisko.toLowerCase()}` : loginInput;
+                const zdjecieInput = document.getElementById("zdjecie");
+                const plik = zdjecieInput.files[0];  // Pobieramy wybrany plik
 
-            const zdjecieInput = document.getElementById("zdjecie");
-            const plik = zdjecieInput.files[0];
+                // Sprawdzamy, czy zdjęcie zostało wybrane
+                if (!plik) {
+                    alert("Proszę wybrać zdjęcie.");
+                    return;
+                }
 
-            const wyslijFormularz = async (blob) => {
                 const formData = new FormData();
                 formData.append("imie", imie);
                 formData.append("dimie", document.getElementById("drugieImie").value);
                 formData.append("nazwisko", nazwisko);
                 formData.append("typ", document.getElementById("typ").value);
-                formData.append("zdjecie", blob);
+                formData.append("zdjecie", plik);  // Dodajemy zdjęcie do formData
                 formData.append("data", document.getElementById("dataDolaczenia").value);
                 formData.append("login", login);
                 formData.append("haslo", document.getElementById("haslo").value);
@@ -308,6 +312,11 @@
 
                 try {
                     const token = localStorage.getItem("token");
+                    if (!token) {
+                        message.textContent = "❌ Brak tokena JWT. Zaloguj się ponownie.";
+                        return;
+                    }
+
                     const response = await fetch("https://frjesionowka.byst.re/api/pracownik/addPracownik", {
                         method: "POST",
                         body: formData,
@@ -318,6 +327,7 @@
 
                     if (response.ok) {
                         message.textContent = "✅ Pracownik został dodany pomyślnie!";
+                        document.getElementById("addUserForm").reset();
                     } else {
                         const errorText = await response.text();
                         message.textContent = "❌ Błąd dodawania: " + errorText;
@@ -326,53 +336,7 @@
                     message.textContent = "❌ Nie udało się połączyć z serwerem: " + error;
                     console.error("Błąd:", error);
                 }
-            };
-
-            if (plik) {
-                const img = new Image();
-                const reader = new FileReader();
-
-                reader.onload = function (event) {
-                    img.src = event.target.result;
-                };
-
-                img.onload = function () {
-                    const MAX_WIDTH = 1024;
-                    const MAX_HEIGHT = 768;
-
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height = Math.round((height *= MAX_WIDTH / width));
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width = Math.round((width *= MAX_HEIGHT / height));
-                            height = MAX_HEIGHT;
-                        }
-                    }
-
-                    const canvas = document.createElement("canvas");
-                    canvas.width = width;
-                    canvas.height = height;
-
-                    const ctx = canvas.getContext("2d");
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    canvas.toBlob((blob) => {
-                        wyslijFormularz(blob);
-                    }, "image/jpeg", 0.8);
-                };
-
-                reader.readAsDataURL(plik);
-            } else {
-                wyslijFormularz(null);
-            }
-        });
-
+            });
 
         async function wyslijFormularz(formData) {
             message.textContent = "Dodawanie pracownika...";
