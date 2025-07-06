@@ -226,7 +226,7 @@
                 return;
             }
 
-            const apiUrl = `https://lupus24.byst.re/api/czasPracy/findCzasPracyByDateId?dataPracy=${date}`;
+            const apiUrl = `https://frjesionowka.byst.re/api/czasPracy/findCzasPracyByDateId?dataPracy=${date}`;
             const token = localStorage.getItem("token"); // Pobieramy token z localStorage
 
             try {
@@ -324,7 +324,7 @@
             const stopPracy = stopPracyElement.value;
             const czasPrzerwy = czasPrzerwyElement.value;
 
-            const apiUrl = `https://lupus24.byst.re/api/czasPracy/updateCzasPracy?dataPracy=${dataPracy}&idPracownika=${idPracownika}&startPracy=${startPracy}&stopPracy=${stopPracy}&czasPrzerwy=${czasPrzerwy}`;
+            const apiUrl = `https://frjesionowka.byst.re/api/czasPracy/updateCzasPracy?dataPracy=${dataPracy}&idPracownika=${idPracownika}&startPracy=${startPracy}&stopPracy=${stopPracy}&czasPrzerwy=${czasPrzerwy}`;
             const token = localStorage.getItem("token");
 
             try {
