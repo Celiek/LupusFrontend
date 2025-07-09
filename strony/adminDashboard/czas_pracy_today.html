@@ -245,7 +245,6 @@
                 const liczbaPracownikow = await resPracownicy.text();
                 document.getElementById("liczba-pracownikow").textContent = liczbaPracownikow + " osób";
 
-                // Czas pracy dzisiaj
                // Czas pracy dzisiaj
                 const resGodziny = await fetch("https://frjesionowka.byst.re/api/pracownik/czasPracyToday", { headers });
                 const godzinyText = await resGodziny.text();

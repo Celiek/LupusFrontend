@@ -228,308 +228,75 @@
             </li>
         </ul>
     </footer>
+
     <script>
-        async function pobierzSumeISredniaGodzin() {
+        async function initStatystykiSezonu() {
             const token = localStorage.getItem("token");
             const headers = { "Authorization": `Bearer ${token}` };
 
-            const startDate = "2025-05-01";
-            const endDate = "2025-09-30";
-
-            try {
-                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, { headers });
-                if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
-
-                const data = await response.json();
-
-                // Suma godzin
-                const sumaGodzin = data.reduce((acc, row) => acc + (parseFloat(row[4]) || 0), 0);
-                const godzinyCale = Math.floor(sumaGodzin);
-                const minuty = Math.round((sumaGodzin - godzinyCale) * 60);
-                const sformatowanaSuma = `${godzinyCale}:${minuty.toString().padStart(2, "0")}`;
-                document.getElementById("godziny-miesiac").textContent = sformatowanaSuma;
-
-                // Średnia godzin
-                const liczbaPracownikow = data.length;
-                const srednia = liczbaPracownikow > 0 ? sumaGodzin / liczbaPracownikow : 0;
-                const sredniaCale = Math.floor(srednia);
-                const sredniaMinuty = Math.round((srednia - sredniaCale) * 60);
-                const sformatowanaSrednia = `${sredniaCale}:${sredniaMinuty.toString().padStart(2, "0")}`;
-                document.getElementById("srednia-godzin").textContent = sformatowanaSrednia;
-            } catch (err) {
-                console.error("Błąd pobierania danych:", err);
-                document.getElementById("godziny-miesiac").textContent = "Błąd";
-                document.getElementById("srednia-godzin").textContent = "Błąd";
-            }
-        }
-
-        async function wypelnijTabeleGodzinami() {
-            const token = localStorage.getItem("token");
-            const headers = { "Authorization": `Bearer ${token}` };
-
-            const startDate = "2025-05-01";
-            const endDate = "2025-09-30";
-
-            try {
-                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracyByDate?startDate=${startDate}&endDate=${endDate}`, { headers });
-                if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
-
-                const data = await response.json();
-                const tbody = document.getElementById("tabelaGodzin");
-                tbody.innerHTML = "";
-
-                data.forEach(row => {
-                    const tr = document.createElement("tr");
-
-                    const tdImieNazwisko = document.createElement("td");
-                    tdImieNazwisko.textContent = `${row[1]} ${row[2]}`;
-
-                    const tdGodziny = document.createElement("td");
-                    tdGodziny.textContent = parseFloat(row[4]).toFixed(2);
-
-                    const tdData = document.createElement("td");
-                    tdData.textContent = `${startDate} – ${endDate}`;
-
-                    tr.appendChild(tdImieNazwisko);
-                    tr.appendChild(tdGodziny);
-                    tr.appendChild(tdData);
-
-                    tbody.appendChild(tr);
-                });
-
-            } catch (err) {
-                console.error("Błąd wypełniania tabeli:", err);
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            pobierzSumeISredniaGodzin();
-            wypelnijTabeleGodzinami();
-
-            const logoutButton = document.getElementById("logout-btn");
-            if (logoutButton) {
-                logoutButton.addEventListener("click", () => {
-                    localStorage.removeItem("token");
-                    window.location.href = "../../login.html";
-                });
-            } else {
-                console.error("Nie znaleziono przycisku logout-btn");
-            }
-        });
-    </script>
-
-    <script>
-        const token = localStorage.getItem("token");
-        const year = new Date().getFullYear(); // lub wpisz na sztywno np. 2025
-        const startDate = `${year}-05-01`;
-        const endDate = `${year}-09-30`;
-
-
-        try {
-            const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracyByDate?startDate=${startDate}&endDate=${endDate}`, {
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error("Błąd pobierania danych");
-            }
-
-            const data = await response.json();
-            const tbody = document.getElementById("tabela-godzin");
-            tbody.innerHTML = "";
-
-            data.forEach(row => {
-                const tr = document.createElement("tr");
-
-                const tdImieNazwisko = document.createElement("td");
-                tdImieNazwisko.textContent = `${row[1]} ${row[2]}`;
-
-                const tdGodziny = document.createElement("td");
-                tdGodziny.textContent = parseFloat(row[4]).toFixed(2);
-
-                const tdData = document.createElement("td");
-                tdData.textContent = `${startDate} - ${endDate}`;
-
-                tr.appendChild(tdImieNazwisko);
-                tr.appendChild(tdGodziny);
-                tr.appendChild(tdData);
-                tbody.appendChild(tr);
-            });
-
-        } catch (error) {
-            console.error("Błąd pobierania danych:", error);
-            alert("Nie udało się pobrać danych z serwera.");
-        }
-    </script>
-    <script>
-        async function pobierzSumeISredniaGodzin() {
-            const token = localStorage.getItem("token");
-            const headers = { "Authorization": `Bearer ${token}` };
-
-            const year = new Date().getFullYear(); // lub wpisz na sztywno np. 2025
+            const year = new Date().getFullYear();
             const startDate = `${year}-05-01`;
             const endDate = `${year}-09-30`;
 
-
             try {
-                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, { headers });
-                if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
+                // SUMA GODZIN
+                const responseSum = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, { headers });
+                if (!responseSum.ok) throw new Error("Błąd przy pobieraniu sumy godzin");
 
-                const data = await response.json();
-
-                // Suma godzin
-                const sumaGodzin = data.reduce((acc, row) => acc + (parseFloat(row[4]) || 0), 0);
+                const dataSum = await responseSum.json();
+                const sumaGodzin = dataSum.reduce((acc, row) => acc + (parseFloat(row[2]) || 0), 0);
                 const godzinyCale = Math.floor(sumaGodzin);
                 const minuty = Math.round((sumaGodzin - godzinyCale) * 60);
-                const sformatowanaSuma = `${godzinyCale}:${minuty.toString().padStart(2, "0")}`;
-                document.getElementById("godziny-miesiac").textContent = sformatowanaSuma;
+                document.getElementById("godziny-miesiac").textContent = `${godzinyCale}:${minuty.toString().padStart(2, "0")}`;
 
-                // Średnia godzin
-                const liczbaPracownikow = data.length;
+                // ŚREDNIA
+                const liczbaPracownikow = dataSum.length;
                 const srednia = liczbaPracownikow > 0 ? sumaGodzin / liczbaPracownikow : 0;
                 const sredniaCale = Math.floor(srednia);
                 const sredniaMinuty = Math.round((srednia - sredniaCale) * 60);
-                const sformatowanaSrednia = `${sredniaCale}:${sredniaMinuty.toString().padStart(2, "0")}`;
-                document.getElementById("srednia-godzin").textContent = sformatowanaSrednia;
-            } catch (err) {
-                console.error("Błąd pobierania danych:", err);
-                document.getElementById("godziny-miesiac").textContent = "Błąd";
-                document.getElementById("srednia-godzin").textContent = "Błąd";
-            }
-        }
+                document.getElementById("srednia-godzin").textContent = `${sredniaCale}:${sredniaMinuty.toString().padStart(2, "0")}`;
 
-        async function wypelnijTabeleGodzinami() {
-            const token = localStorage.getItem("token");
-            const headers = { "Authorization": `Bearer ${token}` };
-
-            const year = new Date().getFullYear(); // lub wpisz na sztywno np. 2025
-            const startDate = `${year}-05-01`;
-            const endDate = `${year}-09-30`;
-
-
-            try {
-                const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracyByDate?startDate=${startDate}&endDate=${endDate}`, { headers });
-                if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
-
-                const data = await response.json();
-                const tbody = document.getElementById("tabelaGodzin");
-                tbody.innerHTML = "";
-
-                data.forEach(row => {
-                    const tr = document.createElement("tr");
-
-                    const tdImieNazwisko = document.createElement("td");
-                    tdImieNazwisko.textContent = `${row[1]} ${row[2]}`;
-
-                    const tdGodziny = document.createElement("td");
-                    tdGodziny.textContent = parseFloat(row[4]).toFixed(2);
-
-                    const tdData = document.createElement("td");
-                    tdData.textContent = `${startDate} – ${endDate}`;
-
-                    tr.appendChild(tdImieNazwisko);
-                    tr.appendChild(tdGodziny);
-                    tr.appendChild(tdData);
-
-                    tbody.appendChild(tr);
-                });
-
-            } catch (err) {
-                console.error("Błąd wypełniania tabeli:", err);
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            pobierzSumeISredniaGodzin();
-            wypelnijTabeleGodzinami();
-
-            const logoutButton = document.getElementById("logout-btn");
-            if (logoutButton) {
-                logoutButton.addEventListener("click", () => {
-                    localStorage.removeItem("token");
-                    window.location.href = "../../login.html";
-                });
-            } else {
-                console.error("Nie znaleziono przycisku logout-btn");
-            }
-        });
-    </script>
-
-    </script>
-
-
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const logoutButton = document.getElementById("logout-btn");
-            if (logoutButton) {
-                logoutButton.addEventListener("click", () => {
-                    localStorage.removeItem("token");
-                    window.location.href = "../../login.html"; // dopasuj ścieżkę do katalogu
-                });
-            } else {
-                console.error("Nie znaleziono przycisku logout-btn");
-            }
-            //pobierzGodzinyMiesiaca();
-            pobierzSumeISredniaGodzin();
-        });
-    </script>
-    <script>
-        async function wypelnijTabeleGodzinami() {
-            const token = localStorage.getItem("token");
-
-            const headers = {
-                "Authorization": `Bearer ${token}`
-            };
-
-            const today = new Date();
-            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-
-            const startDate = firstDay.toISOString().split("T")[0];
-            const endDate = lastDay.toISOString().split("T")[0];
-
-            try {
+                // TABELA
                 const response = await fetch(`https://frjesionowka.byst.re/api/czasPracy/sumGodzinyPracy?startDate=${startDate}&endDate=${endDate}`, {
-                    headers
+                    headers: { "Authorization": `Bearer ${token}` }
                 });
-
-                if (!response.ok) throw new Error("Błąd odpowiedzi z serwera");
+                if (!response.ok) throw new Error("Błąd przy pobieraniu danych");
 
                 const data = await response.json();
                 const tbody = document.getElementById("tabelaGodzin");
-                tbody.innerHTML = ""; // wyczyść stare dane
+                tbody.innerHTML = "";
 
                 data.forEach(row => {
                     const tr = document.createElement("tr");
 
                     const tdImieNazwisko = document.createElement("td");
-                    tdImieNazwisko.textContent = `${row[1]} ${row[2]}`;
+                    tdImieNazwisko.textContent = `${row[0]} ${row[1]}`;
 
                     const tdGodziny = document.createElement("td");
-                    tdGodziny.textContent = parseFloat(row[4]).toFixed(2);
+                    const godz = parseFloat(row[2]);
+                    const godzCale = Math.floor(godz);
+                    const minuty = Math.round((godz - godzCale) * 60);
+                    tdGodziny.textContent = `${godzCale}:${minuty.toString().padStart(2, "0")}`;
 
                     const tdData = document.createElement("td");
-                    tdData.textContent = `${startDate} – ${endDate}`;
+                    tdData.textContent = `${startDate} - ${endDate}`;
 
                     tr.appendChild(tdImieNazwisko);
                     tr.appendChild(tdGodziny);
                     tr.appendChild(tdData);
-
                     tbody.appendChild(tr);
                 });
 
-            } catch (err) {
-                console.error("Błąd wypełniania tabeli:", err);
+
+            } catch (error) {
+                console.error("Błąd:", error);
+                document.getElementById("godziny-miesiac").textContent = "Błąd";
+                document.getElementById("srednia-godzin").textContent = "Błąd";
             }
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            wypelnijTabeleGodzinami();
-        });
+        document.addEventListener("DOMContentLoaded", initStatystykiSezonu);
     </script>
-
 </body>
 
 </html>

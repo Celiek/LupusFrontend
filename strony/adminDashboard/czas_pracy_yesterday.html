@@ -247,13 +247,10 @@
                 const resGodziny = await fetch("https://frjesionowka.byst.re/api/pracownik/czasPracyToday", { headers });
                 const godziny = parseFloat(await resGodziny.text());
 
-                const godzinyCale = Math.floor(godziny); // część całkowita - godziny
-                const minuty = Math.round((godziny - godzinyCale) * 60); // pozostałe minuty
-
-                // Sformatowany wynik HH:MM
+                const totalMinutes = Math.round(godziny * 60);
+                const godzinyCale = Math.floor(totalMinutes / 60);
+                const minuty = totalMinutes % 60;
                 const czasSformatowany = `${godzinyCale}:${minuty.toString().padStart(2, "0")}`;
-
-                document.getElementById("godziny-pracy").textContent = czasSformatowany;
 
             } catch (error) {
                 console.error("Błąd pobierania danych:", error);
@@ -296,9 +293,13 @@
                     const nazwisko = row[3];
                     const pelneImie = drugieImie ? `${imie} ${drugieImie} ${nazwisko}` : `${imie} ${nazwisko}`;
                     tdImieNazwisko.textContent = pelneImie;
-
                     const tdGodziny = document.createElement("td");
-                    tdGodziny.textContent = parseFloat(row[11]).toFixed(2);
+                    const godzinyFloat = parseFloat(row[11]);
+                    const totalMinutes = Math.round(godzinyFloat * 60);
+                    const godzinyCale = Math.floor(totalMinutes / 60);
+                    const minuty = totalMinutes % 60;
+                    tdGodziny.textContent = `${godzinyCale}:${minuty.toString().padStart(2, "0")}`;
+
 
                     const tdData = document.createElement("td");
                     tdData.textContent = formattedDate;
