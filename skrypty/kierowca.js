@@ -33,24 +33,28 @@ function loadStateFromLocalStorage() {
 
 function showBootstrapAlert(message, type = "info") {
   const container = document.getElementById("statusAlertContainer");
-  if (!container) return;
+  if (!container) {
+    console.error("Brak kontenera #statusAlertContainer");
+    return;
+  }
 
-  const wrapper = document.createElement("div");
-  wrapper.innerHTML = `
-    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-      ${message}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Zamknij"></button>
-    </div>
+  const alert = document.createElement("div");
+  alert.className = `alert alert-${type} alert-dismissible fade show`;
+  alert.setAttribute("role", "alert");
+  alert.innerHTML = `
+    ${message}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Zamknij"></button>
   `;
-  container.appendChild(wrapper);
+
+  container.appendChild(alert);
 
   setTimeout(() => {
-    const alertInstance = bootstrap.Alert.getOrCreateInstance(
-      wrapper.querySelector(".alert")
-    );
-    alertInstance.close();
+    alert.classList.remove("show");
+    alert.classList.add("fade");
+    alert.remove();
   }, 5000);
 }
+
 
 async function startPraca(id) {
   const token = localStorage.getItem("token");
@@ -150,87 +154,77 @@ function updateWorkStatus(isWorkStarted) {
 }
 
 // Funkcja start pracy
-async function startPraca(id) {
+document.getElementById("startWork").addEventListener("click", async () => {
+  const checkboxes = document.querySelectorAll(".obecny-checkbox:checked");
+  const ids = Array.from(checkboxes).map((cb) => parseInt(cb.dataset.id));
+
+  if (ids.length === 0) {
+    showBootstrapAlert(
+      "⚠️ Zaznacz przynajmniej jednego pracownika.",
+      "warning"
+    );
+    return;
+  }
+
   const token = localStorage.getItem("token");
   const teraz = new Date();
-  const data = teraz.toISOString().slice(0, 10);
+  const offsetDate = new Date(
+    teraz.getTime() - teraz.getTimezoneOffset() * 60000
+  );
+  const data = offsetDate.toISOString().slice(0, 10);
   const czas = teraz.toTimeString().slice(0, 5);
 
-  workStartTime = new Date();
-  saveStateToLocalStorage();
+  let successCount = 0;
+  let conflictCount = 0;
+  let errorCount = 0;
 
-  if (!id || isNaN(id)) {
-      alert("Nieprawidłowy identyfikator pracownika");
-      return;
-  }
-
-  try {
+  for (const id of ids) {
+    try {
       const url = `https://frjesionowka.byst.re/api/czasPracy/startPraca?id=${id}&data=${data}&czas=${czas}`;
       const response = await fetch(url, {
-          method: "POST",
-          headers: {
-              Authorization: `Bearer ${token}`,
-          },
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      if (!response.ok) throw new Error(`Błąd HTTP: ${response.status}`);
-      const result = await response.text();
-      alert(`✅ ${result}`);
-
-      // Zmiana statusu pracy na rozpoczętą
-      updateWorkStatus(true); // Ustawiamy status pracy na rozpoczęty
-  } catch (err) {
-      console.error("Błąd:", err);
-      alert("❌ Nie udało się rozpocząć pracy.");
-  }
-}
-
-// Event listener dla przycisku "Start pracy"
-document.getElementById("startWork").addEventListener("click", async () => {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-      alert("Brak tokena – użytkownik nie jest zalogowany.");
-      return;
-  }
-
-  try {
-      const response = await fetch(
-          "https://frjesionowka.byst.re/api/czasPracy/startPracy",
-          {
-              method: "POST",
-              headers: {
-                  Authorization: `Bearer ${token}`,
-              },
-          }
-      );
-
-      if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`Błąd: ${response.status} – ${text}`);
+      if (response.ok) {
+        successCount++;
+      } else if (response.status === 409) {
+        conflictCount++;
+      } else {
+        errorCount++;
       }
+    } catch (err) {
+      console.error(`❌ Błąd dla ID ${id}:`, err);
+      errorCount++;
+    }
+  }
 
-      const result = await response.text();
-      console.log("✅", result);
+  if (successCount > 0) {
+    localStorage.setItem("startPracy", teraz.toISOString());
+    updateWorkStatus(true);
+    showBootstrapAlert(
+      `✅ Rozpoczęto pracę dla ${successCount} pracownika(ów).`,
+      "success"
+    );
+  }
 
-      localStorage.setItem("startPracy", new Date().toISOString());
+  if (conflictCount > 0) {
+    alert(
+      `⛔ ${conflictCount} pracownik(ów) już pracuje – nie każ im zapierdalać.`);
+  }
 
-      // Pokazuje alert, że praca została rozpoczęta
-      const alertElement = document.getElementById("startAlert");
-      alertElement.classList.add("show");
-      alertElement.style.display = "block";
-      setTimeout(() => {
-          alertElement.classList.remove("show");
-          alertElement.style.display = "none";
-      }, 5000);
+  if (errorCount > 0) {
+    alert(
+      `❌ Wystąpiły błędy dla ${errorCount} pracowników, mają anemię muzgu !`);
+  }
 
-      // Zmiana statusu w navbarze
-      updateWorkStatus(true); // Ustawiamy status pracy na rozpoczęty
-  } catch (err) {
-      console.error("Błąd podczas rozpoczynania pracy:", err);
-      alert("❌ Nie udało się rozpocząć pracy.");
+  if (successCount === 0 && conflictCount === 0 && errorCount === 0) {
+    alert("⚠️ Nie udało się rozpocząć pracy, program sie wykjebał !!!! ( albo nie masz netu farfoclu)");
   }
 });
+
 
 
 function updateWorkTime() {
@@ -241,49 +235,6 @@ function updateWorkTime() {
   const minutes = String(diff.getUTCMinutes()).padStart(2, "0");
   workTimeDisplay.textContent = `Czas pracy: ${hours}:${minutes}`;
 }
-
-document.getElementById("startWork").addEventListener("click", async () => {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    alert("Brak tokena – użytkownik nie jest zalogowany.");
-    return;
-  }
-
-  try {
-    const response = await fetch(
-      "https://frjesionowka.byst.re/api/czasPracy/startPracy",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      const text = await response.text();
-      throw new Error(`Błąd: ${response.status} – ${text}`);
-    }
-
-    const result = await response.text();
-    console.log("✅", result);
-
-    localStorage.setItem("startPracy", new Date().toISOString());
-
-    if (alertElement) {
-      alertElement.classList.add("show");
-      alertElement.style.display = "block";
-      setTimeout(() => {
-        alertElement.classList.remove("show");
-        alertElement.style.display = "none";
-      }, 5000);
-    }
-  } catch (err) {
-    console.error("Błąd podczas rozpoczynania pracy:", err);
-    alert("❌ Nie udało się rozpocząć pracy.");
-  }
-});
 
 document.getElementById("logout-btn")?.addEventListener("click", () => {
   localStorage.clear();
@@ -622,3 +573,6 @@ async function isOnBreak(id) {
     alert("❌ Nie udało się zarejestrować przerwy.");
   }
 }
+document.addEventListener("DOMContentLoaded", () => {
+  showBootstrapAlert("✅ Alert testowy działa!", "success");
+});

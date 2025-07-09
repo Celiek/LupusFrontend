@@ -248,14 +248,16 @@
                 // Czas pracy dzisiaj
                // Czas pracy dzisiaj
                 const resGodziny = await fetch("https://frjesionowka.byst.re/api/pracownik/czasPracyToday", { headers });
-                const godziny = parseFloat(await resGodziny.text());
+                const godzinyText = await resGodziny.text();
 
-                const godzinyCale = Math.floor(godziny); // część całkowita - godziny
-                const minuty = Math.round((godziny - godzinyCale) * 60); // pozostałe minuty
+                const godzinyFloat = parseFloat(godzinyText); // np. 7.92
+                const totalMinutes = Math.round(godzinyFloat * 60);
+                const godzinyCale = Math.floor(totalMinutes / 60);
+                const minuty = totalMinutes % 60;
 
-                // Sformatowany wynik HH:MM
                 const czasSformatowany = `${godzinyCale}:${minuty.toString().padStart(2, "0")}`;
 
+                // Ustawiamy tylko sformatowany tekst
                 document.getElementById("godziny-pracy").textContent = czasSformatowany;
 
             } catch (error) {
@@ -296,7 +298,10 @@
                     tdImieNazwisko.textContent = row[0];
 
                     const tdGodziny = document.createElement("td");
-                    tdGodziny.textContent = parseFloat(row[1]).toFixed(2);
+                    const totalMinutes = Math.round(parseFloat(row[1]) * 60);
+                    const godzinyCale = Math.floor(totalMinutes / 60);
+                    const minuty = totalMinutes % 60;
+                    tdGodziny.textContent = `${godzinyCale}:${minuty.toString().padStart(2, "0")}`;
 
                     const tdData = document.createElement("td");
                     tdData.textContent = dzisiaj;

@@ -13,6 +13,8 @@
 </head>
 
 <body>
+    <!-- Libka do kompresji zdjęć -->
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.16/dist/browser-image-compression.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
@@ -238,7 +240,7 @@
                 <img src="${imgSrc}" alt="Zdjęcie" id="img-preview-${user.idPracownika}" width="100" class="img-thumbnail">
                 <input type="file" id="zdjecie-${user.idPracownika}" accept=".jpg,.jpeg,.png" class="form-control form-control-sm" onchange="updateImagePreview(event, '${user.idPracownika}')">
             </td>
-            <td><input type="text" value="${formattedDate}" id="data-${user.idPracownika}" disabled class="form-control form-control-sm"></td>
+            <td><input type="text" value="${formattedDate}" id="data-${user.idPracownika}"  class="form-control form-control-sm"></td>
             <td><input type="text" value="${user.login}" id="login-${user.idPracownika}" class="form-control form-control-sm"></td>
             <td><input type="password" value="${user.haslo}" id="haslo-${user.idPracownika}" class="form-control form-control-sm"></td>
             <td><input type="text" value="${user.krajPochodzenia || ''}" id="kraj-${user.idPracownika}" class="form-control form-control-sm"></td>
@@ -306,11 +308,26 @@
                 formData.append("email", email);
                 formData.append("nr_konta", nrKonta);
 
+                const dataDolaczeniaStr = document.getElementById(`data-${userId}`).value;
+                if (dataDolaczeniaStr) {
+                    const dataISO = new Date(dataDolaczeniaStr).toISOString().split("T")[0];
+                    formData.append("data_dolaczenia", dataISO);
+                }
+
                 // Sprawdzamy, czy zdjęcie zostało wybrane
+                // i jest kompresowane
                 if (zdjecie) {
-                    formData.append("zdjecie", zdjecie);
-                } else {
-                    formData.append("zdjecie", "");  // Jeśli brak pliku, dodajemy pusty ciąg
+                    try {
+                        const compressedImage = await imageCompression(zdjecie, {
+                            maxSizeMB: 0.3, // docelowy rozmiar (np. 300 KB)
+                            maxWidthOrHeight: 800, // zmniejsz rozdzielczość, jeśli chcesz
+                            useWebWorker: true
+                        });
+                        formData.append("zdjecie", compressedImage);
+                    } catch (error) {
+                        console.error("Błąd kompresji obrazu:", error);
+                        formData.append("zdjecie", zdjecie); // fallback do oryginału
+                    }
                 }
 
                 // Usuwamy wysyłanie daty
